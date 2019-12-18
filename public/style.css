@@ -19,3 +19,22 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content {
+  border: 1px solid black;
+  margin: 7px;
+}
+
+.IP {
+  background-color: lightsalmon;
+}
+
+.Choir {
+  background-color: aquamarine;
+}
