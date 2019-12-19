@@ -8,7 +8,6 @@ import Board from './Board'
  */
 export const UserHome = props => {
   const {email} = props
-
   return <Board />
 }
 
