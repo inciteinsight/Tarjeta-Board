@@ -1,3 +1,7 @@
+#main {
+  height: 100vh;
+}
+
 body {
   font-family: sans-serif;
 }
@@ -20,10 +24,19 @@ form div {
   display: inline-block;
 }
 
-.meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.tarjeta-placeholder {
+  border: 7px ridge saddlebrown;
+  background-color: chocolate;
+}
+
+.tarjeta-body {
+  border: 1px solid black;
+  border-radius: 10%;
+  padding: 1rem;
+  margin: 0.75rem;
+}
+
+.tarjeta-empty {
 }
 
 .content {

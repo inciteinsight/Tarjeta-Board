@@ -1,38 +1,88 @@
 import React, {Component} from 'react'
-import {Container, Grid} from 'semantic-ui-react'
+import {Container, Col, Row} from 'react-bootstrap'
 import CardItem from './attendance/CardItem'
+import {ml, config} from '../../public/sample/121919'
 
 export default class Board extends Component {
   render() {
     return (
-      <Container>
-        {/* card board */}
-        {/* areas */}
-        <div>
-          <Grid stackable columns={4} padded>
-            <Grid.Column mobile={16} tablet={5} computer={4} color="brown">
+      <div className="d-flex flex-row flex-wrap text-center">
+        <Container className="tarjeta-segment">
+          <Row noGutters>
+            <Col>Male</Col>
+          </Row>
+          <Row noGutters>
+            <Col sm={6} lg={3}>
               <CardItem />
+            </Col>
+            <Col sm={6} lg={3}>
               <CardItem />
+            </Col>
+            <Col sm={6} lg={3}>
               <CardItem />
-            </Grid.Column>
-            <Grid.Column mobile={16} tablet={8} computer={4} color="brown">
+            </Col>
+            <Col sm={6} lg={3}>
               <CardItem />
+            </Col>
+          </Row>
+          <Row noGutters>
+            <Col sm={6} lg={3}>
               <CardItem />
+            </Col>
+            <Col sm={6} lg={3}>
               <CardItem />
-            </Grid.Column>
-            <Grid.Column mobile={16} tablet={8} computer={4} color="brown">
+            </Col>
+            <Col sm={6} lg={3}>
               <CardItem />
+            </Col>
+            <Col sm={6} lg={3}>
               <CardItem />
+            </Col>
+          </Row>
+          <Row noGutters>
+            <Col sm={6} lg={3}>
               <CardItem />
-            </Grid.Column>
-            <Grid.Column mobile={16} tablet={8} computer={4} color="brown">
+            </Col>
+            <Col sm={6} lg={3}>
               <CardItem />
+            </Col>
+            <Col sm={6} lg={3}>
               <CardItem />
+            </Col>
+            <Col sm={6} lg={3}>
               <CardItem />
-            </Grid.Column>
-          </Grid>
-        </div>
-      </Container>
+            </Col>
+          </Row>
+          <Row noGutters>
+            <Col sm={6} lg={3}>
+              <CardItem />
+            </Col>
+            <Col sm={6} lg={3}>
+              <CardItem />
+            </Col>
+            <Col sm={6} lg={3}>
+              <CardItem />
+            </Col>
+            <Col sm={6} lg={3}>
+              <CardItem />
+            </Col>
+          </Row>
+          <Row noGutters>
+            <Col sm={6} lg={3}>
+              <CardItem />
+            </Col>
+            <Col sm={6} lg={3}>
+              <CardItem />
+            </Col>
+            <Col sm={6} lg={3}>
+              <CardItem />
+            </Col>
+            <Col sm={6} lg={3}>
+              <CardItem />
+            </Col>
+          </Row>
+        </Container>
+      </div>
     )
   }
 }
