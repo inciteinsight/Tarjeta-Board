@@ -1389,6 +1389,25 @@ const config = {
     BH: {
       color: 'green'
     }
+  },
+  Locale: {
+    BBExt: {
+      AreaGroup: ['1-1', '1-2']
+    },
+    Manhattan: {
+      AreaGroup: [
+        '1-1',
+        '1-2',
+        '1-3',
+        '1-4',
+        '1-5',
+        '1-6',
+        '2-1',
+        '2-2',
+        '2-3',
+        '2-4'
+      ]
+    }
   }
 }
 

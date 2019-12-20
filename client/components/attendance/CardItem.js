@@ -15,10 +15,12 @@ export default class CardItem extends Component {
         <Card.Body bsPrefix="tarjeta-body">
           <div className="d-flex flex-row justify-content-between">
             <Card.Subtitle className="mb-2 text-muted">######</Card.Subtitle>
-            <Card.Subtitle className="mb-2 text-muted">Area 2-3</Card.Subtitle>
+            <Card.Subtitle className="mb-2 text-muted">
+              Area {member.AreaGroup}
+            </Card.Subtitle>
           </div>
-          <Card.Title>ROGER LESTER</Card.Title>
-          <Card.Title>PALABASAN</Card.Title>
+          <Card.Title>{member.FirstName}</Card.Title>
+          <Card.Title>{member.LastName}</Card.Title>
           {/* <Card.Img variant="top" src="/sample/cfo.jpg" style={{opacity: 0.4}} /> */}
           {/* <Card.Link href="#">Card Link</Card.Link>
                 <Card.Link href="#">Another Link</Card.Link> */}
