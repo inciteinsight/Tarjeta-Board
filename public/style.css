@@ -20,6 +20,10 @@ nav a {
   margin: 1em;
 }
 
+.nav-pills {
+  border: 1px solid black;
+}
+
 form div {
   margin: 1em;
   display: inline-block;

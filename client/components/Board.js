@@ -6,11 +6,9 @@ import {ml, config} from '../../public/sample/121919'
 export default class Board extends Component {
   createRow(fill) {
     const {locale, areaGroup} = this.props
-    console.log(`Locale -> ${locale} and AG -> ${areaGroup}`)
-    let members = ml.filter(
+    const members = ml.filter(
       m => m.AreaGroup === areaGroup && m.LOCAL === locale
     )
-    console.log(members)
     return (
       <Row noGutters>
         {members.map(m => (
