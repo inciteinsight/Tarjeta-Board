@@ -10,7 +10,12 @@ export default class Board extends Component {
       m => m.AreaGroup === areaGroup && m.LOCAL === locale
     )
     return (
-      <Row noGutters>
+      <Row
+        /* className="d-flex flex-column flex-wrap" */ style={{
+          maxHeight: '100'
+        }}
+        noGutters
+      >
         {members.map(m => (
           <Col key={m.FirstName} sm={6} lg={3}>
             <CardItem member={m} />
