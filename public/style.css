@@ -41,14 +41,21 @@ form div {
   height: 200px;
 }
 
+.tarjeta-container {
+  border: 1px solid black;
+}
+
 .tarjeta-body {
   border: 1px solid black;
   border-radius: 10%;
   padding: 1rem;
   margin: 0.75rem;
+  min-height: 144px;
 }
 
-.tarjeta-empty {
+.turnedover {
+  background-color: lightgreen;
+  color: green;
 }
 
 .content {

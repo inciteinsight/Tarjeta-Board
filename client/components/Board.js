@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import {Container, Col, Row} from 'react-bootstrap'
 import CardItem from './attendance/CardItem'
-import {ml, config} from '../../public/sample/121919'
+import {ml} from '../../public/sample/121919'
 
 export default class Board extends Component {
   createRow(fill) {
@@ -10,12 +11,7 @@ export default class Board extends Component {
       m => m.AreaGroup === areaGroup && m.LOCAL === locale
     )
     return (
-      <Row
-        /* className="d-flex flex-column flex-wrap" */ style={{
-          maxHeight: '100'
-        }}
-        noGutters
-      >
+      <Row style={{maxHeight: '100'}} noGutters>
         {members.map(m => (
           <Col key={m.FirstName} sm={6} lg={3}>
             <CardItem member={m} />
@@ -53,3 +49,7 @@ export default class Board extends Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  members: state.members
+})
