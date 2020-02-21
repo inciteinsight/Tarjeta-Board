@@ -4,7 +4,7 @@ import {Container, Col, Row} from 'react-bootstrap'
 import CardItem from './attendance/CardItem'
 import {ml} from '../../public/sample/121919'
 
-export default class Board extends Component {
+class Board extends Component {
   createRow(fill) {
     const {locale, areaGroup} = this.props
     const members = ml.filter(
@@ -53,3 +53,5 @@ export default class Board extends Component {
 const mapStateToProps = state => ({
   members: state.members
 })
+
+export default connect(mapStateToProps)(Board)
