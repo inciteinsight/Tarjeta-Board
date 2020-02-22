@@ -1,8 +1,10 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {updateMemberAttendanceThunk} from '../../store'
 import {Card, Container} from 'react-bootstrap'
 import {Fragment} from 'react'
 
-export default class CardItem extends Component {
+class CardItem extends Component {
   constructor() {
     super()
     this.state = {
@@ -10,18 +12,24 @@ export default class CardItem extends Component {
     }
   }
 
-  turnover = () => {
+  turnover = member => {
     const {isPresent} = this.state
     this.setState({
       isPresent: !isPresent
     })
+    this.props.fetchUpdateMemberAttendanceThunk(member.Id)
   }
 
   cardFront = member => {
+    const {color} = this.props.config
     const {isPresent} = this.state
-    const {Id, AreaGroup, FirstName, LastName, CFO, Officer} = member
+    const {Id, AreaGroup, FirstName, LastName, Officer, Status} = member
     return (
-      <Card onClick={() => this.turnover()}>
+      <Card
+        className={`${
+          !isPresent ? 'bg-light text-dark' : 'bg-secondary text-white'
+        }`}
+      >
         <Card.Body bsPrefix="tarjeta-body">
           <div className="d-flex flex-row justify-content-between">
             <Card.Subtitle className="mb-2 text-muted">{Id}</Card.Subtitle>
@@ -35,11 +43,18 @@ export default class CardItem extends Component {
               <Card.Title>{LastName}</Card.Title>
             </Fragment>
           ) : (
-            <Fragment>
-              <Card.Title>{CFO}</Card.Title>
-              {/* change to shapes and circles */}
-              <Card.Title>{Officer}</Card.Title>
-            </Fragment>
+            <div className="d-flex flex-row justify-content-between align-items-end">
+              <svg height="40" width="40">
+                <circle
+                  cx="20"
+                  cy="20"
+                  r="16"
+                  stroke="black"
+                  strokeWidth="3"
+                  fill={Officer === 'Y' ? color.officer : color.default}
+                />
+              </svg>
+            </div>
           )}
         </Card.Body>
       </Card>
@@ -62,9 +77,24 @@ export default class CardItem extends Component {
     return member === 'empty' ? (
       <Container bsPrefix="tarjeta-placeholder">{this.empty()}</Container>
     ) : (
-      <Container bsPrefix="tarjeta-placeholder">
+      <Container
+        bsPrefix="tarjeta-placeholder"
+        onClick={() => this.turnover(member)}
+      >
         {this.cardFront(member)}
       </Container>
     )
   }
 }
+
+const mapState = state => ({
+  config: state.attendance.config,
+  members: state.attendance.members
+})
+
+const mapDispatch = dispatch => ({
+  fetchUpdateMemberAttendanceThunk: memberId =>
+    dispatch(updateMemberAttendanceThunk(memberId))
+})
+
+export default connect(mapState, mapDispatch)(CardItem)

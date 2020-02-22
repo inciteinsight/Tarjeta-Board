@@ -1,57 +1,80 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {Container, Col, Row} from 'react-bootstrap'
-import CardItem from './attendance/CardItem'
-import {ml} from '../../public/sample/121919'
+import {importFromSampleThunk} from '../store'
+import AreaGroupPane from './attendance/AreaGroupPane'
+import Loading from './misc/Loading'
+import {Tabs, Tab, Nav, Row, Col} from 'react-bootstrap'
+import {ml, config} from '../../public/sample/121919'
+const {Manhattan, BBExt} = config.Locale
 
-class Board extends Component {
-  createRow(fill) {
-    const {locale, areaGroup} = this.props
-    const members = ml.filter(
-      m => m.AreaGroup === areaGroup && m.LOCAL === locale
-    )
-    return (
-      <Row style={{maxHeight: '100'}} noGutters>
-        {members.map(m => (
-          <Col key={m.FirstName} sm={6} lg={3}>
-            <CardItem member={m} />
-          </Col>
-        ))}
-        {fill > members.length ? (
-          new Array(fill - members.length).fill(
-            <Col sm={6} lg={3}>
-              <CardItem member="empty" />
-            </Col>,
-            0,
-            fill - members.length
-          )
-        ) : (
-          <div />
-        )}
-      </Row>
-    )
+export class Board extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isLoading: true
+    }
   }
-  createBoard() {
-    return this.createRow(20)
+
+  componentDidMount = async () => {
+    await this.props.fetchMembersFromSample()
+    this.setState({
+      isLoading: false
+    })
   }
+
   render() {
-    return (
-      <div className="d-flex flex-row flex-wrap text-center">
-        <Container className="tarjeta-segment">
-          <Row noGutters>
-            <Col>
-              <Container bsPrefix="cork" />
-            </Col>
-          </Row>
-          {this.createBoard()}
-        </Container>
-      </div>
+    let {isLoading} = this.state
+    let tabs = Manhattan.AreaGroup.map(ag => `MAN ${ag}`).concat(
+      BBExt.AreaGroup.map(ag => `BB ${ag}`)
+    )
+    return isLoading ? (
+      <Loading />
+    ) : (
+      <Tab.Container id="left-tabs-example" defaultActiveKey={tabs[0]}>
+        <Row>
+          <Col sm={2}>
+            <Nav variant="pills" className="flex-column">
+              {tabs.map(t => (
+                <Nav.Item key={t}>
+                  <Nav.Link eventKey={t}>{t}</Nav.Link>
+                </Nav.Item>
+              ))}
+            </Nav>
+          </Col>
+          <Col sm={10}>
+            <Tab.Content>
+              {tabs.map(t => {
+                const areaGroup = t.split(' ')[1]
+                const locale =
+                  t.split(' ')[0] === 'MAN' ? 'Manhattan' : 'B. Beach Ext'
+                return (
+                  <Tab.Pane key={t} eventKey={t} title={t}>
+                    <AreaGroupPane
+                      areaGroup={areaGroup}
+                      locale={locale}
+                      members={this.props.members.filter(
+                        m => m.AreaGroup === areaGroup && m.LOCAL === locale
+                      )}
+                    />
+                  </Tab.Pane>
+                )
+              })}
+            </Tab.Content>
+          </Col>
+        </Row>
+      </Tab.Container>
     )
   }
 }
 
-const mapStateToProps = state => ({
-  members: state.members
+const mapState = state => ({
+  email: state.user.email,
+  members: state.attendance.members
 })
 
-export default connect(mapStateToProps)(Board)
+const mapDispatch = dispatch => ({
+  fetchMembersFromSample: () => dispatch(importFromSampleThunk())
+})
+
+export default connect(mapState, mapDispatch)(Board)
