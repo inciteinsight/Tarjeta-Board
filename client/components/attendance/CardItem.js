@@ -23,13 +23,9 @@ class CardItem extends Component {
   cardFront = member => {
     const {color} = this.props.config
     const {isPresent} = this.state
-    const {Id, AreaGroup, FirstName, LastName, Officer, Status} = member
+    const {Id, AreaGroup, FirstName, LastName, Officer} = member
     return (
-      <Card
-        className={`${
-          !isPresent ? 'bg-light text-dark' : 'bg-secondary text-white'
-        }`}
-      >
+      <Card className={`${!isPresent ? 'bg-light text-dark' : 'text-white'}`}>
         <Card.Body bsPrefix="tarjeta-body">
           <div className="d-flex flex-row justify-content-between">
             <Card.Subtitle className="mb-2 text-muted">{Id}</Card.Subtitle>
@@ -43,7 +39,8 @@ class CardItem extends Component {
               <Card.Title>{LastName}</Card.Title>
             </Fragment>
           ) : (
-            <div className="d-flex flex-row justify-content-between align-items-end">
+            <div className="d-flex flex-row justify-content-around align-items-center">
+              <h3 className="text-success">PRESENT</h3>
               <svg height="40" width="40">
                 <circle
                   cx="20"

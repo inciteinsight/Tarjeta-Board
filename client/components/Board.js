@@ -3,8 +3,8 @@ import {connect} from 'react-redux'
 import {importFromSampleThunk} from '../store'
 import AreaGroupPane from './attendance/AreaGroupPane'
 import Loading from './misc/Loading'
-import {Tabs, Tab, Nav, Row, Col} from 'react-bootstrap'
-import {ml, config} from '../../public/sample/121919'
+import {Tab, Nav, Row, Col} from 'react-bootstrap'
+import {config} from '../../public/sample/121919'
 const {Manhattan, BBExt} = config.Locale
 
 export class Board extends Component {
