@@ -12,6 +12,12 @@ class CardItem extends Component {
     }
   }
 
+  componentDidMount = () => {
+    this.setState({
+      isPresent: this.props.member.hasAttended
+    })
+  }
+
   turnover = member => {
     const {isPresent} = this.state
     this.setState({

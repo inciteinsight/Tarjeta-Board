@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {importFromSampleThunk} from '../store'
+import {importFromSampleThunk, importFromSessionThunk} from '../store'
 import AreaGroupPane from './attendance/AreaGroupPane'
 import Loading from './misc/Loading'
 import {Tab, Nav, Row, Col} from 'react-bootstrap'
@@ -17,7 +17,8 @@ export class Board extends Component {
   }
 
   componentDidMount = async () => {
-    await this.props.fetchMembersFromSample()
+    await this.props.fetchMembersFromSession()
+    // await this.props.fetchMembersFromSample()
     this.setState({
       isLoading: false
     })
@@ -74,7 +75,8 @@ const mapState = state => ({
 })
 
 const mapDispatch = dispatch => ({
-  fetchMembersFromSample: () => dispatch(importFromSampleThunk())
+  fetchMembersFromSample: () => dispatch(importFromSampleThunk()),
+  fetchMembersFromSession: () => dispatch(importFromSessionThunk())
 })
 
 export default connect(mapState, mapDispatch)(Board)

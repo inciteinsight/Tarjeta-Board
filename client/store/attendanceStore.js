@@ -1,34 +1,43 @@
 import axios from 'axios'
-import {AddHasAttendedField} from '../utils/attendance'
+import {AddHasAttendedField, UpdateMemberInSession} from '../utils/attendance'
 import {ml, config as sampleConfig} from '../../public/sample/121919.js'
 
+const IMPORT_FROM_SAMPLE = 'IMPORT_FROM_SAMPLE'
+const importFromSample = (members, config) => ({
+  type: IMPORT_FROM_SAMPLE,
+  payload: {members, config}
+})
+export const importFromSampleThunk = () => async dispatch => {
+  try {
+    const members = ml.map(m => AddHasAttendedField(m))
+    const config = sampleConfig
+    await axios.post('/api/ws', members)
+    dispatch(importFromSample(members, config))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 const IMPORT_FROM_SESSION = 'IMPORT_FROM_SESSION'
-const importFromSession = payload => ({
+const importFromSession = (members, config) => ({
   type: IMPORT_FROM_SESSION,
-  payload
+  payload: {
+    members: members,
+    config
+  }
 })
 export const importFromSessionThunk = () => async dispatch => {
   try {
     const {data} = await axios.get('/api/ws')
-    dispatch(importFromSession(data))
+    if (data.length === 0) {
+      console.log('found no members - init sample thunk')
+      dispatch(importFromSampleThunk())
+    } else {
+      console.log('Sessions Exists')
+      dispatch(importFromSession(data, sampleConfig))
+    }
   } catch (error) {
     console.error(error)
-  }
-}
-
-const IMPORT_FROM_SAMPLE = 'IMPORT_FROM_SAMPLE'
-const importFromSample = () => ({
-  type: IMPORT_FROM_SAMPLE,
-  payload: {
-    members: ml.map(m => AddHasAttendedField(m)),
-    config: sampleConfig
-  }
-})
-export const importFromSampleThunk = () => dispatch => {
-  try {
-    dispatch(importFromSample())
-  } catch (err) {
-    console.error(err)
   }
 }
 
@@ -39,6 +48,7 @@ const updateMemberAttendance = payload => ({
 })
 export const updateMemberAttendanceThunk = memberId => dispatch => {
   try {
+    UpdateMemberInSession(memberId)
     dispatch(updateMemberAttendance(memberId))
   } catch (error) {
     console.error(error)
@@ -51,6 +61,7 @@ export const updateMemberAttendanceThunk = memberId => dispatch => {
 // 2) Import From Excel File
 // 3) Update Via Manual Entry
 // 4) Send Finalized Report via email (Java)
+// 5) More Admin
 
 const initialState = {
   date: new Date(Date.now()),

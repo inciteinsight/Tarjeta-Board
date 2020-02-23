@@ -11,7 +11,7 @@ router.get('/', (req, res, next) => {
   }
 })
 
-router.put('/', async (req, res, next) => {
+router.put('/', (req, res, next) => {
   try {
     const updateWs = req.body
     req.session.ws = updateWs
@@ -20,3 +20,15 @@ router.put('/', async (req, res, next) => {
     next(error)
   }
 })
+
+router.post('/', (req, res, next) => {
+  try {
+    const updateWs = req.body
+    req.session.ws = updateWs
+    res.json(req.session.ws)
+  } catch (error) {
+    next(error)
+  }
+})
+
+// Update for me I made changes
