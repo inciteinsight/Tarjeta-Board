@@ -57,7 +57,6 @@ export const updateMemberAttendanceThunk = memberId => dispatch => {
 
 // Check List:
 
-// 1) Persistent ws
 // 2) Import From Excel File
 // 3) Update Via Manual Entry
 // 4) Send Finalized Report via email (Java)
