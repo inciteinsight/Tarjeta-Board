@@ -18,7 +18,6 @@ export class Board extends Component {
 
   componentDidMount = async () => {
     await this.props.fetchMembersFromSession()
-    // await this.props.fetchMembersFromSample()
     this.setState({
       isLoading: false
     })
