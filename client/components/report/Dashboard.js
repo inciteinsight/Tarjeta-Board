@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
 import {Tab, Nav, Row, Col} from 'react-bootstrap'
 import Loading from '../misc/Loading'
+import ReportingPane from './ReportingPane'
 import {config} from '../../../public/sample/121919'
+import {connect} from 'react-redux'
 const {Manhattan, BBExt} = config.Locale
 
-export default class Dashboard extends Component {
+class Dashboard extends Component {
   constructor(props) {
     super(props)
 
@@ -46,9 +48,13 @@ export default class Dashboard extends Component {
                   t.split(' ')[0] === 'MAN' ? 'Manhattan' : 'B. Beach Ext'
                 return (
                   <Tab.Pane key={t} eventKey={t} title={t}>
-                    <div>
-                      Hello {locale} {areaGroup}
-                    </div>
+                    <ReportingPane
+                      areaGroup={areaGroup}
+                      locale={locale}
+                      members={this.props.members.filter(
+                        m => m.AreaGroup === areaGroup && m.LOCAL === locale
+                      )}
+                    />
                   </Tab.Pane>
                 )
               })}
@@ -59,3 +65,10 @@ export default class Dashboard extends Component {
     )
   }
 }
+
+const mapState = state => ({
+  members: state.attendance.members,
+  config: state.attendance.config
+})
+
+export default connect(mapState)(Dashboard)
