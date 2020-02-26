@@ -1,13 +1,10 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {importFromSampleThunk, importFromSessionThunk} from '../store'
-import AreaGroupPane from './attendance/AreaGroupPane'
-import Loading from './misc/Loading'
 import {Tab, Nav, Row, Col} from 'react-bootstrap'
-import {config} from '../../public/sample/121919'
+import Loading from '../misc/Loading'
+import {config} from '../../../public/sample/121919'
 const {Manhattan, BBExt} = config.Locale
 
-export class Board extends Component {
+export default class Dashboard extends Component {
   constructor(props) {
     super(props)
 
@@ -17,7 +14,6 @@ export class Board extends Component {
   }
 
   componentDidMount = async () => {
-    await this.props.fetchMembersFromSession()
     this.setState({
       isLoading: false
     })
@@ -50,13 +46,9 @@ export class Board extends Component {
                   t.split(' ')[0] === 'MAN' ? 'Manhattan' : 'B. Beach Ext'
                 return (
                   <Tab.Pane key={t} eventKey={t} title={t}>
-                    <AreaGroupPane
-                      areaGroup={areaGroup}
-                      locale={locale}
-                      members={this.props.members.filter(
-                        m => m.AreaGroup === areaGroup && m.LOCAL === locale
-                      )}
-                    />
+                    <div>
+                      Hello {locale} {areaGroup}
+                    </div>
                   </Tab.Pane>
                 )
               })}
@@ -67,16 +59,3 @@ export class Board extends Component {
     )
   }
 }
-
-const mapState = state => ({
-  email: state.user.email,
-  members: state.attendance.members,
-  config: state.attendance.config
-})
-
-const mapDispatch = dispatch => ({
-  fetchMembersFromSample: () => dispatch(importFromSampleThunk()),
-  fetchMembersFromSession: () => dispatch(importFromSessionThunk())
-})
-
-export default connect(mapState, mapDispatch)(Board)

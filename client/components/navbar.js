@@ -3,9 +3,6 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
-import {Tab, Row, Col, Nav} from 'react-bootstrap'
-import {Login, Signup} from '../components'
-import Board from './Board'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
@@ -13,6 +10,7 @@ const Navbar = ({handleClick, isLoggedIn}) => (
       {isLoggedIn ? (
         <div>
           <Link to="/home">Home</Link>
+          <Link to="/reports">Reports</Link>
           <a href="#" onClick={handleClick}>
             Logout
           </a>
