@@ -52,7 +52,10 @@ class Dashboard extends Component {
                       areaGroup={areaGroup}
                       locale={locale}
                       members={this.props.members.filter(
-                        m => m.AreaGroup === areaGroup && m.LOCAL === locale
+                        m =>
+                          m.AreaGroup === areaGroup &&
+                          m.LOCAL === locale &&
+                          m.hasAttended === false
                       )}
                     />
                   </Tab.Pane>

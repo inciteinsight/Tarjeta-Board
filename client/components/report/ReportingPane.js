@@ -4,18 +4,19 @@ import {connect} from 'react-redux'
 class ReportingPane extends Component {
   render() {
     const {members} = this.props
-    console.log(members)
+    const memberProps = Object.keys(members[0]).slice(
+      0,
+      Object.keys(members[0]).length - 2
+    )
     return (
-      <table>
+      <table className="blueTable">
         <thead>
-          <tr>{Object.keys(members[0]).map(k => <th key={k}>{k}</th>)}</tr>
+          <tr>{memberProps.map(k => <th key={k}>{k}</th>)}</tr>
         </thead>
         <tbody>
           {members.map(m => (
             <tr key={m.Id}>
-              {Object.keys(members[0]).map(k => (
-                <td key={`${k} - ${m.Id}`}>{m[k]}</td>
-              ))}
+              {memberProps.map(k => <td key={`${k} - ${m.Id}`}>{m[k]}</td>)}
             </tr>
           ))}
         </tbody>
