@@ -30,3 +30,12 @@ router.post('/', (req, res, next) => {
     next(error)
   }
 })
+
+router.delete('/', (req, res, next) => {
+  try {
+    req.session.ws = []
+    res.send()
+  } catch (error) {
+    next(error)
+  }
+})

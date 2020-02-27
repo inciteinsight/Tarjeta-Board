@@ -24,6 +24,7 @@ const Navbar = ({handleClick, isLoggedIn}) => (
             <NavDropdown.Item eventKey="4.3">R-103 Preview</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item eventKey="4.4">Save Attendance</NavDropdown.Item>
+            <NavDropdown.Item eventKey="4.4">Clear</NavDropdown.Item>
           </NavDropdown>
           <Nav.Item size="lg">
             <Nav.Link href="#" onClick={handleClick}>

@@ -33,7 +33,18 @@ export const importFromSessionThunk = () => async dispatch => {
       dispatch(importFromSampleThunk())
     } else {
       dispatch(importFromSession(data, sampleConfig))
+      // Will place a "Get current members route here"
     }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const clearSessionThunk = () => async dispatch => {
+  try {
+    await axios.delete('/api/ws')
+    dispatch(importFromSampleThunk())
+    // Will place a "Get current members route here"
   } catch (error) {
     console.error(error)
   }
