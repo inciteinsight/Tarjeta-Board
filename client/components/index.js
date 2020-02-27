@@ -5,5 +5,5 @@
  */
 export {default as Navbar} from './navbar'
 export {default as Board} from './Board'
-export {default as DashBaord} from './report/Dashboard'
+export {default as DashBoard} from './report/Dashboard'
 export {Login, Signup} from './auth-form'

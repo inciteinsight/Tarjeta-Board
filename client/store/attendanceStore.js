@@ -30,10 +30,8 @@ export const importFromSessionThunk = () => async dispatch => {
   try {
     const {data} = await axios.get('/api/ws')
     if (data.length === 0) {
-      console.log('found no members - init sample thunk')
       dispatch(importFromSampleThunk())
     } else {
-      console.log('Sessions Exists')
       dispatch(importFromSession(data, sampleConfig))
     }
   } catch (error) {

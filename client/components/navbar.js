@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
@@ -7,31 +7,37 @@ import {Nav, NavDropdown} from 'react-bootstrap'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
-    <Nav>
+    <Nav className="justify-content-center" activeKey="/home">
       {isLoggedIn ? (
-        <div>
-          <Link to="/home">Home</Link>
-          <NavDropdown title="Reports" id="nav-dropdown">
+        <Fragment>
+          <Nav.Item size="lg">
+            <Nav.Link href="/home">Attendance Board</Nav.Link>
+          </Nav.Item>
+          {/* <Link to="/home">Home</Link> */}
+          <NavDropdown title="Reports" id="nav-dropdown" size="lg">
             <NavDropdown.Item eventKey="4.1">
               <Link to="/reports/absent">Absent</Link>
             </NavDropdown.Item>
             <NavDropdown.Item eventKey="4.2">
-              <Link to="/reports/absent">Complete</Link>
+              <Link to="/reports/complete">Complete</Link>
             </NavDropdown.Item>
             <NavDropdown.Item eventKey="4.3">R-103 Preview</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item eventKey="4.4">Save Attendance</NavDropdown.Item>
           </NavDropdown>
-          <Link to="/reports/didNotAttend">Reports</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-        </div>
+          <Nav.Item size="lg">
+            <Nav.Link href="#" onClick={handleClick}>
+              Logout
+            </Nav.Link>
+          </Nav.Item>
+        </Fragment>
       ) : (
-        <div>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </div>
+        <Fragment>
+          <Nav.Item size="lg">
+            <Nav.Link href="/login">Login</Nav.Link>
+          </Nav.Item>
+          {/* <Link to="/signup">Sign Up</Link> */}
+        </Fragment>
       )}
     </Nav>
     <hr />

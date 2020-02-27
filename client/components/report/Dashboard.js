@@ -12,8 +12,7 @@ class Dashboard extends Component {
     super(props)
 
     this.state = {
-      isLoading: true,
-      didNotAttend: true
+      isLoading: true
     }
   }
 
@@ -29,6 +28,8 @@ class Dashboard extends Component {
     let tabs = Manhattan.AreaGroup.map(ag => `MAN ${ag}`).concat(
       BBExt.AreaGroup.map(ag => `BB ${ag}`)
     )
+    const {mode} = this.props.match.params
+    console.log(mode)
     return isLoading ? (
       <Loading />
     ) : (
@@ -54,11 +55,12 @@ class Dashboard extends Component {
                     <ReportingPane
                       areaGroup={areaGroup}
                       locale={locale}
+                      mode={mode}
                       members={this.props.members.filter(
                         m =>
                           m.AreaGroup === areaGroup &&
                           m.LOCAL === locale &&
-                          m.hasAttended === false
+                          (mode === 'absent' ? !m.hasAttended : true)
                       )}
                     />
                   </Tab.Pane>
