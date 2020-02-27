@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Tab, Nav, Row, Col} from 'react-bootstrap'
 import Loading from '../misc/Loading'
 import ReportingPane from './ReportingPane'
+import {importFromSampleThunk, importFromSessionThunk} from '../../store'
 import {config} from '../../../public/sample/121919'
 import {connect} from 'react-redux'
 const {Manhattan, BBExt} = config.Locale
@@ -11,11 +12,13 @@ class Dashboard extends Component {
     super(props)
 
     this.state = {
-      isLoading: true
+      isLoading: true,
+      didNotAttend: true
     }
   }
 
   componentDidMount = async () => {
+    await this.props.fetchMembersFromSession()
     this.setState({
       isLoading: false
     })
@@ -74,4 +77,9 @@ const mapState = state => ({
   config: state.attendance.config
 })
 
-export default connect(mapState)(Dashboard)
+const mapDispatch = dispatch => ({
+  fetchMembersFromSample: () => dispatch(importFromSampleThunk()),
+  fetchMembersFromSession: () => dispatch(importFromSessionThunk())
+})
+
+export default connect(mapState, mapDispatch)(Dashboard)

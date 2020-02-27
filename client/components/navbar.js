@@ -3,14 +3,26 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
+import {Nav, NavDropdown} from 'react-bootstrap'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
-    <nav>
+    <Nav>
       {isLoggedIn ? (
         <div>
           <Link to="/home">Home</Link>
-          <Link to="/reports">Reports</Link>
+          <NavDropdown title="Reports" id="nav-dropdown">
+            <NavDropdown.Item eventKey="4.1">
+              <Link to="/reports/absent">Absent</Link>
+            </NavDropdown.Item>
+            <NavDropdown.Item eventKey="4.2">
+              <Link to="/reports/absent">Complete</Link>
+            </NavDropdown.Item>
+            <NavDropdown.Item eventKey="4.3">R-103 Preview</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item eventKey="4.4">Save Attendance</NavDropdown.Item>
+          </NavDropdown>
+          <Link to="/reports/didNotAttend">Reports</Link>
           <a href="#" onClick={handleClick}>
             Logout
           </a>
@@ -21,7 +33,7 @@ const Navbar = ({handleClick, isLoggedIn}) => (
           <Link to="/signup">Sign Up</Link>
         </div>
       )}
-    </nav>
+    </Nav>
     <hr />
   </div>
 )
