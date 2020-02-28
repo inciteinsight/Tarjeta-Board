@@ -13,7 +13,18 @@ class Confirm extends Component {
 
   handlePasswordChange = e => this.setState({password: e.target.value})
 
-  clearConfirmed = () => ({})
+  clearConfirmed = async () => {
+    if (this.passwordCheck()) {
+      await this.props.handleClearSession()
+      this.props.hide()
+    }
+  }
+
+  passwordCheck = () => {
+    const {password} = this.state
+    const {secretaryPass} = this.props.config.Settings
+    return password === secretaryPass
+  }
 
   render() {
     return (
@@ -42,6 +53,9 @@ class Confirm extends Component {
                     placeholder="Password"
                     onChange={this.handlePasswordChange}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Please provide a valid city.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Form>
             </Fragment>
@@ -50,6 +64,12 @@ class Confirm extends Component {
           )}
         </Modal.Body>
         <Modal.Footer>
+          <Button
+            variant={this.passwordCheck() ? 'danger' : 'warning'}
+            onClick={this.clearConfirmed}
+          >
+            Clear
+          </Button>
           <Button onClick={this.props.onHide}>Close</Button>
         </Modal.Footer>
       </Modal>
