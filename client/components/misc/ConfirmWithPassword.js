@@ -15,8 +15,8 @@ class ConfirmWithPassword extends Component {
   handlePasswordChange = e => this.setState({password: e.target.value})
 
   handleTrigger = async () => {
-    const {secPass, trigger, hide} = this.props
-    if (this.passwordCheck() || !secPass) {
+    const {trigger, hide} = this.props
+    if (this.passwordCheck()) {
       await trigger()
       hide()
     }

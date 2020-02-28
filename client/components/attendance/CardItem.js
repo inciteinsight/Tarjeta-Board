@@ -1,8 +1,7 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {connect} from 'react-redux'
 import {updateMemberAttendanceThunk} from '../../store'
 import {Card, Container} from 'react-bootstrap'
-import {Fragment} from 'react'
 
 class CardItem extends Component {
   constructor() {
