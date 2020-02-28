@@ -44,6 +44,7 @@ class BoardNav extends Component {
           secPass={true}
           show={this.state.isConfirming}
           onHide={this.confirmClose}
+          trigger={this.props.handleClearSession}
         />
       </NavDropdown>
     )

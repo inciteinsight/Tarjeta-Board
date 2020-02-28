@@ -14,8 +14,8 @@ class Confirm extends Component {
   handlePasswordChange = e => this.setState({password: e.target.value})
 
   clearConfirmed = async () => {
-    if (this.passwordCheck()) {
-      await this.props.handleClearSession()
+    if (this.passwordCheck() || !this.props.secPass) {
+      await this.props.trigger()
       this.props.hide()
     }
   }
@@ -27,6 +27,7 @@ class Confirm extends Component {
   }
 
   render() {
+    const {secPass, message, title, onHide} = this.props
     return (
       <Modal
         {...this.props}
@@ -34,14 +35,12 @@ class Confirm extends Component {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            {this.props.title}
-          </Modal.Title>
+          <Modal.Title id="contained-modal-title-vcenter">{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {this.props.secPass ? (
+          {secPass ? (
             <Fragment>
-              <p>{this.props.message}</p>
+              <p>{message}</p>
               <Form>
                 <Form.Group
                   controlId="formBasicPassword"
@@ -60,7 +59,7 @@ class Confirm extends Component {
               </Form>
             </Fragment>
           ) : (
-            <p>{this.props.message}</p>
+            <p>{message}</p>
           )}
         </Modal.Body>
         <Modal.Footer>
@@ -70,7 +69,7 @@ class Confirm extends Component {
           >
             Clear
           </Button>
-          <Button onClick={this.props.onHide}>Close</Button>
+          <Button onClick={onHide}>Close</Button>
         </Modal.Footer>
       </Modal>
     )
