@@ -3,9 +3,7 @@ import {Tab, Nav, Row, Col} from 'react-bootstrap'
 import Loading from '../misc/Loading'
 import ReportingPane from './ReportingPane'
 import {importFromSampleThunk, importFromSessionThunk} from '../../store'
-import {config} from '../../../public/sample/121919'
 import {connect} from 'react-redux'
-const {Manhattan, BBExt} = config.Locale
 
 class Dashboard extends Component {
   constructor(props) {
@@ -23,11 +21,19 @@ class Dashboard extends Component {
     })
   }
 
-  render() {
-    let {isLoading} = this.state
-    let tabs = Manhattan.AreaGroup.map(ag => `MAN ${ag}`).concat(
+  listAreaGroups = (loading, config) => {
+    if (loading) {
+      return []
+    }
+    const {Manhattan, BBExt} = config.Locale
+    return Manhattan.AreaGroup.map(ag => `MAN ${ag}`).concat(
       BBExt.AreaGroup.map(ag => `BB ${ag}`)
     )
+  }
+
+  render() {
+    let {isLoading} = this.state
+    let tabs = this.listAreaGroups(isLoading, this.props.config)
     const {mode} = this.props.match.params
     console.log(mode)
     return isLoading ? (

@@ -22,8 +22,9 @@ class Routes extends Component {
         <Route path="/signup" component={Signup} />
         {isLoggedIn && (
           <Switch>
-            <Route path="/home" component={Board} />
+            <Route path="/home/:gender" component={Board} />
             <Route path="/reports/:mode" component={DashBoard} />
+            <Route path="/" component={Board} />
           </Switch>
         )}
         <Route component={Login} />

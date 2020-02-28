@@ -1,31 +1,18 @@
 import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import {logout} from '../store'
-import {Nav, NavDropdown} from 'react-bootstrap'
+import {Nav} from 'react-bootstrap'
+import BoardNav from './nav/BoardNav'
+import ReportingNav from './nav/ReportingNav'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
-    <Nav className="justify-content-center" activeKey="/home">
+    <Nav variant="pills" className="justify-content-center" activeKey="/home">
       {isLoggedIn ? (
         <Fragment>
-          <Nav.Item size="lg">
-            <Nav.Link href="/home">Attendance Board</Nav.Link>
-          </Nav.Item>
-          {/* <Link to="/home">Home</Link> */}
-          <NavDropdown title="Reports" id="nav-dropdown" size="lg">
-            <NavDropdown.Item eventKey="4.1">
-              <Link to="/reports/absent">Absent</Link>
-            </NavDropdown.Item>
-            <NavDropdown.Item eventKey="4.2">
-              <Link to="/reports/complete">Complete</Link>
-            </NavDropdown.Item>
-            <NavDropdown.Item eventKey="4.3">R-103 Preview</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item eventKey="4.4">Save Attendance</NavDropdown.Item>
-            <NavDropdown.Item eventKey="4.4">Clear</NavDropdown.Item>
-          </NavDropdown>
+          <BoardNav />
+          <ReportingNav />
           <Nav.Item size="lg">
             <Nav.Link href="#" onClick={handleClick}>
               Logout
@@ -37,7 +24,6 @@ const Navbar = ({handleClick, isLoggedIn}) => (
           <Nav.Item size="lg">
             <Nav.Link href="/login">Login</Nav.Link>
           </Nav.Item>
-          {/* <Link to="/signup">Sign Up</Link> */}
         </Fragment>
       )}
     </Nav>

@@ -4,8 +4,6 @@ import {importFromSampleThunk, importFromSessionThunk} from '../store'
 import AreaGroupPane from './attendance/AreaGroupPane'
 import Loading from './misc/Loading'
 import {Tab, Nav, Row, Col} from 'react-bootstrap'
-import {config} from '../../public/sample/121919'
-const {Manhattan, BBExt} = config.Locale
 
 export class Board extends Component {
   constructor(props) {
@@ -23,11 +21,20 @@ export class Board extends Component {
     })
   }
 
-  render() {
-    let {isLoading} = this.state
-    let tabs = Manhattan.AreaGroup.map(ag => `MAN ${ag}`).concat(
+  listAreaGroups = (loading, config) => {
+    if (loading) {
+      return []
+    }
+    const {Manhattan, BBExt} = config.Locale
+    return Manhattan.AreaGroup.map(ag => `MAN ${ag}`).concat(
       BBExt.AreaGroup.map(ag => `BB ${ag}`)
     )
+  }
+
+  render() {
+    let {isLoading} = this.state
+    const {gender} = this.props.match.params
+    const tabs = this.listAreaGroups(isLoading, this.props.config)
     return isLoading ? (
       <Loading />
     ) : (
@@ -54,7 +61,10 @@ export class Board extends Component {
                       areaGroup={areaGroup}
                       locale={locale}
                       members={this.props.members.filter(
-                        m => m.AreaGroup === areaGroup && m.LOCAL === locale
+                        m =>
+                          m.AreaGroup === areaGroup &&
+                          m.LOCAL === locale &&
+                          (gender ? m.Gender === gender : true)
                       )}
                     />
                   </Tab.Pane>
