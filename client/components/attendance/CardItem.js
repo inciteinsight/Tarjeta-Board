@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {updateMemberAttendanceThunk} from '../../store'
 import {Card, Container} from 'react-bootstrap'
 import EmptyCard from './EmptyCard'
-import Confirm from '../misc/Confirm'
+import MemberConfirm from '../misc/MemberConfirm'
 
 class CardItem extends Component {
   constructor() {
@@ -57,15 +57,15 @@ class CardItem extends Component {
               <Card.Title>{LastName}</Card.Title>
             </Fragment>
           ) : (
-            <div className="d-flex flex-row justify-content-around align-items-center">
+            <div className="d-flex flex-column justify-content-around align-items-center">
               <h3 className="text-success">PRESENT</h3>
-              <svg height="40" width="40">
+              <svg height="30" width="30">
                 <circle
-                  cx="20"
-                  cy="20"
-                  r="16"
+                  cx="15"
+                  cy="15"
+                  r="12"
                   stroke="black"
-                  strokeWidth="3"
+                  strokeWidth="2"
                   fill={Officer === 'Y' ? color.officer : color.default}
                 />
               </svg>
@@ -76,16 +76,19 @@ class CardItem extends Component {
     )
   }
 
-  render() {
+  render = () => {
     let {member} = this.props
     return member === 'empty' ? (
       <Container bsPrefix="tarjeta-placeholder">
         <EmptyCard />
       </Container>
     ) : (
-      <Container bsPrefix="tarjeta-placeholder" onClick={this.turnover}>
-        {this.cardFront(member)}
-        <Confirm
+      <Fragment>
+        <Container bsPrefix="tarjeta-placeholder" onClick={this.turnover}>
+          {this.cardFront(member)}
+        </Container>
+        <MemberConfirm
+          member={member}
           title="Revoking Attendance"
           message={`Are you sure you want to revoke
                   ${member.FirstName} ${member.LastName}'s attendance?`}
@@ -94,7 +97,7 @@ class CardItem extends Component {
           buttonMessage="Revoke"
           trigger={this.handleAttendanceUpdate}
         />
-      </Container>
+      </Fragment>
     )
   }
 }

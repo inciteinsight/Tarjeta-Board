@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Modal, Button} from 'react-bootstrap'
 
-class Confirm extends Component {
+class MemberConfirm extends Component {
   constructor(props) {
     super(props)
 
@@ -9,9 +9,9 @@ class Confirm extends Component {
   }
 
   handleTrigger = async () => {
-    const {trigger, hide} = this.props
+    const {trigger, onHide} = this.props
     await trigger()
-    hide()
+    onHide()
   }
 
   render() {
@@ -39,4 +39,4 @@ class Confirm extends Component {
   }
 }
 
-export default Confirm
+export default MemberConfirm
