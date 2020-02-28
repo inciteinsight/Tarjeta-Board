@@ -15,10 +15,10 @@ class ConfirmWithPassword extends Component {
   handlePasswordChange = e => this.setState({password: e.target.value})
 
   handleTrigger = async () => {
-    const {trigger, hide} = this.props
+    const {trigger, onHide} = this.props
     if (this.passwordCheck()) {
       await trigger()
-      hide()
+      onHide()
     }
   }
 

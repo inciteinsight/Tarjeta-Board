@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {updateMemberAttendanceThunk} from '../../store'
 import {Card, Container} from 'react-bootstrap'
 import EmptyCard from './EmptyCard'
-import MemberConfirm from '../misc/MemberConfirm'
+import Confirm from '../misc/Confirm'
 
 class CardItem extends Component {
   constructor() {
@@ -87,7 +87,7 @@ class CardItem extends Component {
         <Container bsPrefix="tarjeta-placeholder" onClick={this.turnover}>
           {this.cardFront(member)}
         </Container>
-        <MemberConfirm
+        <Confirm
           member={member}
           title="Revoking Attendance"
           message={`Are you sure you want to revoke

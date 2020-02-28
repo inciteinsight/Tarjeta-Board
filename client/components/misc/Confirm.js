@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Modal, Button} from 'react-bootstrap'
 
-class MemberConfirm extends Component {
+class Confirm extends Component {
   constructor(props) {
     super(props)
 
@@ -39,4 +39,4 @@ class MemberConfirm extends Component {
   }
 }
 
-export default MemberConfirm
+export default Confirm

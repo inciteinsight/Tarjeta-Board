@@ -26,6 +26,9 @@ const Navbar = ({handleClick, isLoggedIn}) => (
           </Nav.Item>
         </Fragment>
       )}
+      <Nav.Item className="align-self-baseline text-success">
+        {/* Worship Service Date. */}
+      </Nav.Item>
     </Nav>
     <hr />
   </div>
