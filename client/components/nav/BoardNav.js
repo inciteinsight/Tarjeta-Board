@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {NavDropdown} from 'react-bootstrap'
 import {clearSessionThunk} from '../../store'
-import Confirm from '../misc/Confirm'
+import ConfirmWithPassword from '../misc/ConfirmWithPassword'
 
 import {connect} from 'react-redux'
 
@@ -38,12 +38,13 @@ class BoardNav extends Component {
         >
           Clear Attendance
         </NavDropdown.Item>
-        <Confirm
+        <ConfirmWithPassword
           title="Clearing Worship Service Attendance Cache"
           message="Are you sure you want to clear? This cannot be reversed."
           secPass={true}
           show={this.state.isConfirming}
           onHide={this.confirmClose}
+          buttonMessage="Clear"
           trigger={this.props.handleClearSession}
         />
       </NavDropdown>

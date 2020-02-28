@@ -1,15 +1,17 @@
-import React, {Component} from 'react'
-import {Container} from 'react-bootstrap/lib/Tab'
+import React from 'react'
 import {Form} from 'react-bootstrap'
 
-export default class PasswordRequest extends Component {
-  render() {
-    return (
-      <Container>
-        <Form />
-      </Container>
-    )
-  }
-}
+const PasswordRequest = ({handlePasswordChange}) => (
+  <Form>
+    <Form.Group controlId="formBasicPassword" className="d-flex flex-row">
+      <Form.Label>Secretary Password: </Form.Label>
+      <Form.Control
+        type="password"
+        placeholder="Password"
+        onChange={handlePasswordChange}
+      />
+    </Form.Group>
+  </Form>
+)
 
-// This component will contain a simple password mechanic
+export default PasswordRequest
