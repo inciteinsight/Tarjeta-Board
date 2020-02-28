@@ -2,12 +2,15 @@ import React, {Component, Fragment} from 'react'
 import {connect} from 'react-redux'
 import {updateMemberAttendanceThunk} from '../../store'
 import {Card, Container} from 'react-bootstrap'
+import EmptyCard from './EmptyCard'
+import Confirm from '../misc/Confirm'
 
 class CardItem extends Component {
   constructor() {
     super()
     this.state = {
-      isPresent: false
+      isPresent: false,
+      isConfirming: false
     }
   }
 
@@ -17,13 +20,23 @@ class CardItem extends Component {
     })
   }
 
-  turnover = member => {
+  turnover = () => {
     const {isPresent} = this.state
-    this.setState({
-      isPresent: !isPresent
-    })
-    this.props.fetchUpdateMemberAttendanceThunk(member.Id)
+    if (isPresent) {
+      this.setState({isConfirming: true})
+    } else {
+      this.handleAttendanceUpdate()
+    }
   }
+
+  handleAttendanceUpdate = () => {
+    const {isPresent} = this.state
+    const {Id} = this.props.member
+    this.props.fetchUpdateMemberAttendanceThunk(Id)
+    this.setState({isPresent: !isPresent})
+  }
+
+  confirmClose = () => this.setState({isConfirming: false})
 
   cardFront = member => {
     const {color} = this.props.config
@@ -63,27 +76,24 @@ class CardItem extends Component {
     )
   }
 
-  empty = () => (
-    <Card
-      bsPrefix="tarjeta-empty"
-      className="d-flex flex-row justify-content-center"
-    >
-      <div
-        style={{border: '5px ridge brown', width: '75%', marginTop: '10%'}}
-      />
-    </Card>
-  )
-
   render() {
     let {member} = this.props
     return member === 'empty' ? (
-      <Container bsPrefix="tarjeta-placeholder">{this.empty()}</Container>
+      <Container bsPrefix="tarjeta-placeholder">
+        <EmptyCard />
+      </Container>
     ) : (
-      <Container
-        bsPrefix="tarjeta-placeholder"
-        onClick={() => this.turnover(member)}
-      >
+      <Container bsPrefix="tarjeta-placeholder" onClick={this.turnover}>
         {this.cardFront(member)}
+        <Confirm
+          title="Revoking Attendance"
+          message={`Are you sure you want to revoke
+                  ${member.FirstName} ${member.LastName}'s attendance?`}
+          show={this.state.isConfirming}
+          onHide={this.confirmClose}
+          buttonMessage="Revoke"
+          trigger={this.handleAttendanceUpdate}
+        />
       </Container>
     )
   }
