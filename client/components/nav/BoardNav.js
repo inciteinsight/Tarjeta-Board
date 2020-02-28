@@ -1,9 +1,21 @@
 import React, {Component} from 'react'
 import {NavDropdown} from 'react-bootstrap'
+import {clearSessionThunk} from '../../store'
+import Confirm from '../misc/Confirm'
 
 import {connect} from 'react-redux'
 
-export default class BoardNav extends Component {
+class BoardNav extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isConfirming: false
+    }
+  }
+
+  confirmClose = () => this.setState({isConfirming: false})
+
   render() {
     return (
       <NavDropdown title="Attendance Board" id="nav-dropdown" size="lg">
@@ -20,14 +32,26 @@ export default class BoardNav extends Component {
         <NavDropdown.Item eventKey="4.4" disabled>
           Save Attendance
         </NavDropdown.Item>
-        <NavDropdown.Item eventKey="4.4" disabled>
+        <NavDropdown.Item
+          eventKey="4.4"
+          onClick={() => this.setState({isConfirming: true})}
+        >
           Clear Attendance
         </NavDropdown.Item>
+        <Confirm
+          title="Clearing Worship Service Attendance Cache"
+          message="Are you sure you want to clear? This cannot be reversed."
+          secPass={true}
+          show={this.state.isConfirming}
+          onHide={this.confirmClose}
+        />
       </NavDropdown>
     )
   }
 }
 
-// mapDispatch = dispatch => ({
-//     handleClearSession: () => dispatch()
-// })
+const mapDispatch = dispatch => ({
+  handleClearSession: () => dispatch(clearSessionThunk())
+})
+
+export default connect(null, mapDispatch)(BoardNav)
