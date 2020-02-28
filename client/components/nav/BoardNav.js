@@ -1,19 +1,20 @@
 import React, {Component} from 'react'
 import {NavDropdown} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+
+import {connect} from 'react-redux'
 
 export default class BoardNav extends Component {
   render() {
     return (
       <NavDropdown title="Attendance Board" id="nav-dropdown" size="lg">
-        <NavDropdown.Item eventKey="4.1">
-          <Link to="/home/">Complete</Link>
+        <NavDropdown.Item eventKey="4.1" href="/home/">
+          Complete
         </NavDropdown.Item>
-        <NavDropdown.Item eventKey="4.2">
-          <Link to="/home/M">Male</Link>
+        <NavDropdown.Item eventKey="4.2" href="/home/M">
+          Male
         </NavDropdown.Item>
-        <NavDropdown.Item eventKey="4.2">
-          <Link to="/home/F">Female</Link>
+        <NavDropdown.Item eventKey="4.2" href="/home/F">
+          Female
         </NavDropdown.Item>
         <NavDropdown.Divider />
         <NavDropdown.Item eventKey="4.4" disabled>
@@ -26,3 +27,7 @@ export default class BoardNav extends Component {
     )
   }
 }
+
+// mapDispatch = dispatch => ({
+//     handleClearSession: () => dispatch()
+// })
