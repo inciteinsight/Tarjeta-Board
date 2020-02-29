@@ -74,7 +74,7 @@ export const updateMemberAttendanceThunk = memberId => dispatch => {
 // 5) More Admin
 
 const initialState = {
-  date: new Date(Date.now()),
+  currentDate: '2020-02-29T09:00:00',
   members: [],
   config: {}
 }

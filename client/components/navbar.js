@@ -6,9 +6,19 @@ import {Nav} from 'react-bootstrap'
 import BoardNav from './nav/BoardNav'
 import ReportingNav from './nav/ReportingNav'
 
-const Navbar = ({handleClick, isLoggedIn}) => (
+const Navbar = ({handleClick, isLoggedIn, currentDate}) => (
   <div>
     <Nav variant="pills" className="justify-content-center" activeKey="/home">
+      <Nav.Item className="align-self-center text-success">
+        <div>
+          {new Date(currentDate).toLocaleTimeString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })}
+        </div>
+      </Nav.Item>
       {isLoggedIn ? (
         <Fragment>
           <BoardNav />
@@ -26,23 +36,14 @@ const Navbar = ({handleClick, isLoggedIn}) => (
           </Nav.Item>
         </Fragment>
       )}
-      <Nav.Item className="align-self-center text-success">
-        <div>
-          {new Date('2020-02-29T09:00:00').toLocaleTimeString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          })}
-        </div>
-      </Nav.Item>
     </Nav>
     <hr />
   </div>
 )
 
 const mapState = state => ({
-  isLoggedIn: !!state.user.id
+  isLoggedIn: !!state.user.id,
+  currentDate: state.attendance.currentDate
 })
 
 const mapDispatch = dispatch => ({
