@@ -26,8 +26,15 @@ const Navbar = ({handleClick, isLoggedIn}) => (
           </Nav.Item>
         </Fragment>
       )}
-      <Nav.Item className="align-self-baseline text-success">
-        {/* Worship Service Date. */}
+      <Nav.Item className="align-self-center text-success">
+        <div>
+          {new Date('2020-02-29T09:00:00').toLocaleTimeString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })}
+        </div>
       </Nav.Item>
     </Nav>
     <hr />
