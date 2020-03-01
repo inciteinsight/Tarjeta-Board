@@ -3,7 +3,8 @@ import {connect} from 'react-redux'
 import {importFromSampleThunk, importFromSessionThunk} from '../store'
 import AreaGroupPane from './attendance/AreaGroupPane'
 import Loading from './misc/Loading'
-import {Tab, Nav, Row, Col} from 'react-bootstrap'
+import {Tab} from 'react-bootstrap'
+import TabNav from './nav/TabNav'
 
 export class Board extends Component {
   constructor(props) {
@@ -40,40 +41,28 @@ export class Board extends Component {
       <Loading />
     ) : (
       <Tab.Container id="left-tabs-example" defaultActiveKey={tabs[0]}>
-        <Row>
-          <Col sm={2}>
-            <Nav variant="pills" className="flex-column">
-              {tabs.map(t => (
-                <Nav.Item key={t}>
-                  <Nav.Link eventKey={t}>{t}</Nav.Link>
-                </Nav.Item>
-              ))}
-            </Nav>
-          </Col>
-          <Col sm={10}>
-            <Tab.Content>
-              {tabs.map(t => {
-                const areaGroup = t.split(' ')[1]
-                const locale =
-                  t.split(' ')[0] === 'MAN' ? 'Manhattan' : 'B. Beach Ext'
-                return (
-                  <Tab.Pane key={t} eventKey={t} title={t}>
-                    <AreaGroupPane
-                      areaGroup={areaGroup}
-                      locale={locale}
-                      members={this.props.members.filter(
-                        m =>
-                          m.AreaGroup === areaGroup &&
-                          m.Local === locale &&
-                          (gender ? m.Gender === gender : true)
-                      )}
-                    />
-                  </Tab.Pane>
-                )
-              })}
-            </Tab.Content>
-          </Col>
-        </Row>
+        <Tab.Content>
+          <TabNav tabs={tabs} />
+          {tabs.map(t => {
+            const areaGroup = t.split(' ')[1]
+            const locale =
+              t.split(' ')[0] === 'MAN' ? 'Manhattan' : 'B. Beach Ext'
+            return (
+              <Tab.Pane key={t} eventKey={t} title={t}>
+                <AreaGroupPane
+                  areaGroup={areaGroup}
+                  locale={locale}
+                  members={this.props.members.filter(
+                    m =>
+                      m.AreaGroup === areaGroup &&
+                      m.Local === locale &&
+                      (gender ? m.Gender === gender : true)
+                  )}
+                />
+              </Tab.Pane>
+            )
+          })}
+        </Tab.Content>
       </Tab.Container>
     )
   }

@@ -36,4 +36,11 @@ require('./models')
 // - extensionOf (reference Local Entity; nulll if Local)
 // - district?
 
+// Functionalities
+
+// - Add / Remove (de-activate) Members Manually
+// - Update Current List via Excel
+// - Swipe from area to area
+// - UX / UI Feedback - Screen; Members
+
 module.exports = db

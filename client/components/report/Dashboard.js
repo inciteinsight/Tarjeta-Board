@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-import {Tab, Nav, Row, Col} from 'react-bootstrap'
+import {Tab} from 'react-bootstrap'
 import Loading from '../misc/Loading'
 import ReportingPane from './ReportingPane'
 import {importFromSampleThunk, importFromSessionThunk} from '../../store'
 import {connect} from 'react-redux'
+import TabNav from '../nav/TabNav'
 
 class Dashboard extends Component {
   constructor(props) {
@@ -39,41 +40,29 @@ class Dashboard extends Component {
       <Loading />
     ) : (
       <Tab.Container id="left-tabs-example" defaultActiveKey={tabs[0]}>
-        <Row>
-          <Col sm={2}>
-            <Nav variant="pills" className="flex-column">
-              {tabs.map(t => (
-                <Nav.Item key={t}>
-                  <Nav.Link eventKey={t}>{t}</Nav.Link>
-                </Nav.Item>
-              ))}
-            </Nav>
-          </Col>
-          <Col sm={10}>
-            <Tab.Content>
-              {tabs.map(t => {
-                const areaGroup = t.split(' ')[1]
-                const locale =
-                  t.split(' ')[0] === 'MAN' ? 'Manhattan' : 'B. Beach Ext'
-                return (
-                  <Tab.Pane key={t} eventKey={t} title={t}>
-                    <ReportingPane
-                      areaGroup={areaGroup}
-                      locale={locale}
-                      mode={mode}
-                      members={this.props.members.filter(
-                        m =>
-                          m.AreaGroup === areaGroup &&
-                          m.Local === locale &&
-                          (mode === 'absent' ? !m.hasAttended : true)
-                      )}
-                    />
-                  </Tab.Pane>
-                )
-              })}
-            </Tab.Content>
-          </Col>
-        </Row>
+        <TabNav tabs={tabs} />
+        <Tab.Content>
+          {tabs.map(t => {
+            const areaGroup = t.split(' ')[1]
+            const locale =
+              t.split(' ')[0] === 'MAN' ? 'Manhattan' : 'B. Beach Ext'
+            return (
+              <Tab.Pane key={t} eventKey={t} title={t}>
+                <ReportingPane
+                  areaGroup={areaGroup}
+                  locale={locale}
+                  mode={mode}
+                  members={this.props.members.filter(
+                    m =>
+                      m.AreaGroup === areaGroup &&
+                      m.Local === locale &&
+                      (mode === 'absent' ? !m.hasAttended : true)
+                  )}
+                />
+              </Tab.Pane>
+            )
+          })}
+        </Tab.Content>
       </Tab.Container>
     )
   }

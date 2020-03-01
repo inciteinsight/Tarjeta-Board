@@ -31,7 +31,6 @@ const importFromSession = (members, config, currentDate) => ({
 export const importFromSessionThunk = () => async dispatch => {
   try {
     const {data} = await axios.get('/api/ws/cache')
-    console.log(data)
     if (data.members.length === 0) {
       dispatch(importFromSampleThunk())
     } else {
