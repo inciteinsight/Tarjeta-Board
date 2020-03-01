@@ -2,7 +2,7 @@ const router = require('express').Router()
 
 module.exports = router
 
-router.get('/', (req, res, next) => {
+router.get('/cache', (req, res, next) => {
   try {
     const ws = req.session.ws
     res.json(ws)
@@ -11,7 +11,7 @@ router.get('/', (req, res, next) => {
   }
 })
 
-router.put('/', (req, res, next) => {
+router.put('/cache', (req, res, next) => {
   try {
     const updateWs = req.body
     req.session.ws = updateWs
@@ -21,7 +21,7 @@ router.put('/', (req, res, next) => {
   }
 })
 
-router.post('/', (req, res, next) => {
+router.post('/cache', (req, res, next) => {
   try {
     const updateWs = req.body
     req.session.ws = updateWs
@@ -31,7 +31,7 @@ router.post('/', (req, res, next) => {
   }
 })
 
-router.delete('/', (req, res, next) => {
+router.delete('/cache', (req, res, next) => {
   try {
     req.session.ws = []
     res.send()

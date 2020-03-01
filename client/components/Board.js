@@ -15,7 +15,8 @@ export class Board extends Component {
   }
 
   componentDidMount = async () => {
-    await this.props.fetchMembersFromSession()
+    // await this.props.fetchMembersFromSession()
+    await this.props.fetchMembersFromSample()
     this.setState({
       isLoading: false
     })
@@ -63,7 +64,7 @@ export class Board extends Component {
                       members={this.props.members.filter(
                         m =>
                           m.AreaGroup === areaGroup &&
-                          m.LOCAL === locale &&
+                          m.Local === locale &&
                           (gender ? m.Gender === gender : true)
                       )}
                     />

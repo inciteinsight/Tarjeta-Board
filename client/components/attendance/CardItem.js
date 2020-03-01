@@ -46,7 +46,9 @@ class CardItem extends Component {
       <Card className={`${!isPresent ? 'bg-light text-dark' : 'text-white'}`}>
         <Card.Body bsPrefix="tarjeta-body">
           <div className="d-flex flex-row justify-content-between">
-            <Card.Subtitle className="mb-2 text-muted">{Id}</Card.Subtitle>
+            <Card.Subtitle className="mb-2 text-muted">
+              {String(Id).padStart(4, '0')}
+            </Card.Subtitle>
             <Card.Subtitle className="mb-2 text-muted">
               Area {AreaGroup}
             </Card.Subtitle>
