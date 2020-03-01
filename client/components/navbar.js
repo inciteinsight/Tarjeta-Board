@@ -1,27 +1,32 @@
 import React, {Component, Fragment} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {logout} from '../store'
-import {Navbar as NavBarComp, Nav, Alert} from 'react-bootstrap'
+import {logout, updateSecretaryModeThunk} from '../store'
+import {
+  Navbar as NavBarComp,
+  Nav,
+  Alert,
+  OverlayTrigger,
+  Popover
+} from 'react-bootstrap'
 import BoardNav from './nav/BoardNav'
 import ReportingNav from './nav/ReportingNav'
+import PasswordRequest from './misc/PasswordRequest'
+import BoardOptionsNav from './nav/BoardOptionsNav'
 
 class Navbar extends Component {
-  constructor(props) {
-    super(props)
+  toggleSecMode = () => {
+    this.props.handleUpdateSecretaryMode()
+  }
 
-    this.state = {
-      isSecretary: true
+  handlePasswordChange = e => {
+    if (this.props.config.Settings.secretaryPass === e.target.value) {
+      this.props.handleUpdateSecretaryMode()
     }
   }
 
-  toggleSecMode = () => {
-    this.setState(prevState => ({isSecretary: !prevState.isSecretary}))
-  }
-
   render() {
-    const {isSecretary} = this.state
-    const {handleClick, isLoggedIn, currentDate} = this.props
+    const {handleClick, isLoggedIn, currentDate, isSecretary} = this.props
     return (
       <div>
         <NavBarComp bg="dark" variant="dark">
@@ -42,17 +47,41 @@ class Navbar extends Component {
             {isLoggedIn ? (
               <Fragment>
                 <BoardNav />
-                <ReportingNav />
-                <Nav.Item>
-                  <Nav.Link href="#" onClick={handleClick}>
-                    Logout
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link onClick={this.toggleSecMode}>
-                    {isSecretary ? 'Worship Service Mode' : 'Secretary Mode'}
-                  </Nav.Link>
-                </Nav.Item>
+                {isSecretary ? (
+                  <Fragment>
+                    <ReportingNav />
+                    <BoardOptionsNav />
+                    <Nav.Item>
+                      <Nav.Link href="#" onClick={handleClick}>
+                        Logout
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link onClick={this.toggleSecMode}>
+                        Enter WS Mode
+                      </Nav.Link>
+                    </Nav.Item>
+                  </Fragment>
+                ) : (
+                  <OverlayTrigger
+                    trigger="click"
+                    key="bottom"
+                    placement="bottom"
+                    overlay={
+                      <Popover>
+                        <Popover.Content>
+                          <PasswordRequest
+                            handlePasswordChange={this.handlePasswordChange}
+                          />
+                        </Popover.Content>
+                      </Popover>
+                    }
+                  >
+                    <Nav.Item>
+                      <Nav.Link>Enter Secretary Mode</Nav.Link>
+                    </Nav.Item>
+                  </OverlayTrigger>
+                )}
                 <Nav.Item className="d-flex align-items-center">
                   <Alert
                     style={{marginBottom: 0}}
@@ -70,9 +99,6 @@ class Navbar extends Component {
                 </Nav.Item>
               </Fragment>
             )}
-            {/* <Nav.Item as="h5" className="text-danger align-self-center">
-            {this.state.isSecretary ? "SECRETARY MODE" : "Worship Service Mode"}
-          </Nav.Item> */}
           </Nav>
         </NavBarComp>
         <hr />
@@ -80,17 +106,17 @@ class Navbar extends Component {
     )
   }
 }
-// } () => (
-
-// )
 
 const mapState = state => ({
   isLoggedIn: !!state.user.id,
-  currentDate: state.attendance.currentDate
+  currentDate: state.attendance.currentDate,
+  config: state.attendance.config,
+  isSecretary: state.secretary.isSecretary
 })
 
 const mapDispatch = dispatch => ({
-  handleClick: () => dispatch(logout())
+  handleClick: () => dispatch(logout()),
+  handleUpdateSecretaryMode: () => dispatch(updateSecretaryModeThunk())
 })
 
 export default connect(mapState, mapDispatch)(Navbar)
