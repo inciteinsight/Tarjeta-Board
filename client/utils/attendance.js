@@ -8,8 +8,8 @@ export const AddHasAttendedField = member => {
 export const UpdateMemberInSession = async memberId => {
   const {data} = await axios.get('/api/ws/cache')
   await axios.put(
-    `/api/ws/cache`,
-    data.map(m => {
+    `/api/ws/cache/members`,
+    data.members.map(m => {
       if (m.Id === memberId) {
         m.hasAttended = !m.hasAttended
       }

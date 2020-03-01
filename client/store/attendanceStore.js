@@ -12,7 +12,7 @@ export const importFromSampleThunk = () => async dispatch => {
   try {
     const members = ml.map(m => AddHasAttendedField(m))
     const config = sampleConfig
-    await axios.post('/api/ws/cache', members)
+    await axios.post('/api/ws/cache/members', members)
     dispatch(importFromSample(members, config))
   } catch (err) {
     console.error(err)
@@ -20,20 +20,22 @@ export const importFromSampleThunk = () => async dispatch => {
 }
 
 const IMPORT_FROM_SESSION = 'IMPORT_FROM_SESSION'
-const importFromSession = (members, config) => ({
+const importFromSession = (members, config, currentDate) => ({
   type: IMPORT_FROM_SESSION,
   payload: {
     members: members,
-    config
+    config,
+    currentDate
   }
 })
 export const importFromSessionThunk = () => async dispatch => {
   try {
     const {data} = await axios.get('/api/ws/cache')
-    if (data.length === 0) {
+    console.log(data)
+    if (data.members.length === 0) {
       dispatch(importFromSampleThunk())
     } else {
-      dispatch(importFromSession(data, sampleConfig))
+      dispatch(importFromSession(data.members, sampleConfig, data.currentDate))
       // Will place a "Get current members route here"
     }
   } catch (error) {
@@ -43,7 +45,7 @@ export const importFromSessionThunk = () => async dispatch => {
 
 export const clearSessionThunk = () => async dispatch => {
   try {
-    await axios.delete('/api/ws/cache')
+    await axios.delete('/api/ws/cache/members')
     await dispatch(importFromSampleThunk())
     // Will place a "Get current members route here"
     history.go('/')
@@ -86,6 +88,7 @@ export default (state = initialState, {type, payload}) => {
     case IMPORT_FROM_SESSION:
       newState.members = payload.members
       newState.config = payload.config
+      newState.currentDate = payload.currentDate
       return newState
     case UPDATE_MEMBER_ATTENDANCE:
       newState.members.find(

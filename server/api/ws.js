@@ -11,30 +11,42 @@ router.get('/cache', (req, res, next) => {
   }
 })
 
-router.put('/cache', (req, res, next) => {
+router.put('/cache/members', (req, res, next) => {
   try {
     const updateWs = req.body
-    req.session.ws = updateWs
+    req.session.ws.members = updateWs
     res.json(req.session.ws)
   } catch (error) {
     next(error)
   }
 })
 
-router.post('/cache', (req, res, next) => {
+router.post('/cache/members', (req, res, next) => {
   try {
     const updateWs = req.body
-    req.session.ws = updateWs
+    req.session.ws.members = updateWs
     res.json(req.session.ws)
   } catch (error) {
     next(error)
   }
 })
 
-router.delete('/cache', (req, res, next) => {
+router.delete('/cache/members', (req, res, next) => {
   try {
-    req.session.ws = []
+    req.session.ws.members = []
     res.send()
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/cache/reset', (req, res, next) => {
+  try {
+    req.session.ws = {
+      currentDate: new Date(Date.now()).toISOString(),
+      members: []
+    }
+    res.json(req.session.ws)
   } catch (error) {
     next(error)
   }

@@ -65,7 +65,10 @@ const createApp = () => {
 
   app.use('*', (req, res, next) => {
     if (!req.session.ws) {
-      req.session.ws = []
+      req.session.ws = {
+        currentDate: new Date(Date.now()).toISOString(),
+        members: []
+      }
     }
     next()
   })
