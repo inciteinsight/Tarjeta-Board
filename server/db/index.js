@@ -5,15 +5,15 @@ require('./models')
 
 // To Do List:
 
-// WorshipService
-// - Year
-// - WeekNumber
-// - ServiceType
-// - Local - varchar(50)
-// - Extension - varchar(50)
+// ReportingPeriod
+// - Id {year, weekNumber, serviceType}
+// - year
+// - weekNumber
+// - serviceType
+// - localId - varchar(50)
 
 // Member
-// - ID
+// - Id
 // - Local - varchar(50)
 // - Extension - varchar(50)
 // - AreaGroup - varchar(7)
@@ -22,8 +22,18 @@ require('./models')
 // - CFO - varchar(10)
 // - Officer - varchar(20)
 // - Gender - Enum (M, F)
+// - isActive
+
+// WorshipServiceAttendance
+// - reportingPeriodId
+// - memberId
+// - dateTime
+// - hasAttended
 
 // Local
-// - District?
+// - id {first letter; two consonance}
+// - name
+// - extensionOf (reference Local Entity; nulll if Local)
+// - district?
 
 module.exports = db
