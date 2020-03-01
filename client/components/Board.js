@@ -40,7 +40,7 @@ export class Board extends Component {
     return isLoading ? (
       <Loading />
     ) : (
-      <Tab.Container id="left-tabs-example" defaultActiveKey={tabs[0]}>
+      <Tab.Container defaultActiveKey={tabs[0]}>
         <Tab.Content>
           <TabNav tabs={tabs} />
           {tabs.map(t => {

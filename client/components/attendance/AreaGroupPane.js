@@ -24,13 +24,13 @@ class AreaGroupPane extends Component {
     return (
       <Row style={{maxHeight: '100'}} noGutters>
         {members.map(m => (
-          <Col key={m.FirstName} sm={6} lg={3}>
+          <Col key={m.FirstName} xs={6} md={3} xl={2}>
             <CardItem member={m} />
           </Col>
         ))}
         {fill > members.length ? (
           new Array(fill - members.length).fill(
-            <Col sm={6} lg={3}>
+            <Col xs={6} md={3} xl={2}>
               <CardItem member="empty" />
             </Col>,
             0,
@@ -44,7 +44,7 @@ class AreaGroupPane extends Component {
   }
 
   createPane() {
-    return this.createRow(20)
+    return this.createRow(24)
   }
 
   render() {
@@ -53,14 +53,14 @@ class AreaGroupPane extends Component {
       <Loading />
     ) : (
       <div className="d-flex flex-row flex-wrap text-center">
-        <Container className="tarjeta-segment">
-          <Row noGutters>
+        <div className="tarjeta-segment w-100">
+          {/* <Row noGutters>
             <Col>
               <Container bsPrefix="cork" />
             </Col>
-          </Row>
+          </Row> */}
           {this.createPane()}
-        </Container>
+        </div>
       </div>
     )
   }
