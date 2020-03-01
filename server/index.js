@@ -70,6 +70,11 @@ const createApp = () => {
         members: []
       }
     }
+    if (!req.session.access) {
+      req.session.access = {
+        isSecretary: false
+      }
+    }
     next()
   })
 

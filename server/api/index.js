@@ -3,6 +3,7 @@ module.exports = router
 
 router.use('/users', require('./users'))
 router.use('/ws', require('./ws'))
+router.use('/cache', require('./cache'))
 // router.use('/settings', require('./settings'))
 
 router.use((req, res, next) => {

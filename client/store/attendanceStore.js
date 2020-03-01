@@ -12,7 +12,7 @@ export const importFromSampleThunk = () => async dispatch => {
   try {
     const members = ml.map(m => AddHasAttendedField(m))
     const config = sampleConfig
-    await axios.post('/api/ws/cache/members', members)
+    await axios.post('/api/cache/members', members)
     dispatch(importFromSample(members, config))
   } catch (err) {
     console.error(err)
@@ -30,7 +30,7 @@ const importFromSession = (members, config, currentDate) => ({
 })
 export const importFromSessionThunk = () => async dispatch => {
   try {
-    const {data} = await axios.get('/api/ws/cache')
+    const {data} = await axios.get('/api/cache')
     if (data.members.length === 0) {
       dispatch(importFromSampleThunk())
     } else {
@@ -44,7 +44,7 @@ export const importFromSessionThunk = () => async dispatch => {
 
 export const clearSessionThunk = () => async dispatch => {
   try {
-    await axios.delete('/api/ws/cache/members')
+    await axios.delete('/api/cache/members')
     await dispatch(importFromSampleThunk())
     // Will place a "Get current members route here"
     history.go('/')
