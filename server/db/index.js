@@ -6,22 +6,22 @@ require('./models')
 // To Do List:
 
 // ReportingPeriod
-// - Id {year, weekNumber, serviceType}
+// - id {year, weekNumber, serviceType}
 // - year
 // - weekNumber
 // - serviceType
 // - localId - varchar(50)
 
 // Member
-// - Id
-// - Local - varchar(50)
+// - id
+// - local - varchar(50)
 // - Extension - varchar(50)
-// - AreaGroup - varchar(7)
-// - LastName - varchar (40)
-// - FirstName - varchar (50)
-// - CFO - varchar(10)
-// - Officer - varchar(20)
-// - Gender - Enum (M, F)
+// - areaGroup - varchar(7)
+// - lastName - varchar (40)
+// - firstName - varchar (50)
+// - cfo - varchar(10)
+// - officer - varchar(20)
+// - gender - Enum (M, F)
 // - isActive
 
 // WorshipServiceAttendance
@@ -30,10 +30,10 @@ require('./models')
 // - dateTime
 // - hasAttended
 
-// Local
+// local
 // - id {first letter; two consonance}
 // - name
-// - extensionOf (reference Local Entity; nulll if Local)
+// - extensionOf (reference local Entity; nulll if local)
 // - district?
 
 // Functionalities

@@ -12,9 +12,9 @@ class ReportingPane extends Component {
         </thead>
         <tbody>
           {members.map(m => (
-            <tr key={m.Id}>
+            <tr key={m.id}>
               {memberKeys.map(k => (
-                <td key={`${k} - ${m.Id}`}>{String(m[k])}</td>
+                <td key={`${k} - ${m.id}`}>{String(m[k])}</td>
               ))}
             </tr>
           ))}

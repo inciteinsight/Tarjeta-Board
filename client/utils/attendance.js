@@ -10,7 +10,7 @@ export const UpdateMemberInSession = async memberId => {
   await axios.put(
     `/api/cache/members`,
     data.members.map(m => {
-      if (m.Id === memberId) {
+      if (m.id === memberId) {
         m.hasAttended = !m.hasAttended
       }
       return m

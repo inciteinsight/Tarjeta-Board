@@ -31,8 +31,8 @@ class CardItem extends Component {
 
   handleAttendanceUpdate = () => {
     const {isPresent} = this.state
-    const {Id} = this.props.member
-    this.props.fetchUpdateMemberAttendanceThunk(Id)
+    const {id} = this.props.member
+    this.props.fetchUpdateMemberAttendanceThunk(id)
     this.setState({isPresent: !isPresent})
   }
 
@@ -41,22 +41,22 @@ class CardItem extends Component {
   cardFront = member => {
     const {color} = this.props.config
     const {isPresent} = this.state
-    const {Id, AreaGroup, FirstName, LastName, Officer} = member
+    const {id, areaGroup, firstName, lastName, officer} = member
     return (
       <Card className={`${!isPresent ? 'bg-light text-dark' : 'text-white'}`}>
         <Card.Body bsPrefix="tarjeta-body">
           <div className="d-flex flex-row justify-content-between">
             <Card.Subtitle className="mb-2 text-muted">
-              {String(Id).padStart(4, '0')}
+              {String(id).padStart(4, '0')}
             </Card.Subtitle>
             <Card.Subtitle className="mb-2 text-muted">
-              Area {AreaGroup}
+              Area {areaGroup}
             </Card.Subtitle>
           </div>
           {!isPresent ? (
             <Fragment>
-              <Card.Title>{FirstName}</Card.Title>
-              <Card.Title>{LastName}</Card.Title>
+              <Card.Title>{firstName}</Card.Title>
+              <Card.Title>{lastName}</Card.Title>
             </Fragment>
           ) : (
             <div className="d-flex flex-column justify-content-around align-items-center">
@@ -68,7 +68,7 @@ class CardItem extends Component {
                   r="12"
                   stroke="black"
                   strokeWidth="2"
-                  fill={Officer === 'Y' ? color.officer : color.default}
+                  fill={officer === 'Y' ? color.officer : color.default}
                 />
               </svg>
             </div>
@@ -92,7 +92,7 @@ class CardItem extends Component {
         <Confirm
           title="Revoking Attendance"
           message={`Are you sure you want to revoke
-                  ${member.FirstName} ${member.LastName}'s attendance?`}
+                  ${member.firstName} ${member.lastName}'s attendance?`}
           show={this.state.isConfirming}
           onHide={this.confirmClose}
           buttonMessage="Revoke"

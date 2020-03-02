@@ -24,7 +24,7 @@ class AreaGroupPane extends Component {
     return (
       <Row style={{maxHeight: '100'}} noGutters>
         {members.map(m => (
-          <Col key={m.FirstName} xs={6} md={3} xl={2}>
+          <Col key={m.firstName} xs={6} md={3} xl={2}>
             <CardItem member={m} />
           </Col>
         ))}

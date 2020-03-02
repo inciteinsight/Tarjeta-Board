@@ -37,13 +37,13 @@ class WorshipServiceForm extends Component {
           onSubmit={this.handleSubmit}
         >
           <div className="form-group">
-            <label htmlFor="localSelection">Select Local</label>
+            <label htmlFor="localSelection">Select local</label>
             <select className="form-control" required name="localSelection">
-              <option selected>MNHTN - Local of Manhattan, NY</option>
-              <option>LIC - Local of Long Island City, NY</option>
-              <option>FRSTH - Local of Forest Hills, NY</option>
-              <option>BRONX - Local of Bronx, NY</option>
-              <option>BELLM - Local of Bellmore, NY</option>
+              <option selected>MNHTN - local of Manhattan, NY</option>
+              <option>LIC - local of Long Island City, NY</option>
+              <option>FRSTH - local of Forest Hills, NY</option>
+              <option>BRONX - local of Bronx, NY</option>
+              <option>BELLM - local of Bellmore, NY</option>
             </select>
           </div>
           <div className="form-group">

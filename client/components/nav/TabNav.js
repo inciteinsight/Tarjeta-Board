@@ -2,7 +2,7 @@ import React from 'react'
 import {Nav} from 'react-bootstrap'
 
 const TabNav = ({tabs}) => (
-  <Nav variant="tabs" className="flex-row justify-content-around flex-wrap">
+  <Nav variant="pills" className="flex-row flex-wrap" fill>
     {tabs.map(t => (
       <Nav.Item key={t}>
         <Nav.Link eventKey={t}>{t}</Nav.Link>

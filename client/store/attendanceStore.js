@@ -114,8 +114,8 @@ export default (state = initialState, {type, payload}) => {
       return newState
     case UPDATE_MEMBER_ATTENDANCE:
       newState.members.find(
-        m => m.Id === payload
-      ).hasAttended = !newState.members.find(m => m.Id === payload).hasAttended
+        m => m.id === payload
+      ).hasAttended = !newState.members.find(m => m.id === payload).hasAttended
       return newState
     default:
       return state
