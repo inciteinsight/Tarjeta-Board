@@ -14,7 +14,7 @@ require('./models')
 
 // Member
 // - id
-// - local - varchar(50)
+// - localId - varchar(50)
 // - Extension - varchar(50)
 // - areaGroup - varchar(7)
 // - lastName - varchar (40)
@@ -30,13 +30,13 @@ require('./models')
 // - dateTime
 // - hasAttended
 
-// local
+// localId
 // - id {first letter; two consonance}
 // - name
-// - extensionOf (reference local Entity; nulll if local)
+// - extensionOf (reference localId Entity; nulll if localId)
 // - district?
 
-// Functionalities
+// Functionalities:
 
 // - Add / Remove (de-activate) Members Manually
 // - Update Current List via Excel
