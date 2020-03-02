@@ -42,15 +42,16 @@ class Navbar extends Component {
             className="d-flex justify-content-center flex-wrap w-100"
             activeKey="/home"
           >
-            <Nav.Item className="align-self-center text-success">
-              <div>
+            <Nav.Item className="align-self-center text-success d-flex align-items-center flex-column">
+              <h3>Worship Service:</h3>
+              <h5>
                 {new Date(currentDate).toLocaleTimeString('en-US', {
                   weekday: 'long',
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric'
                 })}
-              </div>
+              </h5>
             </Nav.Item>
             {isLoggedIn ? (
               <Fragment>
@@ -58,7 +59,7 @@ class Navbar extends Component {
                 {isSecretary ? (
                   <Fragment>
                     <ReportingNav />
-                    <BoardOptionsNav />
+                    {/* <BoardOptionsNav /> */}
                     <Nav.Item>
                       <Nav.Link href="#" onClick={handleClick}>
                         Logout

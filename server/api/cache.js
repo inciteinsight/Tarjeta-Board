@@ -69,3 +69,13 @@ router.put('/secAccess', (req, res, next) => {
     next(error)
   }
 })
+
+router.put('/currentDate', (req, res, next) => {
+  try {
+    const updateCurrentDate = req.body
+    req.session.ws.currentDate = updateCurrentDate
+    res.json(req.session.ws)
+  } catch (error) {
+    next(error)
+  }
+})

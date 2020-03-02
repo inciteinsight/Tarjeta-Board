@@ -1,20 +1,10 @@
 import React, {Component} from 'react'
 import {NavDropdown} from 'react-bootstrap'
 import {clearSessionThunk} from '../../store'
-import ConfirmWithPassword from '../misc/ConfirmWithPassword'
 import {connect} from 'react-redux'
+import BoardOptionsNav from './BoardOptionsNav'
 
 class BoardNav extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isConfirming: false
-    }
-  }
-
-  confirmClose = () => this.setState({isConfirming: false})
-
   render() {
     return (
       <NavDropdown title="Attendance Board" id="nav-dropdown" size="lg">
@@ -27,13 +17,18 @@ class BoardNav extends Component {
         <NavDropdown.Item eventKey="4.2" href="/home/F">
           Female
         </NavDropdown.Item>
+        {this.props.isSecretary ? <BoardOptionsNav /> : <NavDropdown.Divider />}
       </NavDropdown>
     )
   }
 }
 
+const mapState = state => ({
+  isSecretary: state.secretary.isSecretary
+})
+
 const mapDispatch = dispatch => ({
   handleClearSession: () => dispatch(clearSessionThunk())
 })
 
-export default connect(null, mapDispatch)(BoardNav)
+export default connect(mapState, mapDispatch)(BoardNav)

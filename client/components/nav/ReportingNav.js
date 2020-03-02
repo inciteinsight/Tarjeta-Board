@@ -14,7 +14,6 @@ export default class ReportingNav extends Component {
         <NavDropdown.Item eventKey="4.3" disabled>
           R-103 Preview
         </NavDropdown.Item>
-        <NavDropdown.Divider />
       </NavDropdown>
     )
   }

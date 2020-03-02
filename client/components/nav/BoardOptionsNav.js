@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {NavDropdown} from 'react-bootstrap'
 import {clearSessionThunk} from '../../store'
 import ConfirmWithPassword from '../misc/ConfirmWithPassword'
@@ -17,7 +17,8 @@ class BoardOptionsNav extends Component {
 
   render() {
     return (
-      <NavDropdown title="Board Options" id="nav-dropdown" size="lg">
+      <Fragment>
+        <NavDropdown.Divider />
         <NavDropdown.Item eventKey="4.4" disabled>
           Save Attendance
         </NavDropdown.Item>
@@ -36,7 +37,7 @@ class BoardOptionsNav extends Component {
           buttonMessage="Clear"
           trigger={this.props.handleClearSession}
         />
-      </NavDropdown>
+      </Fragment>
     )
   }
 }
