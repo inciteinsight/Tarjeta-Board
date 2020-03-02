@@ -34,7 +34,13 @@ export const importFromSessionThunk = () => async dispatch => {
     if (data.members.length === 0) {
       dispatch(importFromSampleThunk())
     } else {
-      dispatch(importFromSession(data.members, sampleConfig, data.currentDate))
+      dispatch(
+        importFromSession(
+          data.members,
+          sampleConfig,
+          Object.keys(data.currentDate)[0]
+        )
+      )
       // Will place a "Get current members route here"
     }
   } catch (error) {
@@ -56,12 +62,12 @@ export const clearSessionThunk = () => async dispatch => {
 const SET_WORSHIP_SERVICE_DATETIME = 'SET_WORSHIP_SERVICE_DATETIME'
 const setWorshipServiceDateTime = currentDate => ({
   type: SET_WORSHIP_SERVICE_DATETIME,
-  payload: currentDate
+  payload: {currentDate}
 })
 export const setWorshipServiceDateTimeThunk = currentDate => async dispatch => {
   try {
-    const {data} = axios.put('/api/cache/currentDate', currentDate)
-    dispatch(setWorshipServiceDateTime(data.currentDate))
+    const {data} = await axios.put('/api/cache/currentDate', currentDate)
+    dispatch(setWorshipServiceDateTime(Object.keys(data.currentDate)[0]))
   } catch (error) {
     console.error(error)
   }

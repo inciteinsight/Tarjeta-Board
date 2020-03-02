@@ -28,6 +28,9 @@ class BoardOptionsNav extends Component {
         >
           Clear Attendance
         </NavDropdown.Item>
+        <NavDropdown.Item eventKey="4.5" href="/service/new">
+          New WS Attendance
+        </NavDropdown.Item>
         <ConfirmWithPassword
           title="Clearing Worship Service Attendance Cache"
           message="Are you sure you want to clear? This cannot be reversed."

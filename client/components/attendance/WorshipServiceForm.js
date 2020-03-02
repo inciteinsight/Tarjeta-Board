@@ -1,57 +1,65 @@
 import React, {Component} from 'react'
-import {Form, Button} from 'react-bootstrap'
-import {setWorshipServiceDateTime} from '../../store'
+import {Form, Button, Carousel} from 'react-bootstrap'
+import {setWorshipServiceDateTimeThunk} from '../../store'
 import {connect} from 'react-redux'
 
 class WorshipServiceForm extends Component {
+  handleSumit = async e => {
+    e.preventDefault()
+    if (
+      this.props.members.reduce((accum, m) => m.hasAttended || accum, false)
+    ) {
+      console.log('Current has attendances. Please reconfirm and clear first')
+    } else {
+      console.log(e.target.localSelection.value)
+      console.log(e.target.wsDateTime.value)
+      await this.props.handleSetWorshipServiceDate(
+        new Date(e.target.wsDateTime.value).toISOString()
+      )
+      console.log('Processing New Service')
+    }
+  }
+
   render() {
     return (
-      <Form className="d-flex flex-column justify-content-center">
-        {/* <Form.Group controlId="exampleForm.ControlInput1">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="name@example.com" />
-                </Form.Group> */}
-        <Form.Group controlId="exampleForm.ControlSelect1">
-          <Form.Label>Example select</Form.Label>
-          <Form.Control as="select">
+      <form
+        className="d-flex flex-column justify-content-center"
+        onSubmit={this.handleSumit}
+      >
+        <div className="form-group">
+          <label htmlFor="localSelection">Select Local</label>
+          <select className="form-control" required name="localSelection">
             <option selected>MNHTN - Local of Manhattan, NY</option>
             <option>LIC - Local of Long Island City, NY</option>
             <option>FRSTH - Local of Forest Hills, NY</option>
             <option>BRONX - Local of Bronx, NY</option>
             <option>BELLM - Local of Bellmore, NY</option>
-          </Form.Control>
-        </Form.Group>
-        {/* <Form.Group controlId="exampleForm.ControlSelect2">
-                    <Form.Label>Example multiple select</Form.Label>
-                    <Form.Control as="select" multiple>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    </Form.Control>
-                </Form.Group> */}
-        <Form.Group controlId="exampleForm.ControlTextarea1">
-          <Form.Label>Worship Service Date and Time</Form.Label>
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="wsDateTime">Worship Service Date and Time</label>
           <input
             type="datetime-local"
             clasSName="form-control"
+            id="wsDateTime"
             name="wsDateTime"
+            required
           />
-        </Form.Group>
-        <Button type="submit">Submit form</Button>
-      </Form>
+        </div>
+        <Button type="submit">Create New Worship Service Attendance</Button>
+      </form>
     )
   }
 }
 
 const mapState = state => ({
-  config: state.attendance.config
+  config: state.attendance.config,
+  members: state.attendance.members
 })
 
 const mapDispatch = dispatch => ({
   handleSetWorshipServiceDate: currentDate =>
-    dispatch(setWorshipServiceDateTime(currentDate))
+    dispatch(setWorshipServiceDateTimeThunk(currentDate))
 })
 
 export default connect(mapState, mapDispatch)(WorshipServiceForm)
