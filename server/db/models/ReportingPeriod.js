@@ -1,7 +1,9 @@
 const Sequelize = require('sequelize')
-const db = '../db.js'
+const db = require('../db.js')
 
 const ReportingPeriod = db.define('reporting', {
+  // PK
+  // FK to Local
   year: {
     type: Sequelize.INTEGER,
     allowNull: false,
@@ -20,10 +22,6 @@ const ReportingPeriod = db.define('reporting', {
   serviceType: {
     type: Sequelize.ENUM('Midweek', 'Weekend', 'Special'),
     defaultValue: 'Special'
-  },
-  localId: {
-    type: Sequelize.INTEGER,
-    defaultValue: 'Manhattan'
   }
 })
 

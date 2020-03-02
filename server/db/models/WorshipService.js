@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const db = '../db.js'
+const db = require('../db.js')
 
 const WorshipService = db.define('worshipservice', {
   // FK to ReportingPeriod

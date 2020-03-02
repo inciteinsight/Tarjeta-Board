@@ -15,7 +15,6 @@ require('./models')
 // Member
 // - id
 // - localId - varchar(50)
-// - Extension - varchar(50)
 // - areaGroup - varchar(7)
 // - lastName - varchar (40)
 // - firstName - varchar (50)

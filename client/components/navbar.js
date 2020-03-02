@@ -43,7 +43,6 @@ class Navbar extends Component {
       isSecretary,
       config
     } = this.props
-    console.info(config)
     return !config ? (
       <Loading />
     ) : (
