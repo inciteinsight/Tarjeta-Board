@@ -53,6 +53,20 @@ export const clearSessionThunk = () => async dispatch => {
   }
 }
 
+const SET_WORSHIP_SERVICE_DATETIME = 'SET_WORSHIP_SERVICE_DATETIME'
+const setWorshipServiceDateTime = currentDate => ({
+  type: SET_WORSHIP_SERVICE_DATETIME,
+  payload: currentDate
+})
+export const setWorshipServiceDateTimeThunk = currentDate => async dispatch => {
+  try {
+    const {data} = axios.put('/api/cache/currentDate', currentDate)
+    dispatch(setWorshipServiceDateTime(data.currentDate))
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 const UPDATE_MEMBER_ATTENDANCE = 'UPDATE_MEMBER_ATTENDANCE'
 const updateMemberAttendance = payload => ({
   type: UPDATE_MEMBER_ATTENDANCE,
@@ -87,6 +101,9 @@ export default (state = initialState, {type, payload}) => {
     case IMPORT_FROM_SESSION:
       newState.members = payload.members
       newState.config = payload.config
+      newState.currentDate = payload.currentDate
+      return newState
+    case SET_WORSHIP_SERVICE_DATETIME:
       newState.currentDate = payload.currentDate
       return newState
     case UPDATE_MEMBER_ATTENDANCE:

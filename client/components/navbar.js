@@ -4,7 +4,8 @@ import {connect} from 'react-redux'
 import {
   logout,
   updateSecretaryModeThunk,
-  getAccessFromSessionThunk
+  getAccessFromSessionThunk,
+  importFromSessionThunk
 } from '../store'
 import {
   Navbar as NavBarComp,
@@ -16,11 +17,12 @@ import {
 import BoardNav from './nav/BoardNav'
 import ReportingNav from './nav/ReportingNav'
 import PasswordRequest from './misc/PasswordRequest'
-import BoardOptionsNav from './nav/BoardOptionsNav'
+import Loading from './misc/Loading'
 
 class Navbar extends Component {
   componentDidMount = () => {
     this.props.fetchAccessFromSession()
+    this.props.fetchMembersFromSession()
   }
 
   toggleSecMode = () => {
@@ -34,8 +36,17 @@ class Navbar extends Component {
   }
 
   render() {
-    const {handleClick, isLoggedIn, currentDate, isSecretary} = this.props
-    return (
+    const {
+      handleClick,
+      isLoggedIn,
+      currentDate,
+      isSecretary,
+      config
+    } = this.props
+    console.info(config)
+    return !config ? (
+      <Loading />
+    ) : (
       <div>
         <NavBarComp bg="dark" variant="dark">
           <Nav
@@ -59,7 +70,6 @@ class Navbar extends Component {
                 {isSecretary ? (
                   <Fragment>
                     <ReportingNav />
-                    {/* <BoardOptionsNav /> */}
                     <Nav.Item>
                       <Nav.Link href="#" onClick={handleClick}>
                         Logout
@@ -126,7 +136,8 @@ const mapState = state => ({
 const mapDispatch = dispatch => ({
   handleClick: () => dispatch(logout()),
   handleUpdateSecretaryMode: () => dispatch(updateSecretaryModeThunk()),
-  fetchAccessFromSession: () => dispatch(getAccessFromSessionThunk())
+  fetchAccessFromSession: () => dispatch(getAccessFromSessionThunk()),
+  fetchMembersFromSession: () => dispatch(importFromSessionThunk())
 })
 
 export default connect(mapState, mapDispatch)(Navbar)

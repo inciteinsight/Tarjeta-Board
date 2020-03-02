@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Modal, Button} from 'react-bootstrap'
 import {connect} from 'react-redux'
 import PasswordRequest from './PasswordRequest'
+import Loading from './Loading'
 
 class ConfirmWithPassword extends Component {
   constructor(props) {
@@ -29,8 +30,10 @@ class ConfirmWithPassword extends Component {
   }
 
   render() {
-    const {message, title, onHide, buttonMessage} = this.props
-    return (
+    const {message, title, onHide, buttonMessage, config} = this.props
+    return !config ? (
+      <Loading />
+    ) : (
       <Modal
         {...this.props}
         aria-labelledby="contained-modal-title-vcenter"

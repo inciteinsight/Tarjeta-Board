@@ -26,7 +26,7 @@ class Dashboard extends Component {
     if (loading) {
       return []
     }
-    const {Manhattan, BBExt} = config.Locale
+    const {Manhattan, BBExt} = config.Local
     return Manhattan.AreaGroup.map(ag => `MAN ${ag}`).concat(
       BBExt.AreaGroup.map(ag => `BB ${ag}`)
     )
@@ -44,18 +44,18 @@ class Dashboard extends Component {
         <Tab.Content>
           {tabs.map(t => {
             const areaGroup = t.split(' ')[1]
-            const locale =
+            const Local =
               t.split(' ')[0] === 'MAN' ? 'Manhattan' : 'B. Beach Ext'
             return (
               <Tab.Pane key={t} eventKey={t} title={t}>
                 <ReportingPane
                   areaGroup={areaGroup}
-                  locale={locale}
+                  Local={Local}
                   mode={mode}
                   members={this.props.members.filter(
                     m =>
                       m.AreaGroup === areaGroup &&
-                      m.Local === locale &&
+                      m.Local === Local &&
                       (mode === 'absent' ? !m.hasAttended : true)
                   )}
                 />
