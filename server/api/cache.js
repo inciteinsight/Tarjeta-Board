@@ -51,3 +51,21 @@ router.get('/reset', (req, res, next) => {
     next(error)
   }
 })
+
+router.get('/secAccess', (req, res, next) => {
+  try {
+    const access = req.session.access
+    res.json(access)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.put('/secAccess', (req, res, next) => {
+  try {
+    req.session.access.isSecretary = !req.session.access.isSecretary
+    res.json(req.session.access)
+  } catch (error) {
+    next(error)
+  }
+})

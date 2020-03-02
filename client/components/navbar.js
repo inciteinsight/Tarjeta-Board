@@ -1,7 +1,11 @@
 import React, {Component, Fragment} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {logout, updateSecretaryModeThunk} from '../store'
+import {
+  logout,
+  updateSecretaryModeThunk,
+  getAccessFromSessionThunk
+} from '../store'
 import {
   Navbar as NavBarComp,
   Nav,
@@ -15,6 +19,10 @@ import PasswordRequest from './misc/PasswordRequest'
 import BoardOptionsNav from './nav/BoardOptionsNav'
 
 class Navbar extends Component {
+  componentDidMount = () => {
+    this.props.fetchAccessFromSession()
+  }
+
   toggleSecMode = () => {
     this.props.handleUpdateSecretaryMode()
   }
@@ -116,7 +124,8 @@ const mapState = state => ({
 
 const mapDispatch = dispatch => ({
   handleClick: () => dispatch(logout()),
-  handleUpdateSecretaryMode: () => dispatch(updateSecretaryModeThunk())
+  handleUpdateSecretaryMode: () => dispatch(updateSecretaryModeThunk()),
+  fetchAccessFromSession: () => dispatch(getAccessFromSessionThunk())
 })
 
 export default connect(mapState, mapDispatch)(Navbar)
