@@ -1,53 +1,70 @@
-import React, {Component} from 'react'
-import {Form, Button, Carousel} from 'react-bootstrap'
+import React, {Component, Fragment} from 'react'
+import {Button} from 'react-bootstrap'
 import {setWorshipServiceDateTimeThunk} from '../../store'
 import {connect} from 'react-redux'
+import Confirm from '../misc/Confirm'
+import history from '../../history'
 
 class WorshipServiceForm extends Component {
-  handleSumit = async e => {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isNotified: false
+    }
+  }
+
+  handleSubmit = async e => {
     e.preventDefault()
     if (
       this.props.members.reduce((accum, m) => m.hasAttended || accum, false)
     ) {
-      console.log('Current has attendances. Please reconfirm and clear first')
+      this.setState({isNotified: true})
     } else {
-      console.log(e.target.localSelection.value)
-      console.log(e.target.wsDateTime.value)
       await this.props.handleSetWorshipServiceDate(
         new Date(e.target.wsDateTime.value).toISOString()
       )
-      console.log('Processing New Service')
     }
   }
 
+  confirmClose = () => this.setState({isNotified: false})
+
   render() {
     return (
-      <form
-        className="d-flex flex-column justify-content-center"
-        onSubmit={this.handleSumit}
-      >
-        <div className="form-group">
-          <label htmlFor="localSelection">Select Local</label>
-          <select className="form-control" required name="localSelection">
-            <option selected>MNHTN - Local of Manhattan, NY</option>
-            <option>LIC - Local of Long Island City, NY</option>
-            <option>FRSTH - Local of Forest Hills, NY</option>
-            <option>BRONX - Local of Bronx, NY</option>
-            <option>BELLM - Local of Bellmore, NY</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="wsDateTime">Worship Service Date and Time</label>
-          <input
-            type="datetime-local"
-            clasSName="form-control"
-            id="wsDateTime"
-            name="wsDateTime"
-            required
-          />
-        </div>
-        <Button type="submit">Create New Worship Service Attendance</Button>
-      </form>
+      <Fragment>
+        <form
+          className="d-flex flex-column justify-content-center"
+          onSubmit={this.handleSubmit}
+        >
+          <div className="form-group">
+            <label htmlFor="localSelection">Select Local</label>
+            <select className="form-control" required name="localSelection">
+              <option selected>MNHTN - Local of Manhattan, NY</option>
+              <option>LIC - Local of Long Island City, NY</option>
+              <option>FRSTH - Local of Forest Hills, NY</option>
+              <option>BRONX - Local of Bronx, NY</option>
+              <option>BELLM - Local of Bellmore, NY</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="wsDateTime">Worship Service Date and Time</label>
+            <input
+              type="datetime-local"
+              clasSName="form-control"
+              id="wsDateTime"
+              name="wsDateTime"
+              required
+            />
+          </div>
+          <Button type="submit">Create New Worship Service Attendance</Button>
+        </form>
+        <Confirm
+          title="Current Attendance Unsaved"
+          message="Please save or clear the current attendance"
+          show={this.state.isNotified}
+          onHide={this.confirmClose}
+        />
+      </Fragment>
     )
   }
 }

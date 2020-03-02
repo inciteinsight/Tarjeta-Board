@@ -90,7 +90,6 @@ class CardItem extends Component {
           {this.cardFront(member)}
         </Container>
         <Confirm
-          member={member}
           title="Revoking Attendance"
           message={`Are you sure you want to revoke
                   ${member.FirstName} ${member.LastName}'s attendance?`}

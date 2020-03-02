@@ -1,32 +1,20 @@
 const Sequelize = require('sequelize')
 const db = '../db.js'
 
-const ReportingPeriod = db.define('reporting', {
-  year: {
-    type: Sequelize.INTEGER,
+const WorshipService = db.define('worshipservice', {
+  // FK to ReportingPeriod
+  // FK to Member
+  dateTime: {
+    type: Sequelize.DATE,
     allowNull: false,
     validate: {
       min: 1914
     }
   },
-  weekNumber: {
-    type: Sequelize.SMALLINT,
-    allowNull: false,
-    validate: {
-      min: 1,
-      max: 52
-    }
-  },
-  ServiceType: {
-    type: Sequelize.ENUM('Midweek', 'Weekend', 'Special'),
-    defaultValue: 'Special'
-  },
-  localId: {
-    type: Sequelize.INTEGER,
-    defaultValue: 'Manhattan'
-  },
-  extension: {
-    type: Sequelize.STRING,
-    defaultValue: 'Main'
+  hasAttended: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 })
+
+module.exports = WorshipService

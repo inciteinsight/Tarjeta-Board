@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {Modal, Button} from 'react-bootstrap'
 
 class Confirm extends Component {
@@ -29,10 +29,16 @@ class Confirm extends Component {
           <p>{message}</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="warning" onClick={this.handleTrigger}>
-            {buttonMessage}
-          </Button>
-          <Button onClick={onHide}>Close</Button>
+          {buttonMessage ? (
+            <Fragment>
+              <Button variant="warning" onClick={this.handleTrigger}>
+                {buttonMessage}
+              </Button>
+              <Button onClick={onHide}>Close</Button>
+            </Fragment>
+          ) : (
+            <Button onClick={onHide}>Close</Button>
+          )}
         </Modal.Footer>
       </Modal>
     )

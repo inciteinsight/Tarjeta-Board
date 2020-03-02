@@ -67,7 +67,8 @@ const setWorshipServiceDateTime = currentDate => ({
 export const setWorshipServiceDateTimeThunk = currentDate => async dispatch => {
   try {
     const {data} = await axios.put('/api/cache/currentDate', currentDate)
-    dispatch(setWorshipServiceDateTime(Object.keys(data.currentDate)[0]))
+    await dispatch(setWorshipServiceDateTime(Object.keys(data.currentDate)[0]))
+    history.push('/')
   } catch (error) {
     console.error(error)
   }
@@ -92,7 +93,6 @@ export const updateMemberAttendanceThunk = memberId => dispatch => {
 // 2) Import From Excel File
 // 3) Update Via Manual Entry
 // 4) Send Finalized Report via email (Java)
-// 5) More Admin
 
 const initialState = {
   currentDate: '2020-02-29T09:00:00',
