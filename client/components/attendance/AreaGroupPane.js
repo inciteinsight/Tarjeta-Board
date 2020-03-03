@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {Container, Col, Row} from 'react-bootstrap'
+import {Col, Row} from 'react-bootstrap'
 import CardItem from './CardItem'
 import Loading from '../misc/Loading'
 
@@ -53,14 +53,7 @@ class AreaGroupPane extends Component {
       <Loading />
     ) : (
       <div className="d-flex flex-row flex-wrap text-center">
-        <div className="tarjeta-segment w-100">
-          {/* <Row noGutters>
-            <Col>
-              <Container bsPrefix="cork" />
-            </Col>
-          </Row> */}
-          {this.createPane()}
-        </div>
+        <div className="tarjeta-segment w-100">{this.createPane()}</div>
       </div>
     )
   }

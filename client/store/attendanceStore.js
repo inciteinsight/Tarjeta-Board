@@ -10,10 +10,13 @@ const importFromSample = (members, config) => ({
 })
 export const importFromSampleThunk = () => async dispatch => {
   try {
-    const members = ml.map(m => AddHasAttendedField(m))
+    // const members = ml.map(m => AddHasAttendedField(m))
+    const data = await (await axios.get('/api/member')).data.map(m =>
+      AddHasAttendedField(m)
+    )
     const config = sampleConfig
-    await axios.post('/api/cache/members', members)
-    dispatch(importFromSample(members, config))
+    await axios.post('/api/cache/members', data)
+    dispatch(importFromSample(data, config))
   } catch (err) {
     console.error(err)
   }

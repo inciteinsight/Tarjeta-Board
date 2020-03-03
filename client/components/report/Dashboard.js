@@ -44,8 +44,7 @@ class Dashboard extends Component {
         <Tab.Content>
           {tabs.map(t => {
             const areaGroup = t.split(' ')[1]
-            const localId =
-              t.split(' ')[0] === 'MAN' ? 'Manhattan' : 'B. Beach Ext'
+            const localId = t.split(' ')[0] === 'MAN' ? 'MANNY' : 'BBMANNY'
             return (
               <Tab.Pane key={t} eventKey={t} title={t}>
                 <ReportingPane

@@ -45,8 +45,7 @@ export class Board extends Component {
           <TabNav tabs={tabs} />
           {tabs.map(t => {
             const areaGroup = t.split(' ')[1]
-            const local =
-              t.split(' ')[0] === 'MAN' ? 'Manhattan' : 'B. Beach Ext'
+            const local = t.split(' ')[0] === 'MAN' ? 'MANNY' : 'BBMANNY'
             return (
               <Tab.Pane key={t} eventKey={t} title={t}>
                 <AreaGroupPane
@@ -55,7 +54,7 @@ export class Board extends Component {
                   members={this.props.members.filter(
                     m =>
                       m.areaGroup === areaGroup &&
-                      m.local === local &&
+                      m.localId === local &&
                       (gender ? m.gender === gender : true)
                   )}
                 />
