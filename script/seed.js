@@ -1,17 +1,25 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
+const {User, Local, Member} = require('../server/db/models')
+const {localCongregations, ml} = require('../public/sample/121919.js')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
+
+  const locals = await Local.loadData(localCongregations)
+  console.log(`seeded ${locals.length} locals`)
+
+  const members = await Member.loadData(ml)
+  console.log(`seeded ${members.length} members`)
 
   const users = await Promise.all([
     User.create({email: 'manhattan@inc.com', password: '123'})
   ])
 
   console.log(`seeded ${users.length} users`)
+
   console.log(`seeded successfully`)
 }
 

@@ -26,7 +26,8 @@ const updateSecretaryMode = isSecretary => ({
 export const updateSecretaryModeThunk = () => async dispatch => {
   try {
     const {data} = await axios.put('/api/cache/secAccess')
-    dispatch(updateSecretaryMode(data.isSecretary))
+    await dispatch(updateSecretaryMode(data.isSecretary))
+    history.push('/')
   } catch (error) {
     console.error(error)
   }

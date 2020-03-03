@@ -2,8 +2,10 @@ const Sequelize = require('sequelize')
 const db = require('../db.js')
 
 const Member = db.define('member', {
-  // PK
-  // FK to Local
+  id: {
+    type: Sequelize.STRING(7),
+    primaryKey: true
+  },
   areaGroup: {
     type: Sequelize.STRING(7),
     allowNull: false
@@ -17,7 +19,7 @@ const Member = db.define('member', {
     allowNull: false
   },
   cfo: {
-    type: Sequelize.STRING(1),
+    type: Sequelize.STRING(2),
     allowNull: false
   },
   officer: {
@@ -26,18 +28,40 @@ const Member = db.define('member', {
   },
   gender: {
     type: Sequelize.ENUM('M', 'F', 'O')
+  },
+  isActive: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true
   }
 })
 
-module.exports = Member
+Member.getFromManSecExcel = name => {
+  switch (name) {
+    case 'Manhattan':
+      return 'MANNY'
+    case 'B. Beach Ext':
+      return 'BBMANNY'
+    default:
+      return 'MANNY'
+  }
+}
 
-// {
-//     id: 148,
-//     localId: 'B. Beach Ext',
-//     areaGroup: '1-2',
-//     lastName: 'Mercado',
-//     firstName: 'Angel',
-//     cfo: 'B',
-//     officer: '',
-//     gender: 'M'
-//   },
+Member.loadData = data => {
+  return data.map(async d => {
+    const localId = Member.getFromManSecExcel(d.local)
+    const gender = d.gender[0].toUpperCase()
+    const {id, areaGroup, lastName, firstName, cfo, officer} = d
+    await Member.create({
+      id,
+      localId,
+      areaGroup,
+      lastName,
+      firstName,
+      cfo,
+      officer,
+      gender
+    })
+  })
+}
+
+module.exports = Member
