@@ -1,8 +1,9 @@
 import axios from 'axios'
 import {AddHasAttendedField, UpdateMemberInSession} from '../utils/attendance'
-import {ml, config as sampleConfig} from '../../public/sample/121919.js'
+import {config as sampleConfig} from '../../public/sample/121919.js'
 import history from '../history'
 
+// RENAME
 const IMPORT_FROM_SAMPLE = 'IMPORT_FROM_SAMPLE'
 const importFromSample = (members, config) => ({
   type: IMPORT_FROM_SAMPLE,
@@ -44,7 +45,6 @@ export const importFromSessionThunk = () => async dispatch => {
           Object.keys(data.currentDate)[0]
         )
       )
-      // Will place a "Get current members route here"
     }
   } catch (error) {
     console.error(error)
@@ -55,7 +55,6 @@ export const clearSessionThunk = () => async dispatch => {
   try {
     await axios.delete('/api/cache/members')
     await dispatch(importFromSampleThunk())
-    // Will place a "Get current members route here"
     history.go('/')
   } catch (error) {
     console.error(error)

@@ -35,6 +35,7 @@ class Dashboard extends Component {
   render() {
     let {isLoading} = this.state
     let tabs = this.listAreaGroups(isLoading, this.props.config)
+    tabs.push('ALL')
     const {mode} = this.props.match.params
     return isLoading ? (
       <Loading />
@@ -53,8 +54,8 @@ class Dashboard extends Component {
                   mode={mode}
                   members={this.props.members.filter(
                     m =>
-                      m.areaGroup === areaGroup &&
-                      m.localId === localId &&
+                      ((m.areaGroup === areaGroup && m.localId === localId) ||
+                        t === 'ALL') &&
                       (mode === 'absent' ? !m.hasAttended : true)
                   )}
                 />

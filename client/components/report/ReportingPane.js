@@ -4,11 +4,24 @@ import {connect} from 'react-redux'
 class ReportingPane extends Component {
   render() {
     const {members} = this.props
-    const memberKeys = Object.keys(members[0]).slice(1)
+    const memberKeys = Object.keys(members[0]).filter(
+      k => k !== 'createdAt' && k !== 'updatedAt' && k !== 'isActive'
+    )
+    const heading = [
+      'Id',
+      'Area-Group',
+      'Last Name',
+      'First Name',
+      'CFO',
+      'Officer',
+      'Gender',
+      'Local',
+      'Attended'
+    ]
     return (
       <table className="blueTable">
         <thead>
-          <tr>{memberKeys.map(k => <th key={k}>{k}</th>)}</tr>
+          <tr>{memberKeys.map((k, i) => <th key={k}>{heading[i]}</th>)}</tr>
         </thead>
         <tbody>
           {members.map(m => (
