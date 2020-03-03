@@ -27,7 +27,7 @@ export class Board extends Component {
     if (loading) {
       return []
     }
-    const {Manhattan, BBExt} = config.localId
+    const {Manhattan, BBExt} = config.local
     return Manhattan.areaGroup
       .map(ag => `MAN ${ag}`)
       .concat(BBExt.areaGroup.map(ag => `BB ${ag}`))
@@ -45,17 +45,17 @@ export class Board extends Component {
           <TabNav tabs={tabs} />
           {tabs.map(t => {
             const areaGroup = t.split(' ')[1]
-            const localId =
+            const local =
               t.split(' ')[0] === 'MAN' ? 'Manhattan' : 'B. Beach Ext'
             return (
               <Tab.Pane key={t} eventKey={t} title={t}>
                 <AreaGroupPane
                   areaGroup={areaGroup}
-                  localId={localId}
+                  local={local}
                   members={this.props.members.filter(
                     m =>
                       m.areaGroup === areaGroup &&
-                      m.localId === localId &&
+                      m.local === local &&
                       (gender ? m.gender === gender : true)
                   )}
                 />

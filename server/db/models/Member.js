@@ -48,7 +48,7 @@ Member.getFromManSecExcel = name => {
 
 Member.loadData = data => {
   return data.map(async d => {
-    const localId = Member.getFromManSecExcel(d.local)
+    const localId = Member.getFromManSecExcel(d.localId)
     const gender = d.gender[0].toUpperCase()
     const {id, areaGroup, lastName, firstName, cfo, officer} = d
     await Member.create({

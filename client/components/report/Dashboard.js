@@ -26,7 +26,7 @@ class Dashboard extends Component {
     if (loading) {
       return []
     }
-    const {Manhattan, BBExt} = config.localId
+    const {Manhattan, BBExt} = config.local
     return Manhattan.areaGroup
       .map(ag => `MAN ${ag}`)
       .concat(BBExt.areaGroup.map(ag => `BB ${ag}`))
