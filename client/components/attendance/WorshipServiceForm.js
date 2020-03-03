@@ -37,7 +37,7 @@ class WorshipServiceForm extends Component {
           onSubmit={this.handleSubmit}
         >
           <div className="form-group">
-            <label htmlFor="localSelection">Select localId</label>
+            <label htmlFor="localSelection">Select Congregation</label>
             <select className="form-control" required name="localSelection">
               <option selected>MANNY - Local of Manhattan, NY</option>
               <option>LICNY - Local of Long Island City, NY</option>
