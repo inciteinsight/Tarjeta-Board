@@ -5,6 +5,7 @@ import AreaGroupPane from './attendance/AreaGroupPane'
 import Loading from './misc/Loading'
 import {Tab} from 'react-bootstrap'
 import TabNav from './nav/TabNav'
+import Initialize from './misc/Initialize'
 
 export class Board extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ export class Board extends Component {
   }
 
   componentDidMount = async () => {
-    await this.props.fetchMembersFromSession()
+    // await this.props.fetchMembersFromSession()
     // await this.props.fetchMembersFromSample()
     this.setState({
       isLoading: false
@@ -27,7 +28,23 @@ export class Board extends Component {
     if (loading) {
       return []
     }
-    const {Manhattan, BBExt} = config.local
+    const BBExt = {
+      areaGroup: ['1-1', '1-2']
+    }
+    const Manhattan = {
+      areaGroup: [
+        '1-1',
+        '1-2',
+        '1-3',
+        '1-4',
+        '1-5',
+        '1-6',
+        '2-1',
+        '2-2',
+        '2-3',
+        '2-4'
+      ]
+    }
     return Manhattan.areaGroup
       .map(ag => `MAN ${ag}`)
       .concat(BBExt.areaGroup.map(ag => `BB ${ag}`))
@@ -36,9 +53,10 @@ export class Board extends Component {
   render() {
     let {isLoading} = this.state
     const {gender} = this.props.match.params
+    const {members, config} = this.props
     const tabs = this.listAreaGroups(isLoading, this.props.config)
-    return isLoading ? (
-      <Loading />
+    return isLoading || !config ? (
+      <Initialize />
     ) : (
       <Tab.Container defaultActiveKey={tabs[0]}>
         <Tab.Content>
@@ -51,7 +69,7 @@ export class Board extends Component {
                 <AreaGroupPane
                   areaGroup={areaGroup}
                   local={local}
-                  members={this.props.members.filter(
+                  members={members.filter(
                     m =>
                       m.areaGroup === areaGroup &&
                       m.localId === local &&
