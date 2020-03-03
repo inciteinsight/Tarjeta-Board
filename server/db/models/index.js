@@ -2,10 +2,14 @@ const User = require('./user')
 const Local = require('./Local')
 const Member = require('./Member')
 const ReportingPeriod = require('./ReportingPeriod')
+const Schedule = require('./WSSchedule')
 const WorshipService = require('./WorshipService')
 
 Member.belongsTo(Local)
 Local.hasMany(Member)
+
+Schedule.belongsTo(Local)
+Local.hasMany(Schedule)
 
 ReportingPeriod.belongsTo(Local)
 Local.hasMany(ReportingPeriod)
@@ -20,5 +24,6 @@ module.exports = {
   Local,
   Member,
   ReportingPeriod,
-  WorshipService
+  WorshipService,
+  Schedule
 }

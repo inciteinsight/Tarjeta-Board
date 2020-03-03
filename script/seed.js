@@ -2,7 +2,11 @@
 
 const db = require('../server/db')
 const {User, Local, Member} = require('../server/db/models')
-const {localCongregations, ml} = require('../public/sample/121919.js')
+const {
+  localCongregations,
+  extensionCongregations,
+  ml
+} = require('../public/sample/121919.js')
 
 async function seed() {
   await db.sync({force: true})
@@ -10,6 +14,9 @@ async function seed() {
 
   const locals = await Local.loadData(localCongregations)
   console.log(`seeded ${locals.length} locals`)
+
+  const extensions = await Local.loadData(extensionCongregations)
+  console.log(`seeded ${extensions.length} extension`)
 
   const members = await Member.loadData(ml)
   console.log(`seeded ${members.length} members`)

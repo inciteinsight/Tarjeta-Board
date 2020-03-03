@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize')
+const Schedule = require('./WSSchedule')
 const db = require('../db.js')
 
 const Local = db.define('local', {
@@ -14,8 +15,13 @@ const Local = db.define('local', {
 
 Local.loadData = data => {
   return data.map(async d => {
-    const {id, name, extensionOfId} = d
+    const {id, name, extensionOfId, schedule} = d
     await Local.create({id, name, extensionOfId})
+    const wsSchedules = await schedule.map(s => {
+      const {serviceType, day, time} = s
+      Schedule.create({localId: id, serviceType, day, time})
+    })
+    console.log(`Created ${wsSchedules.length} ws schedules for ${name}`)
   })
 }
 

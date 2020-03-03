@@ -29,11 +29,18 @@ require('./models')
 // - dateTime
 // - hasAttended
 
-// localId
+// Local
 // - id {first letter; two consonance}
 // - name
 // - extensionOf (reference localId Entity; nulll if localId)
 // - district?
+
+// Schedule
+// - id
+// - localId
+// - serviceType
+// - day
+// - time
 
 // Functionalities:
 
