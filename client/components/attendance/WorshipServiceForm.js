@@ -34,7 +34,7 @@ class WorshipServiceForm extends Component {
 
   localDropdown = () => (
     <select
-      className="form-control"
+      className="form-control col-8"
       required
       name="localSelection"
       onChange={this.handleLocalSelection}
@@ -52,7 +52,7 @@ class WorshipServiceForm extends Component {
       l => l.id === this.state.selectedLocal
     )
     return (
-      <select className="form-control" required name="timeSelection">
+      <select className="form-control col-6" required name="timeSelection">
         {currentLocal.schedules.map((s, i) => (
           <option key={s.id} selected={i === 0} value={s.id}>
             {`${s.serviceType} - ${s.day} -
@@ -74,29 +74,36 @@ class WorshipServiceForm extends Component {
     ) : (
       <Fragment>
         <form
-          className="d-flex flex-column justify-content-center"
+          className="d-flex flex-column justify-content-center align-items-center"
           onSubmit={this.handleSubmit}
         >
-          <div className="form-group">
-            <label htmlFor="localSelection">Select Congregation</label>
+          <div className="form-group row">
+            <label className="col-4" htmlFor="localSelection">
+              Select Congregation
+            </label>
             {this.localDropdown()}
           </div>
-          <Accordion className="m-0 d-flex flex-row">
-            <div className="form-group">
-              <label htmlFor="timeSelection">
+          <Accordion className="m-0">
+            <div className="form-group row">
+              <label className="col-4" htmlFor="timeSelection">
                 Select Worship Service Date Time
               </label>
               {this.serviceTimeDropdown()}
-              <Accordion.Toggle as={Button} eventKey="0">
-                Custom Date Time
+              <Accordion.Toggle
+                className="btn-sm btn-primary col-2"
+                eventKey="0"
+              >
+                Customize
               </Accordion.Toggle>
             </div>
             <Accordion.Collapse eventKey="0">
-              <div className="form-group">
-                <label htmlFor="wsDateTime">Customize Date and Time</label>
+              <div className="form-group row">
+                <label className="col-4" htmlFor="wsDateTime">
+                  Customize Date and Time
+                </label>
                 <input
                   type="datetime-local"
-                  clasSName="form-control"
+                  clasSName="form-control col-8"
                   id="wsDateTime"
                   name="wsDateTime"
                   required
