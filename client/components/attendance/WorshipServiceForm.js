@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {Button, Accordion} from 'react-bootstrap'
+import {Button, Accordion, Form, Container, Row, Col} from 'react-bootstrap'
 import {setWorshipServiceDateTimeThunk} from '../../store'
 import {connect} from 'react-redux'
 import Confirm from '../misc/Confirm'
@@ -33,8 +33,8 @@ class WorshipServiceForm extends Component {
   }
 
   localDropdown = () => (
-    <select
-      className="form-control col-8"
+    <Form.Control
+      as="select"
       required
       name="localSelection"
       onChange={this.handleLocalSelection}
@@ -44,7 +44,7 @@ class WorshipServiceForm extends Component {
           {l.name}
         </option>
       ))}
-    </select>
+    </Form.Control>
   )
 
   serviceTimeDropdown = () => {
@@ -52,7 +52,7 @@ class WorshipServiceForm extends Component {
       l => l.id === this.state.selectedLocal
     )
     return (
-      <select className="form-control col-6" required name="timeSelection">
+      <Form.Control as="select" required name="timeSelection">
         {currentLocal.schedules.map((s, i) => (
           <option key={s.id} selected={i === 0} value={s.id}>
             {`${s.serviceType} - ${s.day} -
@@ -62,7 +62,7 @@ class WorshipServiceForm extends Component {
               ).toLocaleTimeString()}`}
           </option>
         ))}
-      </select>
+      </Form.Control>
     )
   }
 
@@ -73,34 +73,30 @@ class WorshipServiceForm extends Component {
       <Loading />
     ) : (
       <Fragment>
-        <form
-          className="d-flex flex-column justify-content-center align-items-center"
-          onSubmit={this.handleSubmit}
-        >
-          <div className="form-group row">
-            <label className="col-4" htmlFor="localSelection">
-              Select Congregation
-            </label>
-            {this.localDropdown()}
-          </div>
-          <Accordion className="m-0">
-            <div className="form-group row">
-              <label className="col-4" htmlFor="timeSelection">
-                Select Worship Service Date Time
-              </label>
-              {this.serviceTimeDropdown()}
-              <Accordion.Toggle
-                className="btn-sm btn-primary col-2"
-                eventKey="0"
-              >
-                Customize
-              </Accordion.Toggle>
-            </div>
+        <Container as={Form} onSubmit={this.handleSubmit}>
+          <Form.Group as={Row}>
+            <Form.Label column sm="2" controlId="localSelection">
+              Congregation
+            </Form.Label>
+            <Col sm="10">{this.localDropdown()}</Col>
+          </Form.Group>
+          <Accordion as={Row}>
+            <Form.Group as={Row} className="w-100 col-12">
+              <Form.Label column sm="2" controlId="timeSelection">
+                Worship Service Date Time
+              </Form.Label>
+              <Col sm="8">{this.serviceTimeDropdown()}</Col>
+              <Col sm="2">
+                <Accordion.Toggle className="btn-sm btn-primary" eventKey="0">
+                  Customize
+                </Accordion.Toggle>
+              </Col>
+            </Form.Group>
             <Accordion.Collapse eventKey="0">
-              <div className="form-group row">
-                <label className="col-4" htmlFor="wsDateTime">
+              <Form.Group as={Row}>
+                <Form.Label column sm="4" htmlFor="wsDateTime">
                   Customize Date and Time
-                </label>
+                </Form.Label>
                 <input
                   type="datetime-local"
                   clasSName="form-control col-8"
@@ -108,11 +104,13 @@ class WorshipServiceForm extends Component {
                   name="wsDateTime"
                   required
                 />
-              </div>
+              </Form.Group>
             </Accordion.Collapse>
           </Accordion>
-          <Button type="submit">Create New Worship Service Attendance</Button>
-        </form>
+          <Row>
+            <Button type="submit">Create New Worship Service Attendance</Button>
+          </Row>
+        </Container>
         <Confirm
           title="Current Attendance Unsaved"
           message="Please save or clear the current attendance"
