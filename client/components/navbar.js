@@ -18,6 +18,7 @@ import BoardNav from './nav/BoardNav'
 import ReportingNav from './nav/ReportingNav'
 import PasswordRequest from './misc/PasswordRequest'
 import Loading from './misc/Loading'
+import Initialize from './misc/Initialize'
 
 class Navbar extends Component {
   componentDidMount = () => {
@@ -41,10 +42,11 @@ class Navbar extends Component {
       isLoggedIn,
       currentDate,
       isSecretary,
-      config
+      config,
+      locals
     } = this.props
-    return !config ? (
-      <Loading />
+    return !config || !currentDate || locals.length === 0 ? (
+      <Initialize />
     ) : (
       <div>
         <NavBarComp bg="dark" variant="dark">
@@ -129,6 +131,7 @@ const mapState = state => ({
   isLoggedIn: !!state.user.id,
   currentDate: state.attendance.currentDate,
   config: state.attendance.config,
+  locals: state.local.locals,
   isSecretary: state.secretary.isSecretary
 })
 

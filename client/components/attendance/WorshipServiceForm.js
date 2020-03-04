@@ -1,16 +1,17 @@
 import React, {Component, Fragment} from 'react'
-import {Button} from 'react-bootstrap'
+import {Button, Accordion} from 'react-bootstrap'
 import {setWorshipServiceDateTimeThunk} from '../../store'
 import {connect} from 'react-redux'
 import Confirm from '../misc/Confirm'
-import history from '../../history'
+import Loading from '../misc/Loading'
 
 class WorshipServiceForm extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      isNotified: false
+      isNotified: false,
+      selectedLocal: 'MANNY'
     }
   }
 
@@ -27,10 +28,50 @@ class WorshipServiceForm extends Component {
     }
   }
 
+  handleLocalSelection = e => {
+    this.setState({selectedLocal: e.target.value})
+  }
+
+  localDropdown = () => (
+    <select
+      className="form-control"
+      required
+      name="localSelection"
+      onChange={this.handleLocalSelection}
+    >
+      {this.props.locals.map(l => (
+        <option key={l.id} selected={l.id === 'MANNY'} value={l.id}>
+          {l.name}
+        </option>
+      ))}
+    </select>
+  )
+
+  serviceTimeDropdown = () => {
+    const currentLocal = this.props.locals.find(
+      l => l.id === this.state.selectedLocal
+    )
+    return (
+      <select className="form-control" required name="timeSelection">
+        {currentLocal.schedules.map((s, i) => (
+          <option key={s.id} selected={i === 0} value={s.id}>
+            {`${s.serviceType} - ${s.day} -
+              ${new Date(
+                new Date(`2020-01-01T${s.time}Z`).getTime() +
+                  new Date(Date.now()).getTimezoneOffset() * 60000
+              ).toLocaleTimeString()}`}
+          </option>
+        ))}
+      </select>
+    )
+  }
+
   confirmClose = () => this.setState({isNotified: false})
 
   render() {
-    return (
+    return this.props.locals.length === 0 ? (
+      <Loading />
+    ) : (
       <Fragment>
         <form
           className="d-flex flex-column justify-content-center"
@@ -38,24 +79,31 @@ class WorshipServiceForm extends Component {
         >
           <div className="form-group">
             <label htmlFor="localSelection">Select Congregation</label>
-            <select className="form-control" required name="localSelection">
-              <option selected>MANNY - Local of Manhattan, NY</option>
-              <option>LICNY - Local of Long Island City, NY</option>
-              <option>FSHNY - Local of Forest Hills, NY</option>
-              <option>BRXNY - Local of Bronx, NY</option>
-              <option>BLMNY - Local of Bellmore, NY</option>
-            </select>
+            {this.localDropdown()}
           </div>
-          <div className="form-group">
-            <label htmlFor="wsDateTime">Worship Service Date and Time</label>
-            <input
-              type="datetime-local"
-              clasSName="form-control"
-              id="wsDateTime"
-              name="wsDateTime"
-              required
-            />
-          </div>
+          <Accordion className="m-0 d-flex flex-row">
+            <div className="form-group">
+              <label htmlFor="timeSelection">
+                Select Worship Service Date Time
+              </label>
+              {this.serviceTimeDropdown()}
+              <Accordion.Toggle as={Button} eventKey="0">
+                Custom Date Time
+              </Accordion.Toggle>
+            </div>
+            <Accordion.Collapse eventKey="0">
+              <div className="form-group">
+                <label htmlFor="wsDateTime">Customize Date and Time</label>
+                <input
+                  type="datetime-local"
+                  clasSName="form-control"
+                  id="wsDateTime"
+                  name="wsDateTime"
+                  required
+                />
+              </div>
+            </Accordion.Collapse>
+          </Accordion>
           <Button type="submit">Create New Worship Service Attendance</Button>
         </form>
         <Confirm
@@ -71,7 +119,8 @@ class WorshipServiceForm extends Component {
 
 const mapState = state => ({
   config: state.attendance.config,
-  members: state.attendance.members
+  members: state.attendance.members,
+  locals: state.local.locals
 })
 
 const mapDispatch = dispatch => ({
