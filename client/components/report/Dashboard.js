@@ -22,6 +22,7 @@ class Dashboard extends Component {
     })
   }
 
+  // clean up
   listAreaGroups = (loading, config) => {
     if (loading) {
       return []
