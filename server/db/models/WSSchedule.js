@@ -3,7 +3,7 @@ const db = require('../db.js')
 
 const Schedule = db.define('schedule', {
   serviceType: {
-    type: Sequelize.ENUM('Midweek', 'Weekend', 'CWS', 'Special'),
+    type: Sequelize.STRING,
     defaultValue: 'Special'
   },
   day: {

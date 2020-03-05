@@ -3,7 +3,7 @@ const Local = require('./Local')
 const Member = require('./Member')
 const ReportingPeriod = require('./ReportingPeriod')
 const Schedule = require('./WSSchedule')
-const WorshipService = require('./WorshipService')
+const Attendance = require('./Attendance')
 
 Member.belongsTo(Local)
 Local.hasMany(Member)
@@ -16,14 +16,18 @@ Local.hasMany(ReportingPeriod)
 
 Local.belongsTo(Local, {as: 'extensionOf'})
 
-Member.belongsToMany(ReportingPeriod, {through: WorshipService})
-ReportingPeriod.belongsToMany(Member, {through: WorshipService})
+// Reporting period may have multiple services
+Attendance.belongsTo(Member)
+Member.hasMany(Attendance)
+
+Attendance.belongsTo(ReportingPeriod)
+ReportingPeriod.hasMany(Attendance)
 
 module.exports = {
   User,
   Local,
   Member,
   ReportingPeriod,
-  WorshipService,
+  Attendance,
   Schedule
 }
