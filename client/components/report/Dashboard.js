@@ -5,6 +5,7 @@ import ReportingPane from './ReportingPane'
 import {importFromSampleThunk, importFromSessionThunk} from '../../store'
 import {connect} from 'react-redux'
 import TabNav from '../nav/TabNav'
+import {ListAreaGroups} from '../../utils/board'
 
 class Dashboard extends Component {
   constructor(props) {
@@ -22,39 +23,13 @@ class Dashboard extends Component {
     })
   }
 
-  // clean up
-  listAreaGroups = (loading, config) => {
-    if (loading) {
-      return []
-    }
-    const BBExt = {
-      areaGroup: ['1-1', '1-2']
-    }
-    const Manhattan = {
-      areaGroup: [
-        '1-1',
-        '1-2',
-        '1-3',
-        '1-4',
-        '1-5',
-        '1-6',
-        '2-1',
-        '2-2',
-        '2-3',
-        '2-4'
-      ]
-    }
-    return Manhattan.areaGroup
-      .map(ag => `MAN ${ag}`)
-      .concat(BBExt.areaGroup.map(ag => `BB ${ag}`))
-  }
-
   render() {
     let {isLoading} = this.state
-    let tabs = this.listAreaGroups(isLoading, this.props.config)
-    tabs.push('ALL')
     const {mode} = this.props.match.params
-    return isLoading ? (
+    const {members} = this.props
+    let tabs = ListAreaGroups(isLoading)
+    tabs.push('ALL')
+    return members.length === 0 ? (
       <Loading />
     ) : (
       <Tab.Container defaultActiveKey={tabs[0]}>
@@ -69,7 +44,7 @@ class Dashboard extends Component {
                   areaGroup={areaGroup}
                   localId={localId}
                   mode={mode}
-                  members={this.props.members.filter(
+                  members={members.filter(
                     m =>
                       ((m.areaGroup === areaGroup && m.localId === localId) ||
                         t === 'ALL') &&
@@ -86,8 +61,7 @@ class Dashboard extends Component {
 }
 
 const mapState = state => ({
-  members: state.attendance.members,
-  config: state.attendance.config
+  members: state.attendance.members
 })
 
 const mapDispatch = dispatch => ({

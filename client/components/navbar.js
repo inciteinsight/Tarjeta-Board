@@ -17,7 +17,6 @@ import {
 import BoardNav from './nav/BoardNav'
 import ReportingNav from './nav/ReportingNav'
 import PasswordRequest from './misc/PasswordRequest'
-import Loading from './misc/Loading'
 import Initialize from './misc/Initialize'
 
 class Navbar extends Component {

@@ -5,7 +5,7 @@ import AreaGroupPane from './attendance/AreaGroupPane'
 import Loading from './misc/Loading'
 import {Tab} from 'react-bootstrap'
 import TabNav from './nav/TabNav'
-import Initialize from './misc/Initialize'
+import {ListAreaGroups} from '../utils/board'
 
 export class Board extends Component {
   constructor(props) {
@@ -16,49 +16,21 @@ export class Board extends Component {
     }
   }
 
-  componentDidMount = async () => {
-    // await this.props.fetchMembersFromSession()
-    // await this.props.fetchMembersFromSample()
+  componentDidMount = () => {
     this.setState({
       isLoading: false
     })
   }
 
-  listAreaGroups = (loading, config) => {
-    if (loading) {
-      return []
-    }
-    const BBExt = {
-      areaGroup: ['1-1', '1-2']
-    }
-    const Manhattan = {
-      areaGroup: [
-        '1-1',
-        '1-2',
-        '1-3',
-        '1-4',
-        '1-5',
-        '1-6',
-        '2-1',
-        '2-2',
-        '2-3',
-        '2-4'
-      ]
-    }
-    return Manhattan.areaGroup
-      .map(ag => `MAN ${ag}`)
-      .concat(BBExt.areaGroup.map(ag => `BB ${ag}`))
-  }
-
   render() {
     let {isLoading} = this.state
     const {gender} = this.props.match.params
-    const {members, config} = this.props
-    const tabs = this.listAreaGroups(isLoading, this.props.config)
-    return isLoading || !config ? (
-      <Initialize />
+    const {members} = this.props
+    const tabs = ListAreaGroups(isLoading)
+    return members.length === 0 ? (
+      <Loading />
     ) : (
-      <Tab.Container defaultActiveKey={tabs[0]}>
+      <Tab.Container defaultActiveKey="MAN 1-1">
         <Tab.Content>
           <TabNav tabs={tabs} />
           {tabs.map(t => {
@@ -87,8 +59,7 @@ export class Board extends Component {
 
 const mapState = state => ({
   email: state.user.email,
-  members: state.attendance.members,
-  config: state.attendance.config
+  members: state.attendance.members
 })
 
 const mapDispatch = dispatch => ({
