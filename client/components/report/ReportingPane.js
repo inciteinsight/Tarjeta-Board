@@ -1,9 +1,11 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import Loading from '../misc/Loading'
+import {CFO} from '../../utils/board'
 
 class ReportingPane extends Component {
   render() {
-    const {members} = this.props
+    const {members, locals} = this.props
     const memberKeys = Object.keys(members[0]).filter(
       k => k !== 'createdAt' && k !== 'updatedAt' && k !== 'isActive'
     )
@@ -18,7 +20,9 @@ class ReportingPane extends Component {
       'Local',
       'Attended'
     ]
-    return (
+    return members.length === 0 || locals.length === 0 ? (
+      <Loading />
+    ) : (
       <table className="blueTable">
         <thead>
           <tr>{memberKeys.map((k, i) => <th key={k}>{heading[i]}</th>)}</tr>
@@ -26,9 +30,21 @@ class ReportingPane extends Component {
         <tbody>
           {members.map(m => (
             <tr key={m.id}>
-              {memberKeys.map(k => (
-                <td key={`${k} - ${m.id}`}>{String(m[k])}</td>
-              ))}
+              <td>{m.id}</td>
+              <td>{m.areaGroup}</td>
+              <td>{m.lastName}</td>
+              <td>{m.firstName}</td>
+              <td>{CFO[m.cfo]}</td>
+              <td>{m.officer}</td>
+              <td>{m.gender}</td>
+              <td>{locals.find(l => l.id === m.localId).name}</td>
+              <td
+                className={`${
+                  m.hasAttended ? 'table-success' : 'table-danger'
+                }`}
+              >
+                {m.hasAttended ? 'YES' : 'NO'}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -38,7 +54,8 @@ class ReportingPane extends Component {
 }
 
 const mapState = state => ({
-  config: state.attendance.config
+  config: state.attendance.config,
+  locals: state.local.locals
 })
 
 export default connect(mapState)(ReportingPane)

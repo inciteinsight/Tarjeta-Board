@@ -17,6 +17,12 @@ const Manhattan = {
   ]
 }
 
+export const CFO = {
+  B: 'Buklod',
+  K: 'Kadiwa',
+  BH: 'Binhi'
+}
+
 export const ListAreaGroups = loading => {
   if (loading) {
     return []
