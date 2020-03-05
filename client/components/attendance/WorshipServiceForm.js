@@ -1,6 +1,9 @@
 import React, {Component, Fragment} from 'react'
 import {Button, Form, Container, Row} from 'react-bootstrap'
-import {setWorshipServiceDateTimeThunk} from '../../store'
+import {
+  setWorshipServiceDateTimeThunk,
+  createReportingPeriodThunk
+} from '../../store'
 import {
   GetWeekNumber,
   GetDefaultService,
@@ -48,9 +51,18 @@ class WorshipServiceForm extends Component {
     ) {
       this.setState({isNotified: true})
     } else {
-      await this.props.handleSetWorshipServiceDate(
-        new Date(e.target.selectedDateTime.value).toISOString()
-      )
+      const {
+        selectedLocal,
+        selectedWeekNumber,
+        selectedDateTime,
+        selectedServiceType
+      } = e.target
+      await this.props.fetchCreateReportingPeriod({
+        localId: selectedLocal.value,
+        currentDate: selectedDateTime.value,
+        weekNumber: selectedWeekNumber.value,
+        serviceType: selectedServiceType.value
+      })
     }
   }
 
@@ -245,7 +257,8 @@ const mapState = state => ({
 
 const mapDispatch = dispatch => ({
   handleSetWorshipServiceDate: currentDate =>
-    dispatch(setWorshipServiceDateTimeThunk(currentDate))
+    dispatch(setWorshipServiceDateTimeThunk(currentDate)),
+  fetchCreateReportingPeriod: data => dispatch(createReportingPeriodThunk(data))
 })
 
 export default connect(mapState, mapDispatch)(WorshipServiceForm)

@@ -90,15 +90,27 @@ export const updateMemberAttendanceThunk = memberId => dispatch => {
   }
 }
 
-// Check List:
-
-// 2) Import From Excel File
-// 3) Update Via Manual Entry
-// 4) Send Finalized Report via email (Java)
+const CREATE_REPORTING_PERIOD = 'CREATE_REPORTING_PERIOD'
+const createReportingPeriod = payload => ({
+  type: CREATE_REPORTING_PERIOD,
+  payload
+})
+export const createReportingPeriodThunk = reportingData => async dispatch => {
+  try {
+    const {data} = await axios.post('/api/reporting/create', reportingData)
+    dispatch(createReportingPeriod(data))
+    history.push('/')
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 const initialState = {
+  local: 'MANNY',
   currentDate: '2020-02-29T09:00:00',
   members: [],
+  weekNumber: 1,
+  serviceType: 'Special',
   config: {}
 }
 
@@ -118,6 +130,13 @@ export default (state = initialState, {type, payload}) => {
       newState.members.find(
         m => m.id === payload
       ).hasAttended = !newState.members.find(m => m.id === payload).hasAttended
+      return newState
+    case CREATE_REPORTING_PERIOD:
+      console.log(payload)
+      newState.local = payload.localId
+      newState.currentDate = payload.currentDate
+      newState.weekNumber = payload.weekNumber
+      newState.serviceType = payload.serviceType
       return newState
     default:
       return state

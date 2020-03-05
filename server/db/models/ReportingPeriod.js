@@ -20,7 +20,7 @@ const ReportingPeriod = db.define('reporting', {
     }
   },
   serviceType: {
-    type: Sequelize.ENUM('Midweek', 'Weekend', 'CWS', 'Special'),
+    type: Sequelize.STRING,
     defaultValue: 'Special'
   }
 })
