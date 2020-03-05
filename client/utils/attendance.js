@@ -18,6 +18,16 @@ export const UpdateMemberInSession = async memberId => {
   )
 }
 
+export const DAYS_ARRAY = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+]
+
 export const GetTimeZoneAccounted = (givenTime, givenDate) => {
   const time = givenTime ? givenTime : '00:00:00'
   const date = givenDate ? givenDate : '2020-01-01'
@@ -44,7 +54,21 @@ export const GetWeekNumber = givenDate => {
 export const GetDefaultService = local => {
   const {schedules} = local
   const today = new Date(Date.now()).getDay()
-  const service = schedules.find(s => new Date(s.day).getDay() === today)
+  const service = schedules.find(s => new Date(s.day).getDay() >= today)
   console.log(service)
   return service
+}
+
+export const GetServiceFromScheduleDay = (serviceTime, serviceDay) => {
+  const now = new Date(
+    new Date(
+      new Date(Date.now()).getTime() +
+        new Date(Date.now()).getTimezoneOffset() * 60000
+    )
+  )
+  const nowDay = now.getDay() === 0 ? 6 : now.getDay() - 1
+  let serviceDate = new Date(
+    new Date().setDate(now.getDate() - nowDay + DAYS_ARRAY.indexOf(serviceDay))
+  ).toISOString()
+  return `${serviceDate.slice(0, 10)}T${serviceTime}`
 }

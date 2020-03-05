@@ -1,7 +1,11 @@
 import React, {Component, Fragment} from 'react'
 import {Button, Form, Container, Row} from 'react-bootstrap'
 import {setWorshipServiceDateTimeThunk} from '../../store'
-import {GetWeekNumber, GetDefaultService} from '../../utils/attendance'
+import {
+  GetWeekNumber,
+  GetDefaultService,
+  GetServiceFromScheduleDay
+} from '../../utils/attendance'
 import {connect} from 'react-redux'
 import Confirm from '../misc/Confirm'
 import Loading from '../misc/Loading'
@@ -44,32 +48,48 @@ class WorshipServiceForm extends Component {
       this.setState({isNotified: true})
     } else {
       await this.props.handleSetWorshipServiceDate(
-        new Date(e.target.wsDateTime.value).toISOString()
+        new Date(e.target.selectedDateTime.value).toISOString()
       )
     }
-  }
-
-  handleLocalSelection = e => {
-    this.setState({selectedLocal: e.target.value})
   }
 
   handleWeekNumberSelection = e => {
     this.setState({selectedWeekNumber: e.target.value})
   }
 
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
+
   handleDateTimeSelection = e => {
-    const local = this.props.locals.find(l => l.id === this.state.selectedLocal)
-    const sched = local.schedules.find(s => s.id === Number(e.target.value))
-    console.log(sched)
-    // this.setState({selectedWeekNumber: GetWeekNumber(new Date(Date.now()))})
+    if (Number(e.target.value) >= 0) {
+      const selectedWeekNumber = GetWeekNumber(
+        new Date(
+          new Date(Date.now()).getTime() +
+            new Date(Date.now()).getTimezoneOffset() * 60000
+        )
+      )
+      const local = this.props.locals.find(
+        l => l.id === this.state.selectedLocal
+      )
+      const sched = local.schedules.find(s => s.id === Number(e.target.value))
+      const selectedDateTime = GetServiceFromScheduleDay(sched.time, sched.day)
+      this.setState({
+        selectedWeekNumber,
+        selectedDateTime,
+        selectedServiceType: sched.serviceType
+      })
+    }
   }
 
   localDropdown = () => (
     <select
       className="col-8 form-control"
       required
-      name="localSelection"
-      onChange={this.handleLocalSelection}
+      name="selectedLocal"
+      onChange={this.handleChange}
     >
       {this.props.locals.map(l => (
         <option key={l.id} selected={l.id === 'MANNY'} value={l.id}>
@@ -90,7 +110,9 @@ class WorshipServiceForm extends Component {
         name="timeSelection"
         onChange={this.handleDateTimeSelection}
       >
-        <option selected>Select Worship Service Schedule</option>
+        <option selected value={-1}>
+          Select Worship Service Schedule
+        </option>
         {currentLocal.schedules.map(s => (
           <option key={s.id} value={s.id}>
             {`${s.serviceType} - ${s.day} -
@@ -108,6 +130,11 @@ class WorshipServiceForm extends Component {
 
   render() {
     const {locals} = this.props
+    const {
+      selectedWeekNumber,
+      selectedServiceType,
+      selectedDateTime
+    } = this.state
     if (locals.length === 0) {
       return <Loading />
     } else {
@@ -121,7 +148,7 @@ class WorshipServiceForm extends Component {
             <div className="row form-group form-check form-check-inline w-100">
               <label
                 className="col-4 font-weight-bold text-right"
-                htmlFor="localSelection"
+                htmlFor="selectedLocal"
               >
                 Congregation
               </label>
@@ -139,15 +166,17 @@ class WorshipServiceForm extends Component {
             <div className="row form-group form-check form-check-inline w-100">
               <label
                 className="col-4 font-weight-bold text-right"
-                htmlFor="wsDateTime"
+                htmlFor="selectedDateTime"
               >
                 Worship Service Date Time
               </label>
               <input
+                value={selectedDateTime}
                 type="datetime-local"
                 className="form-control col-8"
-                id="wsDateTime"
-                name="wsDateTime"
+                id="selectedDateTime"
+                name="selectedDateTime"
+                onChange={this.handleChange}
                 required
               />
             </div>
@@ -159,14 +188,14 @@ class WorshipServiceForm extends Component {
                 Week Number
               </label>
               <input
-                value={this.state.selectedWeekNumber}
+                value={selectedWeekNumber}
                 type="number"
                 className="form-control col-8"
-                id="weekNum"
-                name="weekNum"
+                id="selectedWeekNumber"
+                name="selectedWeekNumber"
                 min="1"
                 max="52"
-                onChange={this.handleWeekNumberSelection}
+                onChange={this.handleChange}
                 required
               />
             </div>
@@ -178,10 +207,12 @@ class WorshipServiceForm extends Component {
                 Service Type
               </label>
               <select
+                value={selectedServiceType}
                 className="form-control col-8"
-                id="serviceType"
-                name="serviceType"
+                id="selectedServiceType"
+                name="selectedServiceType"
                 required
+                onChange={this.handleChange}
               >
                 <option selected value="Midweek">
                   Midweek
