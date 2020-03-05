@@ -51,6 +51,7 @@ export const GetWeekNumber = givenDate => {
   return week
 }
 
+// Under Construction
 export const GetDefaultService = local => {
   const {schedules} = local
   const today = new Date(Date.now()).getDay()

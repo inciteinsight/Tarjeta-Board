@@ -28,6 +28,7 @@ class WorshipServiceForm extends Component {
     }
   }
 
+  // Under Construction
   loadDefault = async () => {
     const {locals} = this.props
     const {selectedDateTime, selectedServiceType} = this.props
@@ -51,10 +52,6 @@ class WorshipServiceForm extends Component {
         new Date(e.target.selectedDateTime.value).toISOString()
       )
     }
-  }
-
-  handleWeekNumberSelection = e => {
-    this.setState({selectedWeekNumber: e.target.value})
   }
 
   handleChange = e => {
