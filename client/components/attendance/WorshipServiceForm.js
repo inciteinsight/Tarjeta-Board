@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react'
-import {Button, Accordion, Form, Container, Row, Col} from 'react-bootstrap'
+import {Button, Form, Container, Row} from 'react-bootstrap'
 import {setWorshipServiceDateTimeThunk} from '../../store'
+import {GetWeekNumber, GetDefaultService} from '../../utils/attendance'
 import {connect} from 'react-redux'
 import Confirm from '../misc/Confirm'
 import Loading from '../misc/Loading'
@@ -11,7 +12,27 @@ class WorshipServiceForm extends Component {
 
     this.state = {
       isNotified: false,
-      selectedLocal: 'MANNY'
+      selectedWeekNumber: GetWeekNumber(
+        new Date(
+          new Date(Date.now()).getTime() +
+            new Date(Date.now()).getTimezoneOffset() * 60000
+        )
+      ),
+      selectedLocal: 'MANNY',
+      selectedDateTime: '',
+      selectedServiceType: ''
+    }
+  }
+
+  loadDefault = async () => {
+    const {locals} = this.props
+    const {selectedDateTime, selectedServiceType} = this.props
+    if (selectedDateTime === '' || selectedDateTime === '') {
+      const defaultLocal = await locals.find(l => l.id === 'MANNY')
+      const defaultSchedule = GetDefaultService(defaultLocal)
+      this.setState({
+        selectedServiceType: defaultSchedule.serviceType
+      })
     }
   }
 
@@ -32,9 +53,20 @@ class WorshipServiceForm extends Component {
     this.setState({selectedLocal: e.target.value})
   }
 
+  handleWeekNumberSelection = e => {
+    this.setState({selectedWeekNumber: e.target.value})
+  }
+
+  handleDateTimeSelection = e => {
+    const local = this.props.locals.find(l => l.id === this.state.selectedLocal)
+    const sched = local.schedules.find(s => s.id === Number(e.target.value))
+    console.log(sched)
+    // this.setState({selectedWeekNumber: GetWeekNumber(new Date(Date.now()))})
+  }
+
   localDropdown = () => (
-    <Form.Control
-      as="select"
+    <select
+      className="col-8 form-control"
       required
       name="localSelection"
       onChange={this.handleLocalSelection}
@@ -44,7 +76,7 @@ class WorshipServiceForm extends Component {
           {l.name}
         </option>
       ))}
-    </Form.Control>
+    </select>
   )
 
   serviceTimeDropdown = () => {
@@ -52,9 +84,15 @@ class WorshipServiceForm extends Component {
       l => l.id === this.state.selectedLocal
     )
     return (
-      <Form.Control as="select" required name="timeSelection">
-        {currentLocal.schedules.map((s, i) => (
-          <option key={s.id} selected={i === 0} value={s.id}>
+      <select
+        className="col-8 form-control"
+        required
+        name="timeSelection"
+        onChange={this.handleDateTimeSelection}
+      >
+        <option selected>Select Worship Service Schedule</option>
+        {currentLocal.schedules.map(s => (
+          <option key={s.id} value={s.id}>
             {`${s.serviceType} - ${s.day} -
               ${new Date(
                 new Date(`2020-01-01T${s.time}Z`).getTime() +
@@ -62,63 +100,112 @@ class WorshipServiceForm extends Component {
               ).toLocaleTimeString()}`}
           </option>
         ))}
-      </Form.Control>
+      </select>
     )
   }
 
   confirmClose = () => this.setState({isNotified: false})
 
   render() {
-    return this.props.locals.length === 0 ? (
-      <Loading />
-    ) : (
-      <Fragment>
-        <Container as={Form} onSubmit={this.handleSubmit}>
-          <Form.Group as={Row}>
-            <Form.Label column sm="2" controlId="localSelection">
-              Congregation
-            </Form.Label>
-            <Col sm="10">{this.localDropdown()}</Col>
-          </Form.Group>
-          <Accordion as={Row}>
-            <Form.Group as={Row} className="w-100 col-12">
-              <Form.Label column sm="2" controlId="timeSelection">
+    const {locals} = this.props
+    if (locals.length === 0) {
+      return <Loading />
+    } else {
+      return (
+        <Fragment>
+          <Container
+            as={Form}
+            className="d-flex flex-column align-items-center"
+            onSubmit={this.handleSubmit}
+          >
+            <div className="row form-group form-check form-check-inline w-100">
+              <label
+                className="col-4 font-weight-bold text-right"
+                htmlFor="localSelection"
+              >
+                Congregation
+              </label>
+              {this.localDropdown()}
+            </div>
+            <div className="row form-group form-check form-check-inline w-100">
+              <label
+                className="col-4 font-weight-bold text-right"
+                htmlFor="timeSelection"
+              >
+                Autofill from Schedule
+              </label>
+              {this.serviceTimeDropdown()}
+            </div>
+            <div className="row form-group form-check form-check-inline w-100">
+              <label
+                className="col-4 font-weight-bold text-right"
+                htmlFor="wsDateTime"
+              >
                 Worship Service Date Time
-              </Form.Label>
-              <Col sm="8">{this.serviceTimeDropdown()}</Col>
-              <Col sm="2">
-                <Accordion.Toggle className="btn-sm btn-primary" eventKey="0">
-                  Customize
-                </Accordion.Toggle>
-              </Col>
-            </Form.Group>
-            <Accordion.Collapse eventKey="0">
-              <Form.Group as={Row}>
-                <Form.Label column sm="4" htmlFor="wsDateTime">
-                  Customize Date and Time
-                </Form.Label>
-                <input
-                  type="datetime-local"
-                  clasSName="form-control col-8"
-                  id="wsDateTime"
-                  name="wsDateTime"
-                  required
-                />
-              </Form.Group>
-            </Accordion.Collapse>
-          </Accordion>
-          <Row>
-            <Button type="submit">Create New Worship Service Attendance</Button>
-          </Row>
-        </Container>
-        <Confirm
-          title="Current Attendance Unsaved"
-          message="Please save or clear the current attendance"
-          show={this.state.isNotified}
-          onHide={this.confirmClose}
-        />
-      </Fragment>
-    )
+              </label>
+              <input
+                type="datetime-local"
+                className="form-control col-8"
+                id="wsDateTime"
+                name="wsDateTime"
+                required
+              />
+            </div>
+            <div className="row form-group form-check form-check-inline w-100">
+              <label
+                className="col-4 font-weight-bold text-right"
+                htmlFor="weekNum"
+              >
+                Week Number
+              </label>
+              <input
+                value={this.state.selectedWeekNumber}
+                type="number"
+                className="form-control col-8"
+                id="weekNum"
+                name="weekNum"
+                min="1"
+                max="52"
+                onChange={this.handleWeekNumberSelection}
+                required
+              />
+            </div>
+            <div className="row form-group form-check form-check-inline w-100">
+              <label
+                className="col-4 font-weight-bold text-right"
+                htmlFor="serviceType"
+              >
+                Service Type
+              </label>
+              <select
+                className="form-control col-8"
+                id="serviceType"
+                name="serviceType"
+                required
+              >
+                <option selected value="Midweek">
+                  Midweek
+                </option>
+                <option value="Weekend">Weekend</option>
+                <option value="CWS">CWS</option>
+                <option value="Special">Special</option>
+              </select>
+            </div>
+            <Row>
+              <Button type="submit">
+                Create New Worship Service Attendance
+              </Button>
+            </Row>
+          </Container>
+          <Confirm
+            title="Current Attendance Unsaved"
+            message="Please save or clear the current attendance"
+            show={this.state.isNotified}
+            onHide={this.confirmClose}
+          />
+        </Fragment>
+      )
+    }
   }
 }
 
