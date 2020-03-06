@@ -18,6 +18,7 @@ import BoardNav from './nav/BoardNav'
 import ReportingNav from './nav/ReportingNav'
 import PasswordRequest from './misc/PasswordRequest'
 import Initialize from './misc/Initialize'
+const {secretaryPass} = require('../../secrets')
 
 class Navbar extends Component {
   componentDidMount = () => {
@@ -30,7 +31,7 @@ class Navbar extends Component {
   }
 
   handlePasswordChange = e => {
-    if (this.props.config.Settings.secretaryPass === e.target.value) {
+    if (secretaryPass === e.target.value) {
       this.props.handleUpdateSecretaryMode()
     }
   }
@@ -57,10 +58,9 @@ class Navbar extends Component {
       isLoggedIn,
       currentDate,
       isSecretary,
-      config,
       locals
     } = this.props
-    return !config || !currentDate || locals.length === 0 ? (
+    return !currentDate || locals.length === 0 ? (
       <Initialize />
     ) : (
       <div>
@@ -138,7 +138,6 @@ class Navbar extends Component {
 const mapState = state => ({
   isLoggedIn: !!state.user.id,
   currentDate: state.attendance.currentDate,
-  config: state.attendance.config,
   locals: state.local.locals,
   isSecretary: state.secretary.isSecretary,
   reportingPeriod: state.attendance.reportingPeriod

@@ -1,6 +1,4 @@
 import axios from 'axios'
-import {AddHasAttendedField, UpdateMemberInSession} from '../utils/attendance'
-import {ml, config as sampleConfig} from '../../public/sample/121919.js'
 import history from '../history'
 
 const GET_ACCESS_FROM_SESSION = 'GET_ACCESS_FROM_SESSION'

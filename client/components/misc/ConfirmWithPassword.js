@@ -1,10 +1,9 @@
 import React, {Component} from 'react'
 import {Modal, Button} from 'react-bootstrap'
-import {connect} from 'react-redux'
 import PasswordRequest from './PasswordRequest'
-import Loading from './Loading'
+const {secretaryPass} = require('../../../secrets')
 
-class ConfirmWithPassword extends Component {
+export default class ConfirmWithPassword extends Component {
   constructor(props) {
     super(props)
 
@@ -25,15 +24,12 @@ class ConfirmWithPassword extends Component {
 
   passwordCheck = () => {
     const {password} = this.state
-    const {secretaryPass} = this.props.config.Settings
     return password === secretaryPass
   }
 
   render() {
-    const {message, title, onHide, buttonMessage, config} = this.props
-    return !config ? (
-      <Loading />
-    ) : (
+    const {message, title, onHide, buttonMessage} = this.props
+    return (
       <Modal
         {...this.props}
         aria-labelledby="contained-modal-title-vcenter"
@@ -59,9 +55,3 @@ class ConfirmWithPassword extends Component {
     )
   }
 }
-
-const mapState = state => ({
-  config: state.attendance.config
-})
-
-export default connect(mapState)(ConfirmWithPassword)

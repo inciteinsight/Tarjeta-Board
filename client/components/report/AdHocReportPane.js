@@ -98,7 +98,6 @@ class AdHocReportPane extends Component {
 }
 
 const mapState = state => ({
-  config: state.attendance.config,
   locals: state.local.locals
 })
 

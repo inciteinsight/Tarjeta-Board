@@ -4,6 +4,7 @@ import {updateMemberAttendanceThunk} from '../../store'
 import {Card, Container} from 'react-bootstrap'
 import EmptyCard from './EmptyCard'
 import Confirm from '../misc/Confirm'
+import {Colors} from '../../utils/board'
 
 class CardItem extends Component {
   constructor() {
@@ -39,7 +40,6 @@ class CardItem extends Component {
   confirmClose = () => this.setState({isConfirming: false})
 
   cardFront = member => {
-    const {color} = this.props.config
     const {isPresent} = this.state
     const {id, areaGroup, firstName, lastName, officer} = member
     return (
@@ -68,7 +68,7 @@ class CardItem extends Component {
                   r="12"
                   stroke="black"
                   strokeWidth="2"
-                  fill={officer === 'Y' ? color.officer : color.default}
+                  fill={officer === 'Y' ? Colors.officer : Colors.default}
                 />
               </svg>
             </div>
@@ -104,7 +104,6 @@ class CardItem extends Component {
 }
 
 const mapState = state => ({
-  config: state.attendance.config,
   members: state.attendance.members
 })
 

@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {Tab} from 'react-bootstrap'
 import Loading from '../misc/Loading'
 import AdHocReportPane from './AdHocReportPane'
-import {importFromSampleThunk, importFromSessionThunk} from '../../store'
 import {connect} from 'react-redux'
 import TabNav from '../nav/TabNav'
 import {ListAreaGroups} from '../../utils/board'
@@ -81,9 +80,4 @@ const mapState = state => ({
   members: state.attendance.members
 })
 
-const mapDispatch = dispatch => ({
-  // fetchMembersFromSample: () => dispatch(importFromSampleThunk()),
-  // fetchMembersFromSession: () => dispatch(importFromSessionThunk())
-})
-
-export default connect(mapState, mapDispatch)(AdHocReport)
+export default connect(mapState)(AdHocReport)

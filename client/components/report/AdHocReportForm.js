@@ -1,14 +1,7 @@
 import React, {Component, Fragment} from 'react'
 import {Button, Form, Container, Row} from 'react-bootstrap'
 import {createReportingPeriodThunk} from '../../store'
-import {
-  GetWeekNumber,
-  GetDefaultService,
-  GetServiceFromScheduleDay
-} from '../../utils/attendance'
 import {connect} from 'react-redux'
-import Confirm from '../misc/Confirm'
-import Loading from '../misc/Loading'
 import axios from 'axios'
 import history from '../../history'
 
@@ -134,7 +127,6 @@ class AdHocReportForm extends Component {
 }
 
 const mapState = state => ({
-  config: state.attendance.config,
   members: state.attendance.members,
   locals: state.local.locals
 })

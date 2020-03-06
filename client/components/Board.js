@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {importFromSampleThunk, importFromSessionThunk} from '../store'
 import AreaGroupPane from './attendance/AreaGroupPane'
 import Loading from './misc/Loading'
 import {Tab, Button} from 'react-bootstrap'
@@ -77,9 +76,4 @@ const mapState = state => ({
   reportingPeriod: state.attendance.reportingPeriod
 })
 
-const mapDispatch = dispatch => ({
-  fetchMembersFromSample: () => dispatch(importFromSampleThunk()),
-  fetchMembersFromSession: () => dispatch(importFromSessionThunk())
-})
-
-export default connect(mapState, mapDispatch)(Board)
+export default connect(mapState)(Board)

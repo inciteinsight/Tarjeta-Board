@@ -1,10 +1,9 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
 import {Col, Row} from 'react-bootstrap'
 import CardItem from './CardItem'
 import Loading from '../misc/Loading'
 
-class AreaGroupPane extends Component {
+export default class AreaGroupPane extends Component {
   constructor(props) {
     super(props)
 
@@ -58,9 +57,3 @@ class AreaGroupPane extends Component {
     )
   }
 }
-
-const mapState = state => ({
-  config: state.attendance.config
-})
-
-export default connect(mapState)(AreaGroupPane)

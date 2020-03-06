@@ -250,7 +250,6 @@ class WorshipServiceForm extends Component {
 }
 
 const mapState = state => ({
-  config: state.attendance.config,
   members: state.attendance.members,
   locals: state.local.locals
 })
