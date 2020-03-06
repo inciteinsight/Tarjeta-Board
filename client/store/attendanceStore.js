@@ -24,11 +24,12 @@ export const importFromSampleThunk = () => async dispatch => {
 }
 
 const IMPORT_FROM_SESSION = 'IMPORT_FROM_SESSION'
-const importFromSession = (members, config, currentDate) => ({
+const importFromSession = (members, config, reportingPeriod, currentDate) => ({
   type: IMPORT_FROM_SESSION,
   payload: {
     members: members,
     config,
+    reportingPeriod,
     currentDate
   }
 })
@@ -42,7 +43,8 @@ export const importFromSessionThunk = () => async dispatch => {
         importFromSession(
           data.members,
           sampleConfig,
-          Object.keys(data.currentDate)[0]
+          data.reportingPeriod,
+          data.currentDate
         )
       )
     }
@@ -56,21 +58,6 @@ export const clearSessionThunk = () => async dispatch => {
     await axios.delete('/api/cache/members')
     await dispatch(importFromSampleThunk())
     history.go('/')
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-const SET_WORSHIP_SERVICE_DATETIME = 'SET_WORSHIP_SERVICE_DATETIME'
-const setWorshipServiceDateTime = currentDate => ({
-  type: SET_WORSHIP_SERVICE_DATETIME,
-  payload: {currentDate}
-})
-export const setWorshipServiceDateTimeThunk = currentDate => async dispatch => {
-  try {
-    const {data} = await axios.put('/api/cache/currentDate', currentDate)
-    await dispatch(setWorshipServiceDateTime(Object.keys(data.currentDate)[0]))
-    history.push('/')
   } catch (error) {
     console.error(error)
   }
@@ -105,12 +92,18 @@ export const createReportingPeriodThunk = reportingData => async dispatch => {
   }
 }
 
+// const SAVE_ATTENDANCE = 'SAVE_ATTENDANCE'
+// const saveAttendance =
+
 const initialState = {
   local: 'MANNY',
   currentDate: '2020-02-29T09:00:00',
+  reportingPeriod: {
+    id: 1,
+    weekNumber: 1,
+    serviceType: 'Special'
+  },
   members: [],
-  weekNumber: 1,
-  serviceType: 'Special',
   config: {}
 }
 
@@ -121,9 +114,7 @@ export default (state = initialState, {type, payload}) => {
     case IMPORT_FROM_SESSION:
       newState.members = payload.members
       newState.config = payload.config
-      newState.currentDate = payload.currentDate
-      return newState
-    case SET_WORSHIP_SERVICE_DATETIME:
+      newState.reportingPeriod = payload.reportingPeriod
       newState.currentDate = payload.currentDate
       return newState
     case UPDATE_MEMBER_ATTENDANCE:
@@ -132,11 +123,11 @@ export default (state = initialState, {type, payload}) => {
       ).hasAttended = !newState.members.find(m => m.id === payload).hasAttended
       return newState
     case CREATE_REPORTING_PERIOD:
-      console.log(payload)
       newState.local = payload.localId
       newState.currentDate = payload.currentDate
-      newState.weekNumber = payload.weekNumber
-      newState.serviceType = payload.serviceType
+      newState.reportingPeriod.id = payload.id
+      newState.reportingPeriod.weekNumber = payload.weekNumber
+      newState.reportingPeriod.serviceType = payload.serviceType
       return newState
     default:
       return state

@@ -7,10 +7,24 @@ const GetTimeZoneAccounted = date => {
   )
 }
 
+router.post('/attendance', async (req, res, next) => {
+  const attendees = req.body
+  await attendees.forEach(async a => {
+    const {reportingId, memberId, dateTime, hasAttended} = a
+    const attendance = await Attendance.findOrBuild({
+      where: {reportingId, memberId, dateTime}
+    })
+    attendance[0].hasAttended = hasAttended
+    await attendance[0].save()
+  })
+  res.status(200).send()
+})
+
 router.post('/create', async (req, res, next) => {
   try {
-    const {localId, weekNumber, serviceType, currentDate} = req.body
-    const reportingPeriod = await ReportingPeriod.findOrCreate({
+    let reportingPeriod = req.body
+    const {localId, weekNumber, serviceType, currentDate} = reportingPeriod
+    const result = await ReportingPeriod.findOrCreate({
       where: {
         localId: localId,
         year: new Date(currentDate).getFullYear(),
@@ -18,12 +32,19 @@ router.post('/create', async (req, res, next) => {
         serviceType: serviceType
       }
     })
-    console.log(reportingPeriod)
+    reportingPeriod.id = result[0].dataValues.id
+
     req.session.ws.local = localId
     req.session.ws.currentDate = currentDate
-    req.session.ws.serviceType = serviceType
-    req.session.ws.weekNumber = weekNumber
-    res.status(200).json(req.body)
+    req.session.ws.reportingPeriod = {
+      serviceType: 'Special',
+      weekNumber: 1,
+      id: 1
+    }
+    req.session.ws.reportingPeriod.id = reportingPeriod.id
+    req.session.ws.reportingPeriod.serviceType = serviceType
+    req.session.ws.reportingPeriod.weekNumber = weekNumber
+    res.status(200).json(reportingPeriod)
   } catch (error) {
     next(error)
   }

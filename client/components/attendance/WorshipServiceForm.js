@@ -1,9 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import {Button, Form, Container, Row} from 'react-bootstrap'
-import {
-  setWorshipServiceDateTimeThunk,
-  createReportingPeriodThunk
-} from '../../store'
+import {createReportingPeriodThunk} from '../../store'
 import {
   GetWeekNumber,
   GetDefaultService,
@@ -256,8 +253,6 @@ const mapState = state => ({
 })
 
 const mapDispatch = dispatch => ({
-  handleSetWorshipServiceDate: currentDate =>
-    dispatch(setWorshipServiceDateTimeThunk(currentDate)),
   fetchCreateReportingPeriod: data => dispatch(createReportingPeriodThunk(data))
 })
 

@@ -5,10 +5,10 @@ export default class ReportingNav extends Component {
   render() {
     return (
       <NavDropdown title="Reports" id="nav-dropdown" size="lg">
-        <NavDropdown.Item eventKey="4.1" href="/reports/absent">
+        {/* <NavDropdown.Item eventKey="4.1" href="/reports/absent">
           Absent
-        </NavDropdown.Item>
-        <NavDropdown.Item eventKey="4.2" href="/reports/complete">
+        </NavDropdown.Item> */}
+        <NavDropdown.Item eventKey="4.2" href="/reports/current">
           Complete
         </NavDropdown.Item>
         <NavDropdown.Item eventKey="4.3" disabled>

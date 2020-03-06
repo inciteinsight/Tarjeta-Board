@@ -64,10 +64,14 @@ const createApp = () => {
   app.use(passport.session())
 
   app.use('*', (req, res, next) => {
-    if (!req.session.ws || !req.session.ws.currentDate) {
+    if (!req.session.ws) {
       req.session.ws = {
         currentDate: new Date(Date.now()).toISOString(),
-        members: []
+        members: [],
+        reportingPeriod: {
+          weekNumber: 1,
+          serviceType: 'Special'
+        }
       }
     }
     if (!req.session.access) {
