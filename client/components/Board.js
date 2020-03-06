@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {importFromSampleThunk, importFromSessionThunk} from '../store'
 import AreaGroupPane from './attendance/AreaGroupPane'
 import Loading from './misc/Loading'
-import {Tab} from 'react-bootstrap'
+import {Tab, Button} from 'react-bootstrap'
 import TabNav from './nav/TabNav'
 import {ListAreaGroups} from '../utils/board'
 
@@ -25,14 +25,25 @@ export class Board extends Component {
   render() {
     let {isLoading} = this.state
     const {gender} = this.props.match.params
-    const {members} = this.props
+    const {members, reportingPeriod} = this.props
     const tabs = ListAreaGroups(isLoading)
 
-    // Create Empty Board when Service needs to be created
+    if (members.length === 0 || !reportingPeriod) {
+      return <Loading />
+    }
 
-    return members.length === 0 ? (
-      <Loading />
-    ) : (
+    if (reportingPeriod.id === 0) {
+      return (
+        <div className="tarjeta-placeholder d-flex flex-column justify-content-center align-items-center">
+          <h1>Please create a new Worship Service Attendance instance</h1>
+          <Button variant="secondary" size="lg" href="/service/new">
+            New Worship Service Form
+          </Button>
+        </div>
+      )
+    }
+
+    return (
       <Tab.Container defaultActiveKey="MAN 1-1">
         <Tab.Content>
           <TabNav tabs={tabs} />
