@@ -7,7 +7,7 @@ const {
   extensionCongregations,
   ml,
   secretaries
-} = require('../public/sample/121919.js')
+} = require('./initLoad')
 
 async function seed() {
   await db.sync({force: true})
@@ -21,10 +21,6 @@ async function seed() {
 
   const members = await Member.loadData(ml)
   console.log(`seeded ${members.length} members`)
-
-  // const users = await Promise.all([
-  //   User.create({email: 'manhattan@inc.com', password: '123'})
-  // ])
 
   const users = await Promise.all(secretaries.map(s => User.create(s)))
 

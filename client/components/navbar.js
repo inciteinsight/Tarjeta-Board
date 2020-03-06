@@ -18,7 +18,8 @@ import BoardNav from './nav/BoardNav'
 import ReportingNav from './nav/ReportingNav'
 import PasswordRequest from './misc/PasswordRequest'
 import Initialize from './misc/Initialize'
-const {secretaryPass} = require('../../secrets')
+const secretaryPass = require('../../secrets')
+const secPass = process.env.secretaryPass || secretaryPass
 
 class Navbar extends Component {
   componentDidMount = () => {
@@ -31,7 +32,7 @@ class Navbar extends Component {
   }
 
   handlePasswordChange = e => {
-    if (secretaryPass === e.target.value) {
+    if (secPass === e.target.value) {
       this.props.handleUpdateSecretaryMode()
     }
   }

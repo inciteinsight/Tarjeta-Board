@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import {Modal, Button} from 'react-bootstrap'
 import PasswordRequest from './PasswordRequest'
-const {secretaryPass} = require('../../../secrets')
+const secretaryPass = require('../../../secrets')
+const secPass = process.env.secretaryPass || secretaryPass
 
 export default class ConfirmWithPassword extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ export default class ConfirmWithPassword extends Component {
 
   passwordCheck = () => {
     const {password} = this.state
-    return password === secretaryPass
+    return password === secPass
   }
 
   render() {
