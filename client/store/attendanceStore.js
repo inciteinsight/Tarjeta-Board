@@ -10,7 +10,7 @@ const importFromSample = members => ({
 })
 export const importFromSampleThunk = () => async dispatch => {
   try {
-    const data = await (await axios.get('/api/member')).data.map(m =>
+    const data = await (await axios.get('/api/member/active')).data.map(m =>
       AddHasAttendedField(m)
     )
     await axios.post('/api/cache/members', data)

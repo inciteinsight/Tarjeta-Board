@@ -23,7 +23,6 @@ router.post('/attendance', async (req, res, next) => {
     const {reportingId, memberId, dateTime, hasAttended} = a
     const attendance = await Attendance.findOrBuild({
       where: {reportingId, memberId, dateTime: GetTimeZoneAccounted(dateTime)}
-      // test this
     })
     attendance[0].hasAttended = hasAttended
     await attendance[0].save()
