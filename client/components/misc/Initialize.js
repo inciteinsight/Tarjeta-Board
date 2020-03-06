@@ -6,12 +6,16 @@ import {
   getAllLocalsThunk
 } from '../../store'
 import {Line} from 'britecharts-react'
+import history from '../../history'
 
 class Initialize extends Component {
   componentDidMount = async () => {
     await this.props.fetchMembersFromSession()
     await this.props.fetchAccessFromSession()
     await this.props.fetchLocalsFromDatabase()
+    if (this.props.reportingId === 0) {
+      history.push('/service/new')
+    }
   }
 
   render() {
@@ -19,10 +23,14 @@ class Initialize extends Component {
   }
 }
 
+const mapState = state => ({
+  reportingId: state.attendance.reportingPeriod.id
+})
+
 const mapDispatch = dispatch => ({
   fetchMembersFromSession: () => dispatch(importFromSessionThunk()),
   fetchAccessFromSession: () => dispatch(getAccessFromSessionThunk()),
   fetchLocalsFromDatabase: () => dispatch(getAllLocalsThunk())
 })
 
-export default connect(null, mapDispatch)(Initialize)
+export default connect(mapState, mapDispatch)(Initialize)

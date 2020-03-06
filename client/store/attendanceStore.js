@@ -11,7 +11,6 @@ const importFromSample = (members, config) => ({
 })
 export const importFromSampleThunk = () => async dispatch => {
   try {
-    // const members = ml.map(m => AddHasAttendedField(m))
     const data = await (await axios.get('/api/member')).data.map(m =>
       AddHasAttendedField(m)
     )
@@ -57,7 +56,7 @@ export const clearSessionThunk = () => async dispatch => {
   try {
     await axios.delete('/api/cache/members')
     await dispatch(importFromSampleThunk())
-    history.go('/')
+    history.go('/service/new')
   } catch (error) {
     console.error(error)
   }
@@ -92,14 +91,11 @@ export const createReportingPeriodThunk = reportingData => async dispatch => {
   }
 }
 
-// const SAVE_ATTENDANCE = 'SAVE_ATTENDANCE'
-// const saveAttendance =
-
 const initialState = {
   local: 'MANNY',
   currentDate: '2020-02-29T09:00:00',
   reportingPeriod: {
-    id: 1,
+    id: 0,
     weekNumber: 1,
     serviceType: 'Special'
   },

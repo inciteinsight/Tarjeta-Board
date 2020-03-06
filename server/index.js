@@ -70,7 +70,8 @@ const createApp = () => {
         members: [],
         reportingPeriod: {
           weekNumber: 1,
-          serviceType: 'Special'
+          serviceType: 'Special',
+          id: 0
         }
       }
     }

@@ -29,17 +29,17 @@ class WorshipServiceForm extends Component {
   }
 
   // Under Construction
-  loadDefault = async () => {
-    const {locals} = this.props
-    const {selectedDateTime, selectedServiceType} = this.props
-    if (selectedDateTime === '' || selectedDateTime === '') {
-      const defaultLocal = await locals.find(l => l.id === 'MANNY')
-      const defaultSchedule = GetDefaultService(defaultLocal)
-      this.setState({
-        selectedServiceType: defaultSchedule.serviceType
-      })
-    }
-  }
+  // loadDefault = async () => {
+  //   const {locals} = this.props
+  //   const {selectedDateTime, selectedServiceType} = this.props
+  //   if (selectedDateTime === '' || selectedDateTime === '') {
+  //     const defaultLocal = await locals.find(l => l.id === 'MANNY')
+  //     const defaultSchedule = GetDefaultService(defaultLocal)
+  //     this.setState({
+  //       selectedServiceType: defaultSchedule.serviceType
+  //     })
+  //   }
+  // }
 
   handleSubmit = async e => {
     e.preventDefault()
@@ -229,7 +229,10 @@ class WorshipServiceForm extends Component {
               </select>
             </div>
             <Row>
-              <Button type="submit">
+              <Button
+                type="submit"
+                disabled={this.state.selectedDateTime.length < 12}
+              >
                 Create New Worship Service Attendance
               </Button>
             </Row>

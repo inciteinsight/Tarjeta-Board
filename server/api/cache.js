@@ -33,7 +33,15 @@ router.post('/members', (req, res, next) => {
 
 router.delete('/members', (req, res, next) => {
   try {
-    req.session.ws.members = []
+    req.session.ws = {
+      currentDate: new Date(Date.now()).toISOString(),
+      members: [],
+      reportingPeriod: {
+        weekNumber: 1,
+        serviceType: 'Special',
+        id: 0
+      }
+    }
     res.send()
   } catch (error) {
     next(error)

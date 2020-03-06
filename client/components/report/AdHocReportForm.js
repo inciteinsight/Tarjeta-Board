@@ -122,7 +122,7 @@ class AdHocReportForm extends Component {
           <Row>
             <Button
               type="submit"
-              disable={this.state.selectedReportingPeriod === 0}
+              disabled={this.state.selectedReportingPeriod === 0}
             >
               Create Ad Hoc Report
             </Button>
