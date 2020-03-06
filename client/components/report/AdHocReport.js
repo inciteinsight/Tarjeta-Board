@@ -6,13 +6,16 @@ import {importFromSampleThunk, importFromSessionThunk} from '../../store'
 import {connect} from 'react-redux'
 import TabNav from '../nav/TabNav'
 import {ListAreaGroups} from '../../utils/board'
+import axios from 'axios'
 
 class AdHocReport extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      isLoading: true
+      isLoading: true,
+      attendance: [],
+      services: []
     }
   }
 
@@ -42,7 +45,7 @@ class AdHocReport extends Component {
                 <AdHocReportPane
                   areaGroup={areaGroup}
                   localId={localId}
-                  // mode={mode}
+                  reportingId={rpId}
                   members={members.filter(
                     m =>
                       (m.areaGroup === areaGroup && m.localId === localId) ||

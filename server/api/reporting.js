@@ -3,16 +3,27 @@ const {Attendance, ReportingPeriod} = require('../db/models')
 
 const GetTimeZoneAccounted = date => {
   return new Date(
-    new Date(date).getTime() + new Date(Date.now()).getTimezoneOffset() * 60000
+    new Date(date).getTime() - new Date(Date.now()).getTimezoneOffset() * 60000
   )
 }
+
+router.get('/attendance/:reportingId', async (req, res, next) => {
+  const {reportingId} = req.params
+  const attendanceInRep = await Attendance.findAll({
+    where: {
+      reportingId
+    }
+  })
+  res.status(200).send(attendanceInRep)
+})
 
 router.post('/attendance', async (req, res, next) => {
   const attendees = req.body
   await attendees.forEach(async a => {
     const {reportingId, memberId, dateTime, hasAttended} = a
     const attendance = await Attendance.findOrBuild({
-      where: {reportingId, memberId, dateTime}
+      where: {reportingId, memberId, dateTime: GetTimeZoneAccounted(dateTime)}
+      // test this
     })
     attendance[0].hasAttended = hasAttended
     await attendance[0].save()
