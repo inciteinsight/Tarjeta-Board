@@ -35,6 +35,22 @@ class Navbar extends Component {
     }
   }
 
+  renderServiceDateTime = () => {
+    const {reportingPeriod, currentDate} = this.props
+    return (
+      <h5>
+        {reportingPeriod.id === 0
+          ? 'Please set Worship Service time'
+          : new Date(currentDate).toLocaleTimeString('en-US', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })}
+      </h5>
+    )
+  }
+
   render() {
     const {
       handleClick,
@@ -55,14 +71,7 @@ class Navbar extends Component {
           >
             <Nav.Item className="align-self-center text-success d-flex align-items-center flex-column">
               <h3>Worship Service:</h3>
-              <h5>
-                {new Date(currentDate).toLocaleTimeString('en-US', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </h5>
+              {this.renderServiceDateTime()}
             </Nav.Item>
             {isLoggedIn ? (
               <Fragment>
@@ -131,7 +140,8 @@ const mapState = state => ({
   currentDate: state.attendance.currentDate,
   config: state.attendance.config,
   locals: state.local.locals,
-  isSecretary: state.secretary.isSecretary
+  isSecretary: state.secretary.isSecretary,
+  reportingPeriod: state.attendance.reportingPeriod
 })
 
 const mapDispatch = dispatch => ({

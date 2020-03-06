@@ -27,6 +27,9 @@ export class Board extends Component {
     const {gender} = this.props.match.params
     const {members} = this.props
     const tabs = ListAreaGroups(isLoading)
+
+    // Create Empty Board when Service needs to be created
+
     return members.length === 0 ? (
       <Loading />
     ) : (
@@ -59,7 +62,8 @@ export class Board extends Component {
 
 const mapState = state => ({
   email: state.user.email,
-  members: state.attendance.members
+  members: state.attendance.members,
+  reportingPeriod: state.attendance.reportingPeriod
 })
 
 const mapDispatch = dispatch => ({
