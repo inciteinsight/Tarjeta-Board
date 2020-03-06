@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import Loading from '../misc/Loading'
 import {CFO} from '../../utils/board'
 
-class ReportingPane extends Component {
+class AdHocReportPane extends Component {
   render() {
     const {members, locals} = this.props
     const memberKeys = Object.keys(members[0]).filter(
@@ -58,4 +58,4 @@ const mapState = state => ({
   locals: state.local.locals
 })
 
-export default connect(mapState)(ReportingPane)
+export default connect(mapState)(AdHocReportPane)

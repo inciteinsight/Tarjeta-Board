@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
 import {Tab} from 'react-bootstrap'
 import Loading from '../misc/Loading'
-import ReportingPane from './ReportingPane'
+import AdHocReportPane from './AdHocReportPane'
 import {importFromSampleThunk, importFromSessionThunk} from '../../store'
 import {connect} from 'react-redux'
 import TabNav from '../nav/TabNav'
 import {ListAreaGroups} from '../../utils/board'
 
-class Dashboard extends Component {
+class AdHocReport extends Component {
   constructor(props) {
     super(props)
 
@@ -17,7 +17,6 @@ class Dashboard extends Component {
   }
 
   componentDidMount = async () => {
-    await this.props.fetchMembersFromSession()
     this.setState({
       isLoading: false
     })
@@ -25,7 +24,7 @@ class Dashboard extends Component {
 
   render() {
     let {isLoading} = this.state
-    const {mode} = this.props.match.params
+    const {rpId} = this.props.match.params
     const {members} = this.props
     let tabs = ListAreaGroups(isLoading)
     tabs.push('ALL')
@@ -40,15 +39,14 @@ class Dashboard extends Component {
             const localId = t.split(' ')[0] === 'MAN' ? 'MANNY' : 'BBMANNY'
             return (
               <Tab.Pane key={t} eventKey={t} title={t}>
-                <ReportingPane
+                <AdHocReportPane
                   areaGroup={areaGroup}
                   localId={localId}
-                  mode={mode}
+                  // mode={mode}
                   members={members.filter(
                     m =>
-                      ((m.areaGroup === areaGroup && m.localId === localId) ||
-                        t === 'ALL') &&
-                      (mode === 'absent' ? !m.hasAttended : true)
+                      (m.areaGroup === areaGroup && m.localId === localId) ||
+                      t === 'ALL'
                   )}
                 />
               </Tab.Pane>
@@ -65,8 +63,8 @@ const mapState = state => ({
 })
 
 const mapDispatch = dispatch => ({
-  fetchMembersFromSample: () => dispatch(importFromSampleThunk()),
-  fetchMembersFromSession: () => dispatch(importFromSessionThunk())
+  // fetchMembersFromSample: () => dispatch(importFromSampleThunk()),
+  // fetchMembersFromSession: () => dispatch(importFromSessionThunk())
 })
 
-export default connect(mapState, mapDispatch)(Dashboard)
+export default connect(mapState, mapDispatch)(AdHocReport)
