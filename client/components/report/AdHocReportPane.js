@@ -37,13 +37,10 @@ class AdHocReportPane extends Component {
   }
 
   render() {
-    const {members, locals, attendance, services, reportingId} = this.props
+    const {members, locals, services} = this.props
     let memberKeys = Object.keys(members[0]).filter(
       k => k !== 'createdAt' && k !== 'updatedAt' && k !== 'isActive'
     )
-    console.log(reportingId)
-    console.log(attendance)
-    console.log(services)
     let heading = [
       'Id',
       'Area-Group',

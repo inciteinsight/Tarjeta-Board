@@ -23,10 +23,10 @@ export default class ReportingNav extends Component {
           Absent
         </NavDropdown.Item> */}
         <NavDropdown.Item eventKey="4.2" href="/reports/adhoc/current">
-          Current Service
+          Current Service Report
         </NavDropdown.Item>
-        <NavDropdown.Item eventKey="4.2" onClick={this.handleAdHocService}>
-          Ad-Hoc Service Report
+        <NavDropdown.Item eventKey="4.2" href="/reports/adhoc/form">
+          Service Report per Reporting Period
         </NavDropdown.Item>
         <NavDropdown.Item
           eventKey="4.3"

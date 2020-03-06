@@ -31,6 +31,16 @@ router.post('/attendance', async (req, res, next) => {
   res.status(200).send()
 })
 
+router.get('/local/:localId', async (req, res, next) => {
+  const {localId} = req.params
+  const reportingPeriods = await ReportingPeriod.findAll({
+    where: {
+      localId
+    }
+  })
+  res.status(200).send(reportingPeriods)
+})
+
 router.post('/create', async (req, res, next) => {
   try {
     let reportingPeriod = req.body

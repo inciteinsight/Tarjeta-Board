@@ -6,5 +6,6 @@
 export {default as Navbar} from './navbar'
 export {default as Board} from './Board'
 export {default as AdHocReport} from './report/AdHocReport'
+export {default as AdHocReportForm} from './report/AdHocReportForm'
 export {default as WorshipServiceForm} from './attendance/WorshipServiceForm'
 export {Login, Signup} from './auth-form'
