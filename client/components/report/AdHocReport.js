@@ -20,14 +20,28 @@ class AdHocReport extends Component {
   }
 
   componentDidMount = async () => {
+    const {reportingId} = this.props.match.params
+    if (reportingId !== 'current') {
+      const {data} = await axios.get(`/api/reporting/attendance/${reportingId}`)
+      const services = data.reduce((accum, s) => {
+        if (accum.indexOf(s.dateTime) === -1) {
+          accum.push(s.dateTime)
+        }
+        return accum
+      }, [])
+      this.setState({
+        attendance: data,
+        services
+      })
+    }
     this.setState({
       isLoading: false
     })
   }
 
   render() {
-    let {isLoading} = this.state
-    const {rpId} = this.props.match.params
+    let {isLoading, attendance, services} = this.state
+    const {reportingId} = this.props.match.params
     const {members} = this.props
     let tabs = ListAreaGroups(isLoading)
     tabs.push('ALL')
@@ -45,7 +59,9 @@ class AdHocReport extends Component {
                 <AdHocReportPane
                   areaGroup={areaGroup}
                   localId={localId}
-                  reportingId={rpId}
+                  reportingId={reportingId}
+                  attendance={attendance}
+                  services={services}
                   members={members.filter(
                     m =>
                       (m.areaGroup === areaGroup && m.localId === localId) ||

@@ -29,8 +29,7 @@ class Routes extends Component {
         {isLoggedIn && (
           <Switch>
             <Route path="/home/:gender" component={Board} />
-            <Route path="/reports/adhoc/:rpId" component={AdHocReport} />
-            {/* <Route path="/reports/:reportingId" component={CurrentReport} /> */}
+            <Route path="/reports/adhoc/:reportingId" component={AdHocReport} />
             <Route path="/service/:mode" component={WorshipServiceForm} />
             <Route path="/" component={Board} />
           </Switch>

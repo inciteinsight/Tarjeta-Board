@@ -1,15 +1,50 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {connect} from 'react-redux'
 import Loading from '../misc/Loading'
 import {CFO} from '../../utils/board'
 
 class AdHocReportPane extends Component {
+  isCurrentService = () => this.props.reportingId === 'current'
+
+  renderCurrentServiceAttendance = member => (
+    <td className={`${member.hasAttended ? 'table-success' : 'table-danger'}`}>
+      {member.hasAttended ? 'YES' : 'NO'}
+    </td>
+  )
+
+  renderPastAttendances = member => {
+    const {services, attendance} = this.props
+    const memberAttendances = attendance.filter(a => a.memberId === member.id)
+    return (
+      <Fragment>
+        {services.map(s => {
+          const hasAttendedService = memberAttendances.find(
+            m => m.dateTime === s
+          ).hasAttended
+          return (
+            <td
+              key={s}
+              className={`${
+                hasAttendedService ? 'table-success' : 'table-danger'
+              }`}
+            >
+              {hasAttendedService ? 'YES' : 'NO'}
+            </td>
+          )
+        })}
+      </Fragment>
+    )
+  }
+
   render() {
-    const {members, locals} = this.props
-    const memberKeys = Object.keys(members[0]).filter(
+    const {members, locals, attendance, services, reportingId} = this.props
+    let memberKeys = Object.keys(members[0]).filter(
       k => k !== 'createdAt' && k !== 'updatedAt' && k !== 'isActive'
     )
-    const heading = [
+    console.log(reportingId)
+    console.log(attendance)
+    console.log(services)
+    let heading = [
       'Id',
       'Area-Group',
       'Last Name',
@@ -17,9 +52,25 @@ class AdHocReportPane extends Component {
       'CFO',
       'Officer',
       'Gender',
-      'Local',
-      'Attended'
+      'Local'
     ]
+    if (this.isCurrentService()) {
+      heading.push('Attended')
+    } else {
+      const servicesHeading = services.map(s =>
+        new Date(
+          new Date(s).getTime() +
+            new Date(Date.now()).getTimezoneOffset() * 60000
+        ).toLocaleTimeString('en-US', {
+          weekday: 'short',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        })
+      )
+      heading = heading.concat(servicesHeading)
+      memberKeys = [...memberKeys.splice(0, memberKeys.length - 1), ...services]
+    }
     return members.length === 0 || locals.length === 0 ? (
       <Loading />
     ) : (
@@ -38,13 +89,9 @@ class AdHocReportPane extends Component {
               <td>{m.officer}</td>
               <td>{m.gender}</td>
               <td>{locals.find(l => l.id === m.localId).name}</td>
-              <td
-                className={`${
-                  m.hasAttended ? 'table-success' : 'table-danger'
-                }`}
-              >
-                {m.hasAttended ? 'YES' : 'NO'}
-              </td>
+              {this.isCurrentService()
+                ? this.renderCurrentServiceAttendance(m)
+                : this.renderPastAttendances(m)}
             </tr>
           ))}
         </tbody>
