@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react'
-import {Button, Form, Container, Row} from 'react-bootstrap'
+import {Button, Form, Container, Row, Accordion} from 'react-bootstrap'
+import {useAccordionToggle} from 'react-bootstrap/AccordionToggle'
 import {createReportingPeriodThunk} from '../../store'
 import {
   GetWeekNumber,
@@ -24,7 +25,8 @@ class WorshipServiceForm extends Component {
       ),
       selectedLocal: 'MANNY',
       selectedDateTime: '',
-      selectedServiceType: ''
+      selectedServiceType: '',
+      selectedCustomType: 'Special'
     }
   }
 
@@ -54,11 +56,15 @@ class WorshipServiceForm extends Component {
         selectedDateTime,
         selectedServiceType
       } = e.target
+      const serviceType =
+        selectedServiceType.value === 'Custom'
+          ? this.state.selectedCustomType
+          : selectedServiceType.value
       await this.props.fetchCreateReportingPeriod({
         localId: selectedLocal.value,
         currentDate: selectedDateTime.value,
         weekNumber: selectedWeekNumber.value,
-        serviceType: selectedServiceType.value
+        serviceType
       })
     }
   }
@@ -67,6 +73,19 @@ class WorshipServiceForm extends Component {
     this.setState({
       [e.target.name]: e.target.value
     })
+  }
+
+  handleServiceChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+    if (e.target.value === 'Special') {
+      useAccordionToggle('0', () => console.log('totally custom!'))
+    }
+  }
+
+  toggleCustom = () => {
+    console.log('invoked')
   }
 
   handleDateTimeSelection = e => {
@@ -139,7 +158,8 @@ class WorshipServiceForm extends Component {
     const {
       selectedWeekNumber,
       selectedServiceType,
-      selectedDateTime
+      selectedDateTime,
+      selectedCustomType
     } = this.state
     if (locals.length === 0) {
       return <Loading />
@@ -218,15 +238,33 @@ class WorshipServiceForm extends Component {
                 id="selectedServiceType"
                 name="selectedServiceType"
                 required
-                onChange={this.handleChange}
+                onChange={this.handleServiceChange}
               >
                 <option selected value="Midweek">
                   Midweek
                 </option>
                 <option value="Weekend">Weekend</option>
                 <option value="CWS">CWS</option>
-                <option value="Special">Special</option>
+                <option value="Custom">Custom</option>
               </select>
+            </div>
+
+            <div className="row form-group form-check form-check-inline w-100">
+              <label
+                className="col-4 font-weight-bold text-right"
+                htmlFor="serviceType"
+              >
+                Customer Service Type
+              </label>
+              <input
+                disabled={this.state.selectedServiceType !== 'Custom'}
+                value={selectedCustomType}
+                type="text"
+                id="selectedCustomType"
+                name="selectedCustomType"
+                className="form-control col-8"
+                onChange={this.handleChange}
+              />
             </div>
             <Row>
               <Button

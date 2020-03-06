@@ -1,33 +1,30 @@
 import axios from 'axios'
 import {AddHasAttendedField, UpdateMemberInSession} from '../utils/attendance'
-import {config as sampleConfig} from '../../public/sample/121919.js'
 import history from '../history'
 
 // RENAME
 const IMPORT_FROM_SAMPLE = 'IMPORT_FROM_SAMPLE'
-const importFromSample = (members, config) => ({
+const importFromSample = members => ({
   type: IMPORT_FROM_SAMPLE,
-  payload: {members, config}
+  payload: {members}
 })
 export const importFromSampleThunk = () => async dispatch => {
   try {
     const data = await (await axios.get('/api/member')).data.map(m =>
       AddHasAttendedField(m)
     )
-    const config = sampleConfig
     await axios.post('/api/cache/members', data)
-    dispatch(importFromSample(data, config))
+    dispatch(importFromSample(data))
   } catch (err) {
     console.error(err)
   }
 }
 
 const IMPORT_FROM_SESSION = 'IMPORT_FROM_SESSION'
-const importFromSession = (members, config, reportingPeriod, currentDate) => ({
+const importFromSession = (members, reportingPeriod, currentDate) => ({
   type: IMPORT_FROM_SESSION,
   payload: {
     members: members,
-    config,
     reportingPeriod,
     currentDate
   }
@@ -39,12 +36,7 @@ export const importFromSessionThunk = () => async dispatch => {
       dispatch(importFromSampleThunk())
     } else {
       dispatch(
-        importFromSession(
-          data.members,
-          sampleConfig,
-          data.reportingPeriod,
-          data.currentDate
-        )
+        importFromSession(data.members, data.reportingPeriod, data.currentDate)
       )
     }
   } catch (error) {
@@ -99,8 +91,7 @@ const initialState = {
     weekNumber: 1,
     serviceType: 'Special'
   },
-  members: [],
-  config: {}
+  members: []
 }
 
 export default (state = initialState, {type, payload}) => {
@@ -109,7 +100,6 @@ export default (state = initialState, {type, payload}) => {
     case IMPORT_FROM_SAMPLE:
     case IMPORT_FROM_SESSION:
       newState.members = payload.members
-      newState.config = payload.config
       newState.reportingPeriod = payload.reportingPeriod
       newState.currentDate = payload.currentDate
       return newState
