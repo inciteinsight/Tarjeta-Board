@@ -12,6 +12,13 @@ const Attendance = db.define('attendance', {
   hasAttended: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
+  },
+  code: {
+    type: Sequelize.STRING,
+    defaultValue: null
+  },
+  notes: {
+    type: Sequelize.TEXT
   }
 })
 

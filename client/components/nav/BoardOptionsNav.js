@@ -21,7 +21,6 @@ class BoardOptionsNav extends Component {
 
   handleSave = async () => {
     const {reportingPeriod, members, currentDate} = this.props
-    console.log('Save Button Pressed')
     const attendance = members.map(m => ({
       reportingId: reportingPeriod.id,
       memberId: m.id,

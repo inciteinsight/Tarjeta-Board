@@ -1,12 +1,8 @@
 import React, {Component, Fragment} from 'react'
-import {Button, Form, Container, Row, Accordion} from 'react-bootstrap'
+import {Button, Form, Container, Row} from 'react-bootstrap'
 import {useAccordionToggle} from 'react-bootstrap/AccordionToggle'
 import {createReportingPeriodThunk} from '../../store'
-import {
-  GetWeekNumber,
-  GetDefaultService,
-  GetServiceFromScheduleDay
-} from '../../utils/attendance'
+import {GetWeekNumber, GetServiceFromScheduleDay} from '../../utils/attendance'
 import {connect} from 'react-redux'
 import Confirm from '../misc/Confirm'
 import Loading from '../misc/Loading'
@@ -30,18 +26,12 @@ class WorshipServiceForm extends Component {
     }
   }
 
-  // Under Construction
-  // loadDefault = async () => {
-  //   const {locals} = this.props
-  //   const {selectedDateTime, selectedServiceType} = this.props
-  //   if (selectedDateTime === '' || selectedDateTime === '') {
-  //     const defaultLocal = await locals.find(l => l.id === 'MANNY')
-  //     const defaultSchedule = GetDefaultService(defaultLocal)
-  //     this.setState({
-  //       selectedServiceType: defaultSchedule.serviceType
-  //     })
-  //   }
-  // }
+  componentDidMount = () => {
+    if (this.props.members.filter(m => m.hasAttended).length > 0) {
+      this.setState({isNotified: true})
+      setTimeout(() => history.back(), 5000)
+    }
+  }
 
   handleSubmit = async e => {
     e.preventDefault()
@@ -73,19 +63,6 @@ class WorshipServiceForm extends Component {
     this.setState({
       [e.target.name]: e.target.value
     })
-  }
-
-  handleServiceChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
-    if (e.target.value === 'Special') {
-      useAccordionToggle('0', () => console.log('totally custom!'))
-    }
-  }
-
-  toggleCustom = () => {
-    console.log('invoked')
   }
 
   handleDateTimeSelection = e => {
