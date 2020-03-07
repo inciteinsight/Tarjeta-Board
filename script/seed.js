@@ -7,7 +7,7 @@ const {
   extensionCongregations,
   ml,
   secretaries
-} = require('../public/sample/121919')
+} = require('./initLoad')
 
 async function seed() {
   await db.sync({force: true})
