@@ -62,14 +62,11 @@ export const GetDefaultService = local => {
 
 export const GetServiceFromScheduleDay = (serviceTime, serviceDay) => {
   const now = new Date(
-    new Date(
-      new Date(Date.now()).getTime() +
-        new Date(Date.now()).getTimezoneOffset() * 60000
-    )
+    new Date(Date.now()).getTime() - new Date().getTimezoneOffset() * 60000
   )
   const nowDay = now.getDay() === 0 ? 6 : now.getDay() - 1
   let serviceDate = new Date(
-    new Date().setDate(now.getDate() - nowDay + DAYS_ARRAY.indexOf(serviceDay))
+    now.setDate(now.getDate() - nowDay + DAYS_ARRAY.indexOf(serviceDay))
   ).toISOString()
   return `${serviceDate.slice(0, 10)}T${serviceTime}`
 }

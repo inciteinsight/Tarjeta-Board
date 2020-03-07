@@ -44,14 +44,14 @@ class WorshipServiceForm extends Component {
     } = e.target
 
     const {data} = await axios.get(
-      `/api/reporting/attendance/verify/${selectedDateTime}`
+      `/api/reporting/attendance/verify/${selectedDateTime.value}`
     )
     if (
       this.props.members.reduce((accum, m) => m.hasAttended || accum, false)
     ) {
       this.setState({isNotified: true})
     } else if (data) {
-      console.log('Already Exists')
+      this.setState({isNotified: true})
     } else {
       const serviceType =
         selectedServiceType.value === 'Custom'
@@ -260,8 +260,8 @@ class WorshipServiceForm extends Component {
             </Row>
           </Container>
           <Confirm
-            title="Current Attendance Unsaved"
-            message="Please save or clear the current attendance"
+            title="Failed to create new Worship Service"
+            message="There is either already a current instance or this worship service date already exists"
             show={this.state.isNotified}
             onHide={this.confirmClose}
           />
