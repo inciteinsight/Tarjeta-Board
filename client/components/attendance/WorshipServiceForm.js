@@ -260,7 +260,6 @@ class WorshipServiceForm extends Component {
               </Button>
             </Row>
           </Container>
-          {/* Split into two */}
           <Confirm
             title="Cannot create new Worship Service"
             message="The Tarjeta Board is currently active. Please save or clear."
