@@ -64,7 +64,7 @@ const createApp = () => {
   app.use(passport.session())
 
   app.use('*', (req, res, next) => {
-    if (!req.session.ws) {
+    if (!req.session.ws || !req.session.ws.reportingPeriod) {
       req.session.ws = {
         currentDate: new Date(Date.now()).toISOString(),
         members: [],

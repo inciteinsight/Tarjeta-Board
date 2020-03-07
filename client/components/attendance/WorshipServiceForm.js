@@ -6,6 +6,7 @@ import {GetWeekNumber, GetServiceFromScheduleDay} from '../../utils/attendance'
 import {connect} from 'react-redux'
 import Confirm from '../misc/Confirm'
 import Loading from '../misc/Loading'
+import axios from 'axios'
 
 class WorshipServiceForm extends Component {
   constructor(props) {
@@ -35,17 +36,23 @@ class WorshipServiceForm extends Component {
 
   handleSubmit = async e => {
     e.preventDefault()
+    const {
+      selectedLocal,
+      selectedWeekNumber,
+      selectedDateTime,
+      selectedServiceType
+    } = e.target
+
+    const {data} = await axios.get(
+      `/api/reporting/attendance/verify/${selectedDateTime}`
+    )
     if (
       this.props.members.reduce((accum, m) => m.hasAttended || accum, false)
     ) {
       this.setState({isNotified: true})
+    } else if (data) {
+      console.log('Already Exists')
     } else {
-      const {
-        selectedLocal,
-        selectedWeekNumber,
-        selectedDateTime,
-        selectedServiceType
-      } = e.target
       const serviceType =
         selectedServiceType.value === 'Custom'
           ? this.state.selectedCustomType
