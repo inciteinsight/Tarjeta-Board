@@ -1,5 +1,7 @@
+// remove dependency on this
+
 const BBExt = {
-  areaGroup: ['1-1', '1-2']
+  areaGroup: ['1-1', '1-2', '1-3']
 }
 
 const Manhattan = {
@@ -30,6 +32,7 @@ export const CFO = {
   BH: 'Binhi'
 }
 
+// Refactor to be area-group flexible
 export const ListAreaGroups = loading => {
   if (loading) {
     return []

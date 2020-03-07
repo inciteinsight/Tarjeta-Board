@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react'
 import {Button, Form, Container, Row} from 'react-bootstrap'
-import {useAccordionToggle} from 'react-bootstrap/AccordionToggle'
 import {createReportingPeriodThunk} from '../../store'
 import {GetWeekNumber, GetServiceFromScheduleDay} from '../../utils/attendance'
 import {connect} from 'react-redux'
@@ -43,15 +42,17 @@ class WorshipServiceForm extends Component {
       selectedServiceType
     } = e.target
 
-    const {data} = await axios.get(
-      `/api/reporting/attendance/verify/${selectedDateTime.value}`
-    )
+    // console.log(selectedDateTime.value)
+    // const {data} = await axios.get(
+    //   `/api/reporting/attendance/verify/${selectedDateTime.value}`
+    // )
+    // console.log(data)
     if (
       this.props.members.reduce((accum, m) => m.hasAttended || accum, false)
     ) {
       this.setState({isNotified: true})
-    } else if (data) {
-      this.setState({isNotified: true})
+      // } else if (data) { /* Check why this is not going through */
+      //   this.setState({isNotified: true})
     } else {
       const serviceType =
         selectedServiceType.value === 'Custom'
@@ -259,9 +260,10 @@ class WorshipServiceForm extends Component {
               </Button>
             </Row>
           </Container>
+          {/* Split into two */}
           <Confirm
-            title="Failed to create new Worship Service"
-            message="There is either already a current instance or this worship service date already exists"
+            title="Cannot create new Worship Service"
+            message="The Tarjeta Board is currently active. Please save or clear."
             show={this.state.isNotified}
             onHide={this.confirmClose}
           />
