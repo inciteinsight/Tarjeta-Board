@@ -29,8 +29,8 @@ class BoardOptionsNav extends Component {
       hasAttended: m.hasAttended
     }))
     await axios.post('/api/reporting/attendance', attendance)
+    await this.props.handleClearSession()
     this.setState({isSuccessful: true})
-    console.log('Is Successful')
   }
 
   render() {

@@ -254,7 +254,7 @@ class WorshipServiceForm extends Component {
                 className="col-4 font-weight-bold text-right"
                 htmlFor="serviceType"
               >
-                Customer Service Type
+                Custom Service Type
               </label>
               <input
                 disabled={this.state.selectedServiceType !== 'Custom'}
