@@ -1,12 +1,6 @@
 const router = require('express').Router()
 const {Attendance, ReportingPeriod, WorshipService} = require('../db/models')
 
-// const GetTimeZoneAccounted = date => {
-//   return new Date(
-//     new Date(date).getTime() - new Date(Date.now()).getTimezoneOffset() * 60000
-//   )
-// }
-
 router.post('/attendance/save', async (req, res, next) => {
   try {
     const attendees = req.body

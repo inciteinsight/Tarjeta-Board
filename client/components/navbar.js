@@ -18,6 +18,7 @@ import BoardNav from './nav/BoardNav'
 import ReportingNav from './nav/ReportingNav'
 import PasswordRequest from './misc/PasswordRequest'
 import Initialize from './misc/Initialize'
+import moment from 'moment'
 const secretaryPass = require('../../secrets')
 const secPass = process.env.secretaryPass || secretaryPass
 
@@ -37,6 +38,14 @@ class Navbar extends Component {
     }
   }
 
+  reverseTimeZoneAccounted = date => {
+    return new Date(
+      new Date(date).getTime() +
+        new Date(Date.now()).getTimezoneOffset() * 60000 +
+        (moment().isDST() ? 1000 * 60 * 60 : 0)
+    )
+  }
+
   renderServiceDateTime = () => {
     const {reportingPeriod, worshipService} = this.props
     const {dateTime} = worshipService
@@ -44,7 +53,9 @@ class Navbar extends Component {
       <h5>
         {reportingPeriod.id === 0
           ? 'Please set Worship Service time'
-          : new Date(dateTime).toLocaleTimeString('en-US', {
+          : new Date(
+              this.reverseTimeZoneAccounted(dateTime)
+            ).toLocaleTimeString('en-US', {
               weekday: 'long',
               year: 'numeric',
               month: 'long',

@@ -1,9 +1,12 @@
 const router = require('express').Router()
 const {Attendance, ReportingPeriod, WorshipService} = require('../db/models')
+const moment = require('moment')
 
 const GetTimeZoneAccounted = date => {
   return new Date(
-    new Date(date).getTime() - new Date(Date.now()).getTimezoneOffset() * 60000
+    new Date(date).getTime() -
+      new Date(Date.now()).getTimezoneOffset() * 60000 -
+      (moment().isDST() ? 1000 * 60 * 60 : 0)
   )
 }
 
@@ -70,6 +73,7 @@ router.post('/create', async (req, res, next) => {
   try {
     let reportingPeriod = req.body
     let {localId, weekNumber, serviceType, dateTime} = reportingPeriod
+    console.log(reportingPeriod)
     dateTime = GetTimeZoneAccounted(dateTime)
     const rpResult = await ReportingPeriod.findOrCreate({
       where: {
@@ -90,7 +94,7 @@ router.post('/create', async (req, res, next) => {
       }
     })
     const worshipService = wsResult[0].dataValues
-    console.log(worshipService)
+    // console.log(worshipService)
 
     req.session.ws.local = localId
     req.session.ws.worshipService = worshipService

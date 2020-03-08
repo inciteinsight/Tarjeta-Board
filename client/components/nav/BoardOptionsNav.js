@@ -69,7 +69,6 @@ class BoardOptionsNav extends Component {
 
 const mapState = state => ({
   members: state.attendance.members,
-  // reportingPeriod: state.attendance.reportingPeriod,
   worshipService: state.attendance.worshipService
 })
 

@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import Confirm from '../misc/Confirm'
 import Loading from '../misc/Loading'
 import axios from 'axios'
+import moment from 'moment'
 
 class WorshipServiceForm extends Component {
   constructor(props) {
@@ -16,7 +17,8 @@ class WorshipServiceForm extends Component {
       selectedWeekNumber: GetWeekNumber(
         new Date(
           new Date(Date.now()).getTime() +
-            new Date(Date.now()).getTimezoneOffset() * 60000
+            new Date(Date.now()).getTimezoneOffset() * 60000 +
+            (moment().isDST() ? 1000 * 60 * 60 : 0)
         )
       ),
       selectedLocal: 'MANNY',
@@ -78,14 +80,17 @@ class WorshipServiceForm extends Component {
       const selectedWeekNumber = GetWeekNumber(
         new Date(
           new Date(Date.now()).getTime() +
-            new Date(Date.now()).getTimezoneOffset() * 60000
+            new Date(Date.now()).getTimezoneOffset() * 60000 +
+            (moment().isDST() ? 1000 * 60 * 60 : 0)
         )
       )
       const local = this.props.locals.find(
         l => l.id === this.state.selectedLocal
       )
       const sched = local.schedules.find(s => s.id === Number(e.target.value))
+      console.log(sched)
       const selectedDateTime = GetServiceFromScheduleDay(sched.time, sched.day)
+      console.log(selectedDateTime)
       this.setState({
         selectedWeekNumber,
         selectedDateTime,
@@ -128,7 +133,8 @@ class WorshipServiceForm extends Component {
             {`${s.serviceType} - ${s.day} -
               ${new Date(
                 new Date(`2020-01-01T${s.time}Z`).getTime() +
-                  new Date(Date.now()).getTimezoneOffset() * 60000
+                  new Date(Date.now()).getTimezoneOffset() * 60000 +
+                  (moment().isDST() ? 1000 * 60 * 60 : 0)
               ).toLocaleTimeString()}`}
           </option>
         ))}

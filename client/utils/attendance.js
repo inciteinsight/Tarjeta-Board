@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment'
 
 export const AddHasAttendedField = member => {
   member.hasAttended = false
@@ -34,7 +35,8 @@ export const GetTimeZoneAccounted = (givenTime, givenDate) => {
   const date = givenDate ? givenDate : '2020-01-01'
   return new Date(
     new Date(`${date}T${time}Z`).getTime() +
-      new Date(Date.now()).getTimezoneOffset() * 60000
+      new Date(Date.now()).getTimezoneOffset() * 60000 +
+      (moment().isDST() ? 1000 * 60 * 60 : 0)
   )
 }
 
@@ -69,5 +71,6 @@ export const GetServiceFromScheduleDay = (serviceTime, serviceDay) => {
   let serviceDate = new Date(
     now.setDate(now.getDate() - nowDay + DAYS_ARRAY.indexOf(serviceDay))
   ).toISOString()
+  console.log(serviceDate)
   return `${serviceDate.slice(0, 10)}T${serviceTime}`
 }
