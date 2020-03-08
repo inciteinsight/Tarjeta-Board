@@ -39,5 +39,5 @@ export const ListAreaGroups = loading => {
   }
   return Manhattan.areaGroup
     .map(ag => `MAN ${ag}`)
-    .concat(BBExt.areaGroup.map(ag => `BB ${ag}`))
+    .concat(BBExt.areaGroup.map(ag => `BBx ${ag}`))
 }

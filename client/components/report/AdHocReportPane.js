@@ -73,6 +73,7 @@ class AdHocReportPane extends Component {
         ...dateTimeArray
       ]
     }
+
     return members.length === 0 || locals.length === 0 ? (
       <Loading />
     ) : (

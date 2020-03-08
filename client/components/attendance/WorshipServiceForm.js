@@ -21,7 +21,7 @@ class WorshipServiceForm extends Component {
             (moment().isDST() ? 1000 * 60 * 60 : 0)
         )
       ),
-      selectedLocal: 'MANNY',
+      selectedLocal: 'MANNYUS',
       selectedDateTime: '',
       selectedServiceType: '',
       selectedCustomType: 'Special'
@@ -105,7 +105,7 @@ class WorshipServiceForm extends Component {
       onChange={this.handleChange}
     >
       {this.props.locals.map(l => (
-        <option key={l.id} selected={l.id === 'MANNY'} value={l.id}>
+        <option key={l.id} selected={l.id === 'MANNYUS'} value={l.id}>
           {l.name}
         </option>
       ))}

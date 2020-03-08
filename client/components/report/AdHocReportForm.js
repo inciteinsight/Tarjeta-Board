@@ -10,7 +10,7 @@ class AdHocReportForm extends Component {
     super(props)
 
     this.state = {
-      selectedLocal: 'MANNY',
+      selectedLocal: 'MANNYUS',
       reportingPeriods: [],
       selectedReportingPeriod: 0
     }
@@ -54,7 +54,7 @@ class AdHocReportForm extends Component {
       onChange={this.handleChange}
     >
       {this.props.locals.map(l => (
-        <option key={l.id} selected={l.id === 'MANNY'} value={l.id}>
+        <option key={l.id} selected={l.id === 'MANNYUS'} value={l.id}>
           {l.name}
         </option>
       ))}

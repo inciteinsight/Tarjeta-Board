@@ -88,7 +88,7 @@ export const createReportingPeriodThunk = reportingData => async dispatch => {
 }
 
 const initialState = {
-  local: 'MANNY',
+  local: 'MANNYUS',
   worshipService: {
     id: 0,
     dateTime: new Date(Date.now()).toISOString()

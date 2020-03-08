@@ -14,9 +14,14 @@ class AdHocReport extends Component {
     this.state = {
       isLoading: true,
       attendance: [],
-      services: []
+      services: [],
+      isNotified: false
     }
   }
+
+  confirmClose = () => this.setState({isNotified: false})
+
+  componentDidMount = () => {}
 
   componentDidMount = async () => {
     const {reportingId} = this.props.match.params
@@ -32,6 +37,7 @@ class AdHocReport extends Component {
         services: data
       })
     }
+
     this.setState({
       isLoading: false
     })
@@ -42,6 +48,7 @@ class AdHocReport extends Component {
     const {reportingId} = this.props.match.params
     const {members} = this.props
     let tabs = ListAreaGroups(isLoading)
+    console.log(tabs)
     tabs.push('ALL')
     return members.length === 0 ? (
       <Loading />
@@ -51,7 +58,7 @@ class AdHocReport extends Component {
         <Tab.Content>
           {tabs.map(t => {
             const areaGroup = t.split(' ')[1]
-            const localId = t.split(' ')[0] === 'MAN' ? 'MANNY' : 'BBMANNY'
+            const localId = t.split(' ')[0] === 'MAN' ? 'MANNYUS' : 'BBxNYUS'
             return (
               <Tab.Pane key={t} eventKey={t} title={t}>
                 <AdHocReportPane

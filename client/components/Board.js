@@ -48,7 +48,7 @@ export class Board extends Component {
           <TabNav tabs={tabs} />
           {tabs.map(t => {
             const areaGroup = t.split(' ')[1]
-            const local = t.split(' ')[0] === 'MAN' ? 'MANNY' : 'BBMANNY'
+            const local = t.split(' ')[0] === 'MAN' ? 'MANNYUS' : 'BBxNYUS'
             return (
               <Tab.Pane key={t} eventKey={t} title={t}>
                 <AreaGroupPane

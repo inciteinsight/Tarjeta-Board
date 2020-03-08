@@ -66,12 +66,17 @@ router.get('/reporting/:reportingId/includeExt', async (req, res, next) => {
       )
     )
 
-    const services = parentReportingPeriod.worshipservices.concat(
-      childrenReportingPeriods.reduce((accum, crp) => {
-        accum = accum.concat(crp.worshipservices)
-        return accum
-      }, [])
-    )
+    let services = parentReportingPeriod.worshipservices
+
+    if (childrenReportingPeriods[0]) {
+      services = services.concat(
+        childrenReportingPeriods.reduce((accum, crp) => {
+          accum = accum.concat(crp.worshipservices)
+          return accum
+        }, [])
+      )
+    }
+
     res.status(200).send(services)
   } catch (error) {
     next(error)

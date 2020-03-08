@@ -38,11 +38,11 @@ const Member = db.define('member', {
 Member.getFromManSecExcel = name => {
   switch (name) {
     case 'Manhattan':
-      return 'MANNY'
+      return 'MANNYUS'
     case 'B. Beach Ext':
-      return 'BBMANNY'
+      return 'BBxNYUS'
     default:
-      return 'MANNY'
+      return 'MANNYUS'
   }
 }
 
