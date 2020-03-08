@@ -2,8 +2,9 @@ const User = require('./user')
 const Local = require('./Local')
 const Member = require('./Member')
 const ReportingPeriod = require('./ReportingPeriod')
-const Schedule = require('./WSSchedule')
+const Schedule = require('./Schedule')
 const Attendance = require('./Attendance')
+const WorshipService = require('./WorshipService')
 
 Member.belongsTo(Local)
 Local.hasMany(Member)
@@ -20,8 +21,14 @@ Local.belongsTo(Local, {as: 'extensionOf'})
 Attendance.belongsTo(Member)
 Member.hasMany(Attendance)
 
-Attendance.belongsTo(ReportingPeriod)
-ReportingPeriod.hasMany(Attendance)
+// Attendance.belongsTo(ReportingPeriod)
+// ReportingPeriod.hasMany(Attendance)
+
+WorshipService.belongsTo(ReportingPeriod)
+ReportingPeriod.hasMany(WorshipService)
+
+Attendance.belongsTo(WorshipService)
+WorshipService.hasMany(Attendance)
 
 module.exports = {
   User,

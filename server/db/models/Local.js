@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const Schedule = require('./WSSchedule')
+const Schedule = require('./Schedule')
 const db = require('../db.js')
 
 const Local = db.define('local', {
