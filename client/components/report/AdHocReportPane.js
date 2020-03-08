@@ -18,17 +18,23 @@ class AdHocReportPane extends Component {
     return (
       <Fragment>
         {services.map(s => {
-          const hasAttendedService = s.attendances.find(
+          const memberAttendance = s.attendances.find(
             a => a.memberId === member.id
-          ).hasAttended
+          )
           return (
             <td
               key={s.dateTime}
               className={`${
-                hasAttendedService ? 'table-success' : 'table-danger'
+                !memberAttendance
+                  ? 'table-secondary'
+                  : memberAttendance.hasAttended
+                    ? 'table-success'
+                    : 'table-danger'
               }`}
             >
-              {hasAttendedService ? 'YES' : 'NO'}
+              {!memberAttendance
+                ? 'N/A'
+                : memberAttendance.hasAttended ? 'YES' : 'NO'}
             </td>
           )
         })}
