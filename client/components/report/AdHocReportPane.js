@@ -14,17 +14,16 @@ class AdHocReportPane extends Component {
   )
 
   renderPastAttendances = member => {
-    const {services, attendance} = this.props
-    const memberAttendances = attendance.filter(a => a.memberId === member.id)
+    const {services} = this.props
     return (
       <Fragment>
         {services.map(s => {
-          const hasAttendedService = memberAttendances.find(
-            m => m.dateTime === s
+          const hasAttendedService = s.attendances.find(
+            a => a.memberId === member.id
           ).hasAttended
           return (
             <td
-              key={s}
+              key={s.dateTime}
               className={`${
                 hasAttendedService ? 'table-success' : 'table-danger'
               }`}
@@ -39,6 +38,7 @@ class AdHocReportPane extends Component {
 
   render() {
     const {members, locals, services} = this.props
+    const dateTimeArray = services.map(s => s.dateTime)
     let memberKeys = Object.keys(members[0]).filter(
       k => k !== 'createdAt' && k !== 'updatedAt' && k !== 'isActive'
     )
@@ -55,9 +55,9 @@ class AdHocReportPane extends Component {
     if (this.isCurrentService()) {
       heading.push('Attended')
     } else {
-      const servicesHeading = services.map(s =>
+      const servicesHeading = dateTimeArray.map(dateTime =>
         new Date(
-          new Date(s).getTime() +
+          new Date(dateTime).getTime() +
             new Date(Date.now()).getTimezoneOffset() * 60000 +
             (moment().isDST() ? 1000 * 60 * 60 : 0)
         ).toLocaleTimeString('en-US', {
@@ -68,7 +68,10 @@ class AdHocReportPane extends Component {
         })
       )
       heading = heading.concat(servicesHeading)
-      memberKeys = [...memberKeys.splice(0, memberKeys.length - 1), ...services]
+      memberKeys = [
+        ...memberKeys.splice(0, memberKeys.length - 1),
+        ...dateTimeArray
+      ]
     }
     return members.length === 0 || locals.length === 0 ? (
       <Loading />

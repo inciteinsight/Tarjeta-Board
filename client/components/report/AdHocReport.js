@@ -21,16 +21,15 @@ class AdHocReport extends Component {
   componentDidMount = async () => {
     const {reportingId} = this.props.match.params
     if (reportingId !== 'current') {
-      const {data} = await axios.get(`/api/reporting/attendance/${reportingId}`)
-      const services = data.reduce((accum, s) => {
-        if (accum.indexOf(s.dateTime) === -1) {
-          accum.push(s.dateTime)
-        }
-        return accum
-      }, [])
+      const {data} = await axios.get(
+        `/api/ws/reporting/${reportingId}/includeExt`
+      )
       this.setState({
-        attendance: data,
-        services
+        attendance: data.reduce((a, s) => {
+          a = a.concat(s.attendances)
+          return a
+        }, []),
+        services: data
       })
     }
     this.setState({

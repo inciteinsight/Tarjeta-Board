@@ -1,5 +1,96 @@
 const router = require('express').Router()
-const {Attendance, ReportingPeriod, WorshipService} = require('../db/models')
+const {
+  Attendance,
+  ReportingPeriod,
+  WorshipService,
+  Local
+} = require('../db/models')
+
+router.get('/reporting/:reportingId', async (req, res, next) => {
+  try {
+    const {reportingId} = req.params
+    const attendanceInRep = await WorshipService.findAll({
+      where: {
+        reportingId
+      }
+    })
+    res.status(200).send(attendanceInRep)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/reporting/:reportingId/includeExt', async (req, res, next) => {
+  try {
+    const {reportingId} = req.params
+
+    const parentReportingPeriod = await ReportingPeriod.findOne({
+      where: {
+        id: reportingId
+      },
+      include: [
+        {
+          model: WorshipService,
+          include: [Attendance]
+        }
+      ]
+    })
+    const localOfRep = await Local.findOne({
+      where: {
+        id: parentReportingPeriod.localId
+      },
+      include: [
+        {
+          model: Local,
+          as: 'Extensions'
+        }
+      ]
+    })
+
+    const childrenReportingPeriods = await Promise.all(
+      localOfRep.Extensions.map(e =>
+        ReportingPeriod.findOne({
+          where: {
+            localId: e.id,
+            year: parentReportingPeriod.year,
+            weekNumber: parentReportingPeriod.weekNumber,
+            serviceType: parentReportingPeriod.serviceType
+          },
+          include: [
+            {
+              model: WorshipService,
+              include: [Attendance]
+            }
+          ]
+        })
+      )
+    )
+
+    const services = parentReportingPeriod.worshipservices.concat(
+      childrenReportingPeriods.reduce((accum, crp) => {
+        accum = accum.concat(crp.worshipservices)
+        return accum
+      }, [])
+    )
+    res.status(200).send(services)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/attendance/:worshipserviceId', async (req, res, next) => {
+  try {
+    const {worshipserviceId} = req.params
+    const attendanceInWS = await Attendance.findAll({
+      where: {
+        worshipserviceId
+      }
+    })
+    res.status(200).send(attendanceInWS)
+  } catch (error) {
+    next(error)
+  }
+})
 
 router.post('/attendance/save', async (req, res, next) => {
   try {

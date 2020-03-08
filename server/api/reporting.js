@@ -73,7 +73,7 @@ router.post('/create', async (req, res, next) => {
   try {
     let reportingPeriod = req.body
     let {localId, weekNumber, serviceType, dateTime} = reportingPeriod
-    console.log(reportingPeriod)
+
     dateTime = GetTimeZoneAccounted(dateTime)
     const rpResult = await ReportingPeriod.findOrCreate({
       where: {

@@ -88,9 +88,7 @@ class WorshipServiceForm extends Component {
         l => l.id === this.state.selectedLocal
       )
       const sched = local.schedules.find(s => s.id === Number(e.target.value))
-      console.log(sched)
       const selectedDateTime = GetServiceFromScheduleDay(sched.time, sched.day)
-      console.log(selectedDateTime)
       this.setState({
         selectedWeekNumber,
         selectedDateTime,
