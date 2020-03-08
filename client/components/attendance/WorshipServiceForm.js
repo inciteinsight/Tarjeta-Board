@@ -60,7 +60,7 @@ class WorshipServiceForm extends Component {
           : selectedServiceType.value
       await this.props.fetchCreateReportingPeriod({
         localId: selectedLocal.value,
-        currentDate: selectedDateTime.value,
+        dateTime: selectedDateTime.value,
         weekNumber: selectedWeekNumber.value,
         serviceType
       })

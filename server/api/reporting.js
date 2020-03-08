@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Attendance, ReportingPeriod} = require('../db/models')
+const {Attendance, ReportingPeriod, WorshipService} = require('../db/models')
 
 const GetTimeZoneAccounted = date => {
   return new Date(
@@ -69,28 +69,42 @@ router.get('/local/:localId', async (req, res, next) => {
 router.post('/create', async (req, res, next) => {
   try {
     let reportingPeriod = req.body
-    const {localId, weekNumber, serviceType, currentDate} = reportingPeriod
-    const result = await ReportingPeriod.findOrCreate({
+    const {localId, weekNumber, serviceType, dateTime} = reportingPeriod
+    console.log(GetTimeZoneAccounted(dateTime))
+    const rpResult = await ReportingPeriod.findOrCreate({
       where: {
         localId: localId,
-        year: new Date(currentDate).getFullYear(),
+        year: new Date(dateTime).getFullYear(),
         weekNumber: weekNumber,
         serviceType: serviceType
       }
     })
-    reportingPeriod.id = result[0].dataValues.id
+    const newRP = rpResult[0].dataValues
+    reportingPeriod.id = newRP.id
+
+    // create worship service instance
+    const wsResult = await WorshipService.findOrCreate({
+      reportingId: reportingPeriod.id,
+      dateTime
+    })
+    const worshipService = wsResult[0].dataValues
 
     req.session.ws.local = localId
-    req.session.ws.currentDate = currentDate
+    req.session.ws.worshipService = worshipService
     req.session.ws.reportingPeriod = {
-      serviceType: 'Special',
-      weekNumber: 1,
-      id: 1
+      serviceType: serviceType,
+      weekNumber: weekNumber,
+      id: reportingPeriod.id
     }
-    req.session.ws.reportingPeriod.id = reportingPeriod.id
-    req.session.ws.reportingPeriod.serviceType = serviceType
-    req.session.ws.reportingPeriod.weekNumber = weekNumber
-    res.status(200).json(reportingPeriod)
+    // req.session.ws.reportingPeriod.id = reportingPeriod.id
+    // req.session.ws.reportingPeriod.serviceType = serviceType
+    // req.session.ws.reportingPeriod.weekNumber = weekNumber
+
+    // Send both reportingPeriod and result
+    res.status(200).json({
+      reportingPeriod,
+      worshipService
+    })
   } catch (error) {
     next(error)
   }

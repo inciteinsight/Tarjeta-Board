@@ -21,12 +21,12 @@ export const importFromSampleThunk = () => async dispatch => {
 }
 
 const IMPORT_FROM_SESSION = 'IMPORT_FROM_SESSION'
-const importFromSession = (members, reportingPeriod, currentDate) => ({
+const importFromSession = (members, reportingPeriod, worshipService) => ({
   type: IMPORT_FROM_SESSION,
   payload: {
     members: members,
     reportingPeriod,
-    currentDate
+    worshipService
   }
 })
 export const importFromSessionThunk = () => async dispatch => {
@@ -36,7 +36,11 @@ export const importFromSessionThunk = () => async dispatch => {
       dispatch(importFromSampleThunk())
     } else {
       dispatch(
-        importFromSession(data.members, data.reportingPeriod, data.currentDate)
+        importFromSession(
+          data.members,
+          data.reportingPeriod,
+          data.worshipService
+        )
       )
     }
   } catch (error) {
@@ -46,7 +50,7 @@ export const importFromSessionThunk = () => async dispatch => {
 
 export const clearSessionThunk = () => async dispatch => {
   try {
-    await axios.delete('/api/cache/members')
+    await axios.get('/api/cache/reset')
     await dispatch(importFromSampleThunk())
     history.go('/service/new')
   } catch (error) {
@@ -85,7 +89,11 @@ export const createReportingPeriodThunk = reportingData => async dispatch => {
 
 const initialState = {
   local: 'MANNY',
-  currentDate: '2020-02-29T09:00:00',
+  // currentDate: '2020-02-29T09:00:00',
+  worshipService: {
+    id: 0,
+    dateTime: new Date(Date.now()).toISOString()
+  },
   reportingPeriod: {
     id: 0,
     weekNumber: 1,
@@ -101,7 +109,7 @@ export default (state = initialState, {type, payload}) => {
     case IMPORT_FROM_SESSION:
       newState.members = payload.members
       newState.reportingPeriod = payload.reportingPeriod
-      newState.currentDate = payload.currentDate
+      newState.worshipService = payload.worshipService
       return newState
     case UPDATE_MEMBER_ATTENDANCE:
       newState.members.find(
@@ -110,10 +118,10 @@ export default (state = initialState, {type, payload}) => {
       return newState
     case CREATE_REPORTING_PERIOD:
       newState.local = payload.localId
-      newState.currentDate = payload.currentDate
-      newState.reportingPeriod.id = payload.id
-      newState.reportingPeriod.weekNumber = payload.weekNumber
-      newState.reportingPeriod.serviceType = payload.serviceType
+      newState.worshipService = payload.worshipService
+      newState.reportingPeriod.id = payload.reportingPeriod.id
+      newState.reportingPeriod.weekNumber = payload.reportingPeriod.weekNumber
+      newState.reportingPeriod.serviceType = payload.reportingPeriod.serviceType
       return newState
     default:
       return state

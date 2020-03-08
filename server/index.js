@@ -66,12 +66,15 @@ const createApp = () => {
   app.use('*', (req, res, next) => {
     if (!req.session.ws || !req.session.ws.reportingPeriod) {
       req.session.ws = {
-        currentDate: new Date(Date.now()).toISOString(),
         members: [],
         reportingPeriod: {
           weekNumber: 1,
           serviceType: 'Special',
           id: 0
+        },
+        worshipService: {
+          id: 0,
+          dateTime: new Date(Date.now()).toISOString()
         }
       }
     }

@@ -12,6 +12,7 @@ export const UpdateMemberInSession = async memberId => {
     data.members.map(m => {
       if (m.id === memberId) {
         m.hasAttended = !m.hasAttended
+        // m.code = "future code change"
       }
       return m
     })

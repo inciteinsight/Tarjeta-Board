@@ -31,28 +31,29 @@ router.post('/members', (req, res, next) => {
   }
 })
 
-router.delete('/members', (req, res, next) => {
+// router.delete('/members', (req, res, next) => {
+//   try {
+//     req.session.ws.members = []
+//     res.send(req.session.ws)
+//   } catch (error) {
+//     next(error)
+//   }
+// })
+
+router.get('/reset', (req, res, next) => {
   try {
     req.session.ws = {
-      currentDate: new Date(Date.now()).toISOString(),
+      // currentDate: new Date(Date.now()).toISOString(),
       members: [],
+      worshipService: {
+        id: 0,
+        dateTime: new Date(Date.now()).toISOString()
+      },
       reportingPeriod: {
         weekNumber: 1,
         serviceType: 'Special',
         id: 0
       }
-    }
-    res.send()
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.get('/reset', (req, res, next) => {
-  try {
-    req.session.ws = {
-      currentDate: new Date(Date.now()).toISOString(),
-      members: []
     }
     res.json(req.session.ws)
   } catch (error) {
@@ -78,12 +79,12 @@ router.put('/secAccess', (req, res, next) => {
   }
 })
 
-router.put('/currentDate', (req, res, next) => {
-  try {
-    const updateCurrentDate = req.body
-    req.session.ws.currentDate = updateCurrentDate
-    res.json(req.session.ws)
-  } catch (error) {
-    next(error)
-  }
-})
+// router.put('/currentDate', (req, res, next) => {
+//   try {
+//     const updateCurrentDate = req.body
+//     req.session.ws.currentDate = updateCurrentDate
+//     res.json(req.session.ws)
+//   } catch (error) {
+//     next(error)
+//   }
+// })

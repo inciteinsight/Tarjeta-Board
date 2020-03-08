@@ -38,12 +38,13 @@ class Navbar extends Component {
   }
 
   renderServiceDateTime = () => {
-    const {reportingPeriod, currentDate} = this.props
+    const {reportingPeriod, worshipService} = this.props
+    const {dateTime} = worshipService
     return (
       <h5>
         {reportingPeriod.id === 0
           ? 'Please set Worship Service time'
-          : new Date(currentDate).toLocaleTimeString('en-US', {
+          : new Date(dateTime).toLocaleTimeString('en-US', {
               weekday: 'long',
               year: 'numeric',
               month: 'long',
@@ -57,11 +58,11 @@ class Navbar extends Component {
     const {
       handleClick,
       isLoggedIn,
-      currentDate,
+      worshipService,
       isSecretary,
       locals
     } = this.props
-    return !currentDate || locals.length === 0 ? (
+    return !worshipService || locals.length === 0 ? (
       <Initialize />
     ) : (
       <div>
@@ -138,7 +139,7 @@ class Navbar extends Component {
 
 const mapState = state => ({
   isLoggedIn: !!state.user.id,
-  currentDate: state.attendance.currentDate,
+  worshipService: state.attendance.worshipService,
   locals: state.local.locals,
   isSecretary: state.secretary.isSecretary,
   reportingPeriod: state.attendance.reportingPeriod

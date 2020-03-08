@@ -20,11 +20,12 @@ class BoardOptionsNav extends Component {
   confirmSuccess = () => this.setState({isSuccessful: false})
 
   handleSave = async () => {
-    const {reportingPeriod, members, currentDate} = this.props
+    const {/*reportingPeriod, */ members, worshipService} = this.props
+    const {dateTime, id} = worshipService
     const attendance = members.map(m => ({
-      reportingId: reportingPeriod.id,
+      worshipserviceId: id,
       memberId: m.id,
-      dateTime: currentDate,
+      dateTime,
       hasAttended: m.hasAttended
     }))
     await axios.post('/api/reporting/attendance', attendance)
@@ -71,7 +72,7 @@ class BoardOptionsNav extends Component {
 const mapState = state => ({
   members: state.attendance.members,
   reportingPeriod: state.attendance.reportingPeriod,
-  currentDate: state.attendance.currentDate
+  worshipService: state.attendance.worshipService
 })
 
 const mapDispatch = dispatch => ({
