@@ -35,22 +35,22 @@ router.get('/attendance/:reportingId', async (req, res, next) => {
   }
 })
 
-router.post('/attendance', async (req, res, next) => {
-  try {
-    const attendees = req.body
-    await attendees.forEach(async a => {
-      const {reportingId, memberId, dateTime, hasAttended} = a
-      const attendance = await Attendance.findOrBuild({
-        where: {reportingId, memberId, dateTime: GetTimeZoneAccounted(dateTime)}
-      })
-      attendance[0].hasAttended = hasAttended
-      await attendance[0].save()
-    })
-    res.status(200).send()
-  } catch (error) {
-    next(error)
-  }
-})
+// router.post('/attendance', async (req, res, next) => {
+//   try {
+//     const attendees = req.body
+//     await attendees.forEach(async a => {
+//       const {reportingId, memberId, dateTime, hasAttended} = a
+//       const attendance = await Attendance.findOrBuild({
+//         where: {reportingId, memberId, dateTime: GetTimeZoneAccounted(dateTime)}
+//       })
+//       attendance[0].hasAttended = hasAttended
+//       await attendance[0].save()
+//     })
+//     res.status(200).send()
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
 router.get('/local/:localId', async (req, res, next) => {
   try {
@@ -69,8 +69,8 @@ router.get('/local/:localId', async (req, res, next) => {
 router.post('/create', async (req, res, next) => {
   try {
     let reportingPeriod = req.body
-    const {localId, weekNumber, serviceType, dateTime} = reportingPeriod
-    console.log(GetTimeZoneAccounted(dateTime))
+    let {localId, weekNumber, serviceType, dateTime} = reportingPeriod
+    dateTime = GetTimeZoneAccounted(dateTime)
     const rpResult = await ReportingPeriod.findOrCreate({
       where: {
         localId: localId,
@@ -84,10 +84,13 @@ router.post('/create', async (req, res, next) => {
 
     // create worship service instance
     const wsResult = await WorshipService.findOrCreate({
-      reportingId: reportingPeriod.id,
-      dateTime
+      where: {
+        reportingId: reportingPeriod.id,
+        dateTime
+      }
     })
     const worshipService = wsResult[0].dataValues
+    console.log(worshipService)
 
     req.session.ws.local = localId
     req.session.ws.worshipService = worshipService
@@ -101,6 +104,7 @@ router.post('/create', async (req, res, next) => {
     // req.session.ws.reportingPeriod.weekNumber = weekNumber
 
     // Send both reportingPeriod and result
+    console.info(req.session.ws)
     res.status(200).json({
       reportingPeriod,
       worshipService

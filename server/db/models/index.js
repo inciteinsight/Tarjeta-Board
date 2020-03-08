@@ -36,5 +36,6 @@ module.exports = {
   Member,
   ReportingPeriod,
   Attendance,
-  Schedule
+  Schedule,
+  WorshipService
 }

@@ -117,7 +117,7 @@ export default (state = initialState, {type, payload}) => {
       ).hasAttended = !newState.members.find(m => m.id === payload).hasAttended
       return newState
     case CREATE_REPORTING_PERIOD:
-      newState.local = payload.localId
+      newState.local = payload.reportingPeriod.localId
       newState.worshipService = payload.worshipService
       newState.reportingPeriod.id = payload.reportingPeriod.id
       newState.reportingPeriod.weekNumber = payload.reportingPeriod.weekNumber

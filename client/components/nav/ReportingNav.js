@@ -18,9 +18,9 @@ export default class ReportingNav extends Component {
         <NavDropdown.Item eventKey="4.2" href="/reports/adhoc/current">
           Current Service Report
         </NavDropdown.Item>
-        <NavDropdown.Item eventKey="4.2" href="/reports/adhoc/form">
+        {/* <NavDropdown.Item eventKey="4.2" href="/reports/adhoc/form">
           Service Report per Reporting Period
-        </NavDropdown.Item>
+        </NavDropdown.Item> */}
         {/* <NavDropdown.Item
           eventKey="4.3"
           disabled

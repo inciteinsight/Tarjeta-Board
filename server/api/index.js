@@ -2,7 +2,7 @@ const router = require('express').Router()
 module.exports = router
 
 router.use('/users', require('./users'))
-router.use('/ws', require('./ws'))
+router.use('/ws', require('./worshipService'))
 router.use('/cache', require('./cache'))
 router.use('/member', require('./member'))
 router.use('/congregation', require('./local'))
