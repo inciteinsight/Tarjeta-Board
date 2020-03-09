@@ -4,28 +4,38 @@ import AreaGroupPane from './attendance/AreaGroupPane'
 import Loading from './misc/Loading'
 import {Tab, Button} from 'react-bootstrap'
 import TabNav from './nav/TabNav'
-import {ListAreaGroups} from '../utils/board'
+// import {ListAreaGroups} from '../utils/board'
 
 export class Board extends Component {
-  constructor(props) {
-    super(props)
+  // constructor(props) {
+  //   super(props)
 
-    this.state = {
-      isLoading: true
-    }
-  }
+  //   this.state = {
+  //     isLoading: true
+  //   }
+  // }
 
-  componentDidMount = () => {
-    this.setState({
-      isLoading: false
-    })
+  // componentDidMount = () => {
+  //   this.setState({
+  //     isLoading: false
+  //   })
+  // }
+
+  tabulizeAreaGroupMembers = () => {
+    const {members} = this.props
+    return members.reduce((a, m) => {
+      const tabName = `${m.localId.slice(0, 3)} ${m.areaGroup}`
+      if (!a[tabName]) a[tabName] = [m]
+      else a[tabName].push(m)
+      return a
+    }, {})
   }
 
   render() {
-    let {isLoading} = this.state
     const {gender} = this.props.match.params
     const {members, reportingPeriod} = this.props
-    const tabs = ListAreaGroups(isLoading)
+    const tabs = this.tabulizeAreaGroupMembers()
+    const tabNames = Object.keys(tabs)
 
     if (members.length === 0 || !reportingPeriod) {
       return <Loading />
@@ -43,22 +53,18 @@ export class Board extends Component {
     }
 
     return (
-      <Tab.Container defaultActiveKey="MAN 1-1">
+      <Tab.Container defaultActiveKey={tabNames[0]}>
         <Tab.Content>
-          <TabNav tabs={tabs} />
-          {tabs.map(t => {
-            const areaGroup = t.split(' ')[1]
-            const local = t.split(' ')[0] === 'MAN' ? 'MANNYUS' : 'BBxNYUS'
+          <TabNav tabs={tabNames} />
+          {tabNames.map(t => {
+            const [local, areaGroup] = t.split(' ')
             return (
               <Tab.Pane key={t} eventKey={t} title={t}>
                 <AreaGroupPane
                   areaGroup={areaGroup}
                   local={local}
-                  members={members.filter(
-                    m =>
-                      m.areaGroup === areaGroup &&
-                      m.localId === local &&
-                      (gender ? m.gender === gender : true)
+                  members={tabs[t].filter(
+                    m => (gender ? gender === m.gender : true)
                   )}
                 />
               </Tab.Pane>

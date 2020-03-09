@@ -4,7 +4,6 @@ import Loading from '../misc/Loading'
 import AdHocReportPane from './AdHocReportPane'
 import {connect} from 'react-redux'
 import TabNav from '../nav/TabNav'
-import {ListAreaGroups} from '../../utils/board'
 import axios from 'axios'
 
 class AdHocReport extends Component {
@@ -12,16 +11,11 @@ class AdHocReport extends Component {
     super(props)
 
     this.state = {
-      isLoading: true,
       attendance: [],
       services: [],
-      isNotified: false
+      districtRegion: 'NYUS' /* Must add district functionality */
     }
   }
-
-  confirmClose = () => this.setState({isNotified: false})
-
-  componentDidMount = () => {}
 
   componentDidMount = async () => {
     const {reportingId} = this.props.match.params
@@ -37,41 +31,42 @@ class AdHocReport extends Component {
         services: data
       })
     }
+  }
 
-    this.setState({
-      isLoading: false
-    })
+  tabulizeAreaGroupMembers = () => {
+    const {members} = this.props
+    return members.reduce((a, m) => {
+      const tabName = `${m.localId.slice(0, 3)} ${m.areaGroup}`
+      if (!a[tabName]) a[tabName] = [m]
+      else a[tabName].push(m)
+      return a
+    }, {})
   }
 
   render() {
-    let {isLoading, attendance, services} = this.state
+    let {attendance, services, districtRegion} = this.state
     const {reportingId} = this.props.match.params
     const {members} = this.props
-    let tabs = ListAreaGroups(isLoading)
-    console.log(tabs)
-    tabs.push('ALL')
+    let tabs = this.tabulizeAreaGroupMembers()
+    const tabNames = Object.keys(tabs)
+    tabNames.unshift('ALL')
     return members.length === 0 ? (
       <Loading />
     ) : (
-      <Tab.Container defaultActiveKey={tabs[0]}>
-        <TabNav tabs={tabs} />
+      <Tab.Container defaultActiveKey={tabNames[0]}>
+        <TabNav tabs={tabNames} />
         <Tab.Content>
-          {tabs.map(t => {
-            const areaGroup = t.split(' ')[1]
-            const localId = t.split(' ')[0] === 'MAN' ? 'MANNYUS' : 'BBxNYUS'
+          {tabNames.map(t => {
+            const [localId, areaGroup] = t.split(' ')
             return (
               <Tab.Pane key={t} eventKey={t} title={t}>
                 <AdHocReportPane
                   areaGroup={areaGroup}
-                  localId={localId}
+                  localId={`${localId}${districtRegion}`}
                   reportingId={reportingId}
                   attendance={attendance}
                   services={services}
-                  members={members.filter(
-                    m =>
-                      (m.areaGroup === areaGroup && m.localId === localId) ||
-                      t === 'ALL'
-                  )}
+                  members={t === 'ALL' ? members : tabs[t]}
                 />
               </Tab.Pane>
             )

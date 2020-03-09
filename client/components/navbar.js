@@ -92,6 +92,11 @@ class Navbar extends Component {
                 {isSecretary ? (
                   <Fragment>
                     <ReportingNav />
+                    {/* <Nav.Item>
+                      <Nav.Link href="/terminal" >
+                        Database
+                      </Nav.Link>
+                    </Nav.Item> */}
                     <Nav.Item>
                       <Nav.Link href="#" onClick={handleClick}>
                         Logout
