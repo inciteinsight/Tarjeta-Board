@@ -8,7 +8,8 @@ import {
   Board,
   WorshipServiceForm,
   AdHocReport,
-  AdHocReportForm
+  AdHocReportForm,
+  MemberDashboard
 } from './components'
 import {me} from './store'
 
@@ -33,6 +34,7 @@ class Routes extends Component {
             <Route path="/reports/adhoc/form" component={AdHocReportForm} />
             <Route path="/reports/adhoc/:reportingId" component={AdHocReport} />
             <Route path="/service/:mode" component={WorshipServiceForm} />
+            <Route path="/control/members" component={MemberDashboard} />
             <Route path="/" component={Board} />
           </Switch>
         )}

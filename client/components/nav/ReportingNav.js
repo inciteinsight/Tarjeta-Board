@@ -2,12 +2,6 @@ import React, {Component} from 'react'
 import {NavDropdown} from 'react-bootstrap'
 
 export default class ReportingNav extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {}
-  }
-
   handleR103request = () => {
     console.log('Selected R-103 Request')
   }

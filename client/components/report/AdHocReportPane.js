@@ -50,13 +50,13 @@ class AdHocReportPane extends Component {
     )
     let heading = [
       'Id',
+      'Local',
       'Area-Group',
       'Last Name',
       'First Name',
       'CFO',
       'Officer',
-      'Gender',
-      'Local'
+      'Gender'
     ]
     if (this.isCurrentService()) {
       heading.push('Attended')
@@ -91,13 +91,13 @@ class AdHocReportPane extends Component {
           {members.map(m => (
             <tr key={m.id}>
               <td>{m.id}</td>
+              <td>{locals.find(l => l.id === m.localId).name}</td>
               <td>{m.areaGroup}</td>
               <td>{m.lastName}</td>
               <td>{m.firstName}</td>
               <td>{CFO[m.cfo]}</td>
               <td>{m.officer}</td>
               <td>{m.gender}</td>
-              <td>{locals.find(l => l.id === m.localId).name}</td>
               {this.isCurrentService()
                 ? this.renderCurrentServiceAttendance(m)
                 : this.renderPastAttendances(m)}

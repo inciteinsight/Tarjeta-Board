@@ -19,6 +19,7 @@ import ReportingNav from './nav/ReportingNav'
 import PasswordRequest from './misc/PasswordRequest'
 import Initialize from './misc/Initialize'
 import moment from 'moment'
+import ControlNav from './nav/ControlNav'
 const secretaryPass = require('../../secrets')
 const secPass = process.env.secretaryPass || secretaryPass
 
@@ -92,11 +93,7 @@ class Navbar extends Component {
                 {isSecretary ? (
                   <Fragment>
                     <ReportingNav />
-                    {/* <Nav.Item>
-                      <Nav.Link href="/terminal" >
-                        Database
-                      </Nav.Link>
-                    </Nav.Item> */}
+                    <ControlNav />
                     <Nav.Item>
                       <Nav.Link href="#" onClick={handleClick}>
                         Logout
