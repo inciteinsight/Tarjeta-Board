@@ -21,22 +21,6 @@ class AdHocReportPane extends Component {
 
   componentDidMount = async () => {
     const {data} = await axios.get('/api/member/')
-    // const {locals} = this.props
-
-    // const localsWithAreaGroups = data.reduce((a,m) => {
-    //   const {localId} = m
-    //   if (!a[localId]) {
-    //     a[localId] = {
-    //       name: locals.find(l => l.id === localId).name,
-    //       areaGroups: [m.areaGroup]
-    //     }
-    //   } else if(a[localId].areaGroups.indexOf(m.areaGroup) === -1) {
-    //     a[localId].areaGroups.push(m.areaGroup)
-    //   }
-    //   return a
-    // },{})
-
-    // console.log(localsWithAreaGroups)
 
     this.setState({members: data})
   }
@@ -56,6 +40,16 @@ class AdHocReportPane extends Component {
       }
       return a
     }, {})
+  }
+
+  toggleUpdateMember = async member => {
+    await this.setState({
+      selectedMember: member
+    })
+    this.setState({
+      isModalActive: true,
+      mode: 'update'
+    })
   }
 
   confirmClose = () =>
@@ -109,13 +103,8 @@ class AdHocReportPane extends Component {
                 <td>{moment(m.updatedAt).format('LLLL')}</td>
                 <td>
                   <Button
-                    onClick={() =>
-                      this.setState({
-                        isModalActive: true,
-                        selectedMember: m,
-                        mode: 'update'
-                      })
-                    }
+                    className="w-100"
+                    onClick={() => this.toggleUpdateMember(m)}
                   >
                     Edit
                   </Button>
@@ -124,13 +113,17 @@ class AdHocReportPane extends Component {
             ))}
           </tbody>
         </table>
-        <MemberModal
-          show={isModalActive}
-          onHide={this.confirmClose}
-          mode={mode}
-          member={selectedMember}
-          locals={this.localsWithAreaGroups()}
-        />
+        {isModalActive ? (
+          <MemberModal
+            show={isModalActive}
+            onHide={this.confirmClose}
+            mode={mode}
+            member={selectedMember}
+            locals={this.localsWithAreaGroups()}
+          />
+        ) : (
+          <div />
+        )}
       </Fragment>
     )
   }

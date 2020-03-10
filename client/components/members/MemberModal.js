@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
-import {Modal, Card, Button, Container, Form} from 'react-bootstrap'
+import {Modal, Button, Container, Form} from 'react-bootstrap'
+import {CFO} from '../../utils/board'
 
 export default class MemberModal extends Component {
   constructor(props) {
@@ -14,8 +15,6 @@ export default class MemberModal extends Component {
       officer: 'N',
       gender: 'M',
       isActive: true,
-      // createdAt,
-      // updatedAt,
       localId: 'MANNYUS'
     }
   }
@@ -31,8 +30,6 @@ export default class MemberModal extends Component {
         officer,
         gender,
         isActive,
-        createdAt,
-        updatedAt,
         localId
       } = this.props.member
       this.setState({
@@ -44,8 +41,6 @@ export default class MemberModal extends Component {
         officer,
         gender,
         isActive,
-        createdAt,
-        updatedAt,
         localId
       })
     }
@@ -58,7 +53,7 @@ export default class MemberModal extends Component {
   }
 
   localDropdown = () => {
-    const {locals} = this.props
+    const {locals, member} = this.props
     const localKeys = Object.keys(locals)
     return (
       <select
@@ -70,7 +65,7 @@ export default class MemberModal extends Component {
         {localKeys.map(k => {
           const selectedLocal = locals[k]
           return (
-            <option key={k} selected={k === 'MANNYUS'} value={k}>
+            <option key={k} selected={k === member.localId} value={k}>
               {selectedLocal.name}
             </option>
           )
@@ -81,6 +76,7 @@ export default class MemberModal extends Component {
 
   areaGroupsDropdown = () => {
     const {localId} = this.state
+    const {member} = this.props
     return (
       <select
         className="col-8 form-control"
@@ -89,7 +85,7 @@ export default class MemberModal extends Component {
         onChange={this.handleChange}
       >
         {this.props.locals[localId].areaGroups.map(ag => (
-          <option key={ag} selected={ag === '1-1'} value={ag}>
+          <option key={ag} selected={ag === member.areaGroup} value={ag}>
             {ag}
           </option>
         ))}
@@ -97,19 +93,46 @@ export default class MemberModal extends Component {
     )
   }
 
+  cfoDropdown = () => {
+    const {member} = this.props
+    const cfoKeys = Object.keys(CFO)
+    return (
+      <select
+        className="col-8 form-control"
+        required
+        name="cfo"
+        onChange={this.handleChange}
+      >
+        {cfoKeys.map(cfo => (
+          <option key={cfo} selected={cfo === member.cfo} value={cfo}>
+            {CFO[cfo]}
+          </option>
+        ))}
+      </select>
+    )
+  }
+
+  genericDropdown = (property, options) => {
+    const {member} = this.props
+    return (
+      <select
+        className="col-8 form-control"
+        required
+        name={property}
+        onChange={this.handleChange}
+      >
+        {options.map(o => (
+          <option key={o} selected={o === member[property]} value={o}>
+            {String(o)}
+          </option>
+        ))}
+      </select>
+    )
+  }
+
   render() {
-    const {
-      id,
-      lastName,
-      firstName,
-      cfo,
-      officer,
-      gender,
-      isActive,
-      createdAt,
-      updatedAt
-    } = this.state
-    const {onHide, mode, locals} = this.props
+    const {id, lastName, firstName, cfo, officer, gender, isActive} = this.state
+    const {onHide, mode} = this.props
     return (
       <Modal
         {...this.props}
@@ -137,6 +160,7 @@ export default class MemberModal extends Component {
                 name="id"
                 onChange={this.handleChange}
                 required
+                disabled
               />
             </div>
             <div className="row form-group form-check form-check-inline w-100">
@@ -184,6 +208,42 @@ export default class MemberModal extends Component {
                 onChange={this.handleChange}
                 required
               />
+            </div>
+            <div className="row form-group form-check form-check-inline w-100">
+              <label
+                className="col-4 font-weight-bold text-right"
+                htmlFor="cfo"
+              >
+                CFO
+              </label>
+              {this.cfoDropdown()}
+            </div>
+            <div className="row form-group form-check form-check-inline w-100">
+              <label
+                className="col-4 font-weight-bold text-right"
+                htmlFor="officer"
+              >
+                Officer
+              </label>
+              {this.genericDropdown('officer', ['Y', 'N'])}
+            </div>
+            <div className="row form-group form-check form-check-inline w-100">
+              <label
+                className="col-4 font-weight-bold text-right"
+                htmlFor="gender"
+              >
+                Gender
+              </label>
+              {this.genericDropdown('gender', ['M', 'F'])}
+            </div>
+            <div className="row form-group form-check form-check-inline w-100">
+              <label
+                className="col-4 font-weight-bold text-right"
+                htmlFor="isActive"
+              >
+                Registered in Local
+              </label>
+              {this.genericDropdown('isActive', [true, false])}
             </div>
           </Container>
         </Modal.Body>
