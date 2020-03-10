@@ -1,15 +1,21 @@
 import React, {Component} from 'react'
 import {NavDropdown} from 'react-bootstrap'
+import {connect} from 'react-redux'
 
-export default class ReportingNav extends Component {
+class ReportingNav extends Component {
   handleR103request = () => {
     console.log('Selected R-103 Request')
   }
 
   render() {
+    const {worshipService} = this.props
     return (
       <NavDropdown title="Reports" id="nav-dropdown" size="lg">
-        <NavDropdown.Item eventKey="4.2" href="/reports/adhoc/current">
+        <NavDropdown.Item
+          eventKey="4.2"
+          href="/reports/adhoc/current"
+          disabled={worshipService.id === 0}
+        >
           Current Service Report
         </NavDropdown.Item>
         <NavDropdown.Item eventKey="4.2" href="/reports/adhoc/form">
@@ -26,3 +32,9 @@ export default class ReportingNav extends Component {
     )
   }
 }
+
+const mapState = state => ({
+  worshipService: state.attendance.worshipService
+})
+
+export default connect(mapState)(ReportingNav)

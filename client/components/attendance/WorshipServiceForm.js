@@ -7,6 +7,7 @@ import Confirm from '../misc/Confirm'
 import Loading from '../misc/Loading'
 import axios from 'axios'
 import moment from 'moment'
+import alertify from 'alertifyjs'
 
 class WorshipServiceForm extends Component {
   constructor(props) {
@@ -60,12 +61,15 @@ class WorshipServiceForm extends Component {
         selectedServiceType.value === 'Custom'
           ? this.state.selectedCustomType
           : selectedServiceType.value
-      await this.props.fetchCreateReportingPeriod({
+      const {status} = await this.props.fetchCreateReportingPeriod({
         localId: selectedLocal.value,
         dateTime: selectedDateTime.value,
         weekNumber: selectedWeekNumber.value,
         serviceType
       })
+      if (status === 200) {
+        alertify.success('New Worship Service Attendance Success!')
+      }
     }
   }
 

@@ -1,12 +1,16 @@
 import React, {Component} from 'react'
 import {Modal, Button, Container, Form} from 'react-bootstrap'
 import {CFO} from '../../utils/board'
+import Loading from '../misc/Loading'
+import axios from 'axios'
+import alertify from 'alertifyjs'
 
 export default class MemberModal extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      isLoading: true,
       id: '1914',
       areaGroup: '',
       lastName: '',
@@ -21,28 +25,7 @@ export default class MemberModal extends Component {
 
   componentDidMount = () => {
     if (this.props.mode === 'update') {
-      const {
-        id,
-        areaGroup,
-        lastName,
-        firstName,
-        cfo,
-        officer,
-        gender,
-        isActive,
-        localId
-      } = this.props.member
-      this.setState({
-        id,
-        areaGroup,
-        lastName,
-        firstName,
-        cfo,
-        officer,
-        gender,
-        isActive,
-        localId
-      })
+      this.reset()
     }
   }
 
@@ -50,6 +33,50 @@ export default class MemberModal extends Component {
     this.setState({
       [e.target.name]: e.target.value
     })
+  }
+
+  handleSave = async e => {
+    e.preventDefault()
+    const {
+      id,
+      areaGroup,
+      lastName,
+      firstName,
+      cfo,
+      officer,
+      gender,
+      isActive,
+      localId
+    } = this.state
+    const {mode, onHide} = this.props
+
+    const dataToSend = {
+      id,
+      areaGroup,
+      lastName,
+      firstName,
+      cfo,
+      officer,
+      gender,
+      isActive,
+      localId
+    }
+
+    let res
+    if (mode === 'update') {
+      res = await axios.put('/api/member', dataToSend)
+    } else if (mode === 'create') {
+      res = await axios.post('/api/member', dataToSend)
+    }
+
+    const {data, status} = res
+    if (status === 409) {
+      history.push('/control/members')
+      alertify.error(`Error. Id exists as ${data.firstName} ${data.lastName}`)
+    } else {
+      onHide()
+      alertify.success(`${mode.toUpperCase()} SUCCESS`)
+    }
   }
 
   localDropdown = () => {
@@ -130,9 +157,37 @@ export default class MemberModal extends Component {
     )
   }
 
+  reset = async () => {
+    const {
+      id,
+      areaGroup,
+      lastName,
+      firstName,
+      cfo,
+      officer,
+      gender,
+      isActive,
+      localId
+    } = this.props.member
+    await this.setState({isLoading: true})
+    await this.setState({
+      id,
+      areaGroup,
+      lastName,
+      firstName,
+      cfo,
+      officer,
+      gender,
+      isActive,
+      localId
+    })
+    this.setState({isLoading: false})
+  }
+
   render() {
-    const {id, lastName, firstName, cfo, officer, gender, isActive} = this.state
+    const {isLoading, id, lastName, firstName} = this.state
     const {onHide, mode} = this.props
+    if (isLoading) return <Loading />
     return (
       <Modal
         {...this.props}
@@ -248,8 +303,11 @@ export default class MemberModal extends Component {
           </Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="warning" onClick={this.handleTrigger}>
+          <Button variant="success" type="submit" onClick={this.handleSave}>
             Save
+          </Button>
+          <Button variant="warning" onClick={this.reset}>
+            Reset
           </Button>
           <Button onClick={onHide}>Close</Button>
         </Modal.Footer>

@@ -35,10 +35,20 @@ router.put('/active/:id', async (req, res, next) => {
   }
 })
 
-router.put('/:id', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const {id} = req.params
+    let member = await Member.findByPk(id)
+    res.status(200).send(member)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.put('/', async (req, res, next) => {
+  try {
     const {body} = req
+    const {id} = body
     const member = await Member.findByPk(id)
     const updatedMember = await member.update(body)
     res.status(200).send(updatedMember)
@@ -47,11 +57,17 @@ router.put('/:id', async (req, res, next) => {
   }
 })
 
-router.get('/:id', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
-    const {id} = req.params
+    const {body} = req
+    const {id} = body
     let member = await Member.findByPk(id)
-    res.status(200).send(member)
+    if (member) {
+      member = await Member.create(body)
+      res.status(200).send(member)
+    } else {
+      res.status(409).send(member)
+    }
   } catch (error) {
     next(error)
   }

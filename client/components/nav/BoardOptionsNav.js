@@ -5,6 +5,7 @@ import ConfirmWithPassword from '../misc/ConfirmWithPassword'
 import Confirm from '../misc/Confirm'
 import {connect} from 'react-redux'
 import axios from 'axios'
+import alertify from 'alertifyjs'
 
 class BoardOptionsNav extends Component {
   constructor(props) {
@@ -26,25 +27,38 @@ class BoardOptionsNav extends Component {
       memberId: m.id,
       hasAttended: m.hasAttended
     }))
-    await axios.post('/api/ws/attendance/save', attendance)
-    await this.props.handleClearSession()
-    this.setState({isSuccessful: true})
+    const {status} = await axios.post('/api/ws/attendance/save', attendance)
+    if (status === 200) {
+      await this.props.handleClearSession()
+      this.setState({isSuccessful: true})
+      alertify.success('Members saved!')
+    }
   }
 
   render() {
+    const {worshipService} = this.props
     return (
       <Fragment>
         <NavDropdown.Divider />
-        <NavDropdown.Item eventKey="4.4" onClick={this.handleSave}>
+        <NavDropdown.Item
+          eventKey="4.4"
+          disabled={worshipService.id === 0}
+          onClick={this.handleSave}
+        >
           Save Attendance
         </NavDropdown.Item>
         <NavDropdown.Item
           eventKey="4.4"
+          disabled={worshipService.id === 0}
           onClick={() => this.setState({isConfirming: true})}
         >
           Clear Attendance
         </NavDropdown.Item>
-        <NavDropdown.Item eventKey="4.5" href="/service/new">
+        <NavDropdown.Item
+          eventKey="4.5"
+          href="/service/new"
+          disabled={worshipService.id > 0}
+        >
           New WS Attendance
         </NavDropdown.Item>
         <ConfirmWithPassword

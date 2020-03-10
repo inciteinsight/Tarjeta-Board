@@ -31,6 +31,7 @@ router.post('/members', (req, res, next) => {
   }
 })
 
+// For Resetting Attendanace - without ws or rp rest
 // router.delete('/members', (req, res, next) => {
 //   try {
 //     req.session.ws.members = []
@@ -43,7 +44,6 @@ router.post('/members', (req, res, next) => {
 router.get('/reset', (req, res, next) => {
   try {
     req.session.ws = {
-      // currentDate: new Date(Date.now()).toISOString(),
       members: [],
       worshipService: {
         id: 0,
@@ -78,13 +78,3 @@ router.put('/secAccess', (req, res, next) => {
     next(error)
   }
 })
-
-// router.put('/currentDate', (req, res, next) => {
-//   try {
-//     const updateCurrentDate = req.body
-//     req.session.ws.currentDate = updateCurrentDate
-//     res.json(req.session.ws)
-//   } catch (error) {
-//     next(error)
-//   }
-// })

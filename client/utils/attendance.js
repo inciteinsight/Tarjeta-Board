@@ -71,6 +71,5 @@ export const GetServiceFromScheduleDay = (serviceTime, serviceDay) => {
   let serviceDate = new Date(
     now.setDate(now.getDate() - nowDay + DAYS_ARRAY.indexOf(serviceDay))
   ).toISOString()
-  console.log(serviceDate)
   return `${serviceDate.slice(0, 10)}T${serviceTime}`
 }
