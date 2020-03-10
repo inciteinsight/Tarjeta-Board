@@ -21,7 +21,6 @@ class AdHocReportPane extends Component {
 
   componentDidMount = async () => {
     const {data} = await axios.get('/api/member/')
-
     this.setState({members: data})
   }
 
@@ -52,6 +51,13 @@ class AdHocReportPane extends Component {
     })
   }
 
+  toggleCreateMember = () => {
+    this.setState({
+      isModalActive: true,
+      mode: 'create'
+    })
+  }
+
   confirmClose = () =>
     this.setState({isModalActive: false, mode: '', selectedMember: {}})
 
@@ -59,6 +65,16 @@ class AdHocReportPane extends Component {
     <td className={`${member.isActive ? 'table-success' : 'table-danger'}`}>
       {member.isActive ? 'YES' : 'NO'}
     </td>
+  )
+
+  renderCreateRow = () => (
+    <tr>
+      <td colSpan={11} className="d-flex justify-content-center">
+        <Button onClick={() => this.toggleCreateMember()}>
+          Create New Member
+        </Button>
+      </td>
+    </tr>
   )
 
   render() {
@@ -88,6 +104,7 @@ class AdHocReportPane extends Component {
             <tr>{heading.map((k, i) => <th key={k}>{heading[i]}</th>)}</tr>
           </thead>
           <tbody>
+            {this.renderCreateRow()}
             {members.map(m => (
               <tr key={m.id}>
                 <td>{m.id}</td>

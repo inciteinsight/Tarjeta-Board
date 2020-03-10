@@ -158,6 +158,7 @@ export default class MemberModal extends Component {
   }
 
   reset = async () => {
+    await this.setState({isLoading: true})
     const {
       id,
       areaGroup,
@@ -169,18 +170,19 @@ export default class MemberModal extends Component {
       isActive,
       localId
     } = this.props.member
-    await this.setState({isLoading: true})
-    await this.setState({
-      id,
-      areaGroup,
-      lastName,
-      firstName,
-      cfo,
-      officer,
-      gender,
-      isActive,
-      localId
-    })
+    if (this.props.mode === 'update') {
+      await this.setState({
+        id,
+        areaGroup,
+        lastName,
+        firstName,
+        cfo,
+        officer,
+        gender,
+        isActive,
+        localId
+      })
+    }
     this.setState({isLoading: false})
   }
 

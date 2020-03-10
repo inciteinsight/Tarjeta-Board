@@ -53,7 +53,8 @@ class WorshipServiceForm extends Component {
     if (
       this.props.members.reduce((accum, m) => m.hasAttended || accum, false)
     ) {
-      this.setState({isNotified: true})
+      // this.setState({isNotified: true})
+      alertify.error('A Worship Service is currently active')
       // } else if (data) { /* Check why this is not going through */
       //   this.setState({isNotified: true})
     } else {
@@ -144,7 +145,7 @@ class WorshipServiceForm extends Component {
     )
   }
 
-  confirmClose = () => this.setState({isNotified: false})
+  // confirmClose = () => this.setState({isNotified: false})
 
   render() {
     const {locals} = this.props
@@ -268,12 +269,12 @@ class WorshipServiceForm extends Component {
               </Button>
             </Row>
           </Container>
-          <Confirm
+          {/* <Confirm
             title="Cannot create new Worship Service"
             message="The Tarjeta Board is currently active. Please save or clear."
             show={this.state.isNotified}
             onHide={this.confirmClose}
-          />
+          /> */}
         </Fragment>
       )
     }
