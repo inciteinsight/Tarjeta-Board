@@ -23,11 +23,17 @@ require('./models')
 // - gender - Enum (M, F)
 // - isActive
 
-// WorshipServiceAttendance
-// - reportingPeriodId
+// Attendance
+// - worshipserviceId
 // - memberId
-// - dateTime
+// - code
+// - notes
 // - hasAttended
+
+// Worship Service
+// - reportingPeriodId
+// - dateTime
+// - notes
 
 // Local
 // - id {first letter; two consonance}

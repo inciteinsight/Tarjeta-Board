@@ -10,18 +10,18 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/active', async (req, res, next) => {
-  try {
-    const members = await Member.findAll({
-      where: {
-        isActive: true
-      }
-    })
-    res.status(200).send(members)
-  } catch (error) {
-    next(error)
-  }
-})
+// router.get('/active', async (req, res, next) => {
+//   try {
+//     const members = await Member.findAll({
+//       where: {
+//         isActive: true
+//       }
+//     })
+//     res.status(200).send(members)
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
 router.put('/active/:id', async (req, res, next) => {
   try {

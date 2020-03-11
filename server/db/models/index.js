@@ -16,15 +16,11 @@ ReportingPeriod.belongsTo(Local)
 Local.hasMany(ReportingPeriod)
 
 Local.hasMany(Local, {as: 'Extensions', foreignKey: 'extensionOfId'})
-// Local.hasMany(Local, {as: 'extensionOf'})
 
-// Reporting period may have multiple services
 Attendance.belongsTo(Member)
 Member.hasMany(Attendance)
 
-// Attendance.belongsTo(ReportingPeriod)
-// ReportingPeriod.hasMany(Attendance)
-
+// Reporting period may have multiple services
 WorshipService.belongsTo(ReportingPeriod)
 ReportingPeriod.hasMany(WorshipService)
 

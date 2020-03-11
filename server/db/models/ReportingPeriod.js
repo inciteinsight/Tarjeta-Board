@@ -2,8 +2,6 @@ const Sequelize = require('sequelize')
 const db = require('../db.js')
 
 const ReportingPeriod = db.define('reporting', {
-  // PK
-  // FK to Local
   year: {
     type: Sequelize.INTEGER,
     allowNull: false,
