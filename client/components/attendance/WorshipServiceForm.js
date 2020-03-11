@@ -3,7 +3,6 @@ import {Button, Form, Container, Row} from 'react-bootstrap'
 import {createReportingPeriodThunk} from '../../store'
 import {GetWeekNumber, GetServiceFromScheduleDay} from '../../utils/attendance'
 import {connect} from 'react-redux'
-// import Confirm from '../misc/Confirm'
 import Loading from '../misc/Loading'
 import axios from 'axios'
 import moment from 'moment'
@@ -17,8 +16,7 @@ class WorshipServiceForm extends Component {
       selectedWeekNumber: GetWeekNumber(
         new Date(
           new Date(Date.now()).getTime() +
-            new Date(Date.now()).getTimezoneOffset() * 60000 +
-            (moment().isDST() ? 1000 * 60 * 60 : 0)
+            new Date(Date.now()).getTimezoneOffset() * 60000
         )
       ),
       selectedLocal: 'MANNYUS',
@@ -66,12 +64,8 @@ class WorshipServiceForm extends Component {
         `/api/ws/${selectedLocal}/${selectedWeekNumber}/${serviceType}/${selectedDateTime}`
       )
 
-      console.log(data)
-
       let serviceAttendanceExists = !!data
       if (serviceAttendanceExists) {
-        console.log('checking attendances length')
-        console.log(data.attendances.length)
         serviceAttendanceExists = !(data.attendances.length === 0)
       }
 

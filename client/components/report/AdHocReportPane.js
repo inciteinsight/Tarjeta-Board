@@ -2,7 +2,6 @@ import React, {Component, Fragment} from 'react'
 import {connect} from 'react-redux'
 import Loading from '../misc/Loading'
 import {CFO} from '../../utils/board'
-import moment from 'moment'
 
 class AdHocReportPane extends Component {
   isCurrentService = () => this.props.reportingId === 'current'
@@ -64,8 +63,7 @@ class AdHocReportPane extends Component {
       const servicesHeading = dateTimeArray.map(dateTime =>
         new Date(
           new Date(dateTime).getTime() +
-            new Date(Date.now()).getTimezoneOffset() * 60000 +
-            (moment().isDST() ? 1000 * 60 * 60 : 0)
+            new Date(Date.now()).getTimezoneOffset() * 60000
         ).toLocaleTimeString('en-US', {
           weekday: 'short',
           year: 'numeric',
