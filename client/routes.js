@@ -27,6 +27,7 @@ class Routes extends Component {
 
     return (
       <Switch>
+        {/* <Route path="/api/:path" component={Loading} /> */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         {isLoggedIn && (
@@ -39,7 +40,6 @@ class Routes extends Component {
             <Route path="/" component={Board} />
           </Switch>
         )}
-        <Route path="/api" component={Loading} />
         <Route component={Login} />
       </Switch>
     )

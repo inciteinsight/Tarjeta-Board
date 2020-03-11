@@ -10,6 +10,8 @@ const sessionStore = new SequelizeStore({db})
 const PORT = process.env.PORT || 8080
 const app = express()
 const socketio = require('socket.io')
+const jwt = require('jsonwebtoken')
+const {jwtcode} = require('../secrets')
 module.exports = app
 
 if (process.env.NODE_ENV === 'test') {
@@ -75,6 +77,8 @@ const createApp = () => {
     }
     next()
   })
+
+  app.set('Secret', jwtcode)
 
   // auth and api routes
   app.use('/auth', require('./auth'))
