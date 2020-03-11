@@ -43,7 +43,7 @@ class CardItem extends Component {
     const {isPresent} = this.state
     const {id, areaGroup, firstName, lastName, officer} = member
     return (
-      <Card className={`${!isPresent ? 'bg-light text-dark' : 'text-white'}`}>
+      <Card className="bg-light text-dark">
         <Card.Body bsPrefix="tarjeta-body">
           <div className="d-flex flex-row justify-content-between">
             <Card.Subtitle className="mb-2 text-muted">
@@ -53,26 +53,40 @@ class CardItem extends Component {
               Area {areaGroup}
             </Card.Subtitle>
           </div>
-          {!isPresent ? (
-            <Fragment>
-              <Card.Title>{firstName}</Card.Title>
-              <Card.Title>{lastName}</Card.Title>
-            </Fragment>
-          ) : (
-            <div className="d-flex flex-column justify-content-around align-items-center">
-              <h3 className="text-success">PRESENT</h3>
-              <svg height="30" width="30">
-                <circle
-                  cx="15"
-                  cy="15"
-                  r="12"
-                  stroke="black"
-                  strokeWidth="2"
-                  fill={officer === 'Y' ? Colors.officer : Colors.default}
-                />
-              </svg>
-            </div>
-          )}
+          <Card.Title>{firstName}</Card.Title>
+          <Card.Title>{lastName}</Card.Title>
+        </Card.Body>
+      </Card>
+    )
+  }
+
+  cardBack = member => {
+    const {isPresent} = this.state
+    const {id, areaGroup, firstName, lastName, officer} = member
+    return (
+      <Card className="bg-light text-dark">
+        <Card.Body bsPrefix="tarjeta-body">
+          <div className="d-flex flex-row justify-content-between">
+            <Card.Subtitle className="mb-2 text-muted">
+              {String(id).padStart(4, '0')}
+            </Card.Subtitle>
+            <Card.Subtitle className="mb-2 text-muted">
+              Area {areaGroup}
+            </Card.Subtitle>
+          </div>
+          <div className="d-flex flex-column justify-content-around align-items-center">
+            {/* <h3 className="text-success">PRESENT</h3> */}
+            <svg height="30" width="30">
+              <circle
+                cx="15"
+                cy="15"
+                r="12"
+                stroke="black"
+                strokeWidth="2"
+                fill={officer === 'Y' ? Colors.officer : Colors.default}
+              />
+            </svg>
+          </div>
         </Card.Body>
       </Card>
     )
