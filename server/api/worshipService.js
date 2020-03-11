@@ -6,17 +6,39 @@ const {
   Local
 } = require('../db/models')
 
-router.get('/propBased', async (req, res, next) => {
-  try {
-    const worshipService = await WorshipService.findOne({
-      where: req.body,
-      include: [{model: Attendance}]
-    })
-    res.send(worshipService)
-  } catch (error) {
-    next(error)
-  }
+router.get('/', async (req, res, next) => {
+  const worshipServices = await WorshipService.findAll()
+  res.send(worshipServices)
 })
+
+router.get(
+  '/:localId/:weekNumber/:serviceType/:dateTime/',
+  async (req, res, next) => {
+    try {
+      console.log('entering propbased')
+      console.info(req.params)
+      const {localId, weekNumber, serviceType, dateTime} = req.params
+
+      let worshipService = await WorshipService.findOne({
+        where: {dateTime: `${dateTime}Z`},
+        include: [{model: Attendance}]
+      })
+
+      console.log(worshipService)
+
+      if (worshipService) {
+        const reportingPeriodOfWS = await ReportingPeriod.findOne({
+          where: {localId, weekNumber, serviceType}
+        })
+        worshipService = !reportingPeriodOfWS ? null : worshipService
+      }
+
+      res.send(worshipService)
+    } catch (error) {
+      next(error)
+    }
+  }
+)
 
 router.get('/reporting/:reportingId', async (req, res, next) => {
   try {

@@ -14,7 +14,6 @@ class WorshipServiceForm extends Component {
     super(props)
 
     this.state = {
-      // isNotified: false,
       selectedWeekNumber: GetWeekNumber(
         new Date(
           new Date(Date.now()).getTime() +
@@ -31,7 +30,6 @@ class WorshipServiceForm extends Component {
 
   componentDidMount = () => {
     if (this.props.members.filter(m => m.hasAttended).length > 0) {
-      // this.setState({isNotified: true})
       setTimeout(() => history.back(), 5000)
     }
   }
@@ -48,13 +46,14 @@ class WorshipServiceForm extends Component {
         selectedLocal,
         selectedWeekNumber,
         selectedDateTime,
-        selectedServiceType
-      } = e.target
+        selectedServiceType,
+        selectedCustomType
+      } = this.state
 
       const serviceType =
-        selectedServiceType.value === 'Custom'
-          ? this.state.selectedCustomType
-          : selectedServiceType.value
+        selectedServiceType === 'Custom'
+          ? selectedCustomType
+          : selectedServiceType
 
       const dataToSend = {
         localId: selectedLocal,
@@ -63,24 +62,23 @@ class WorshipServiceForm extends Component {
         serviceType
       }
 
-      const {data} = await axios.get('/api/ws/propBased', dataToSend)
+      const {data} = await axios.get(
+        `/api/ws/${selectedLocal}/${selectedWeekNumber}/${serviceType}/${selectedDateTime}`
+      )
 
       console.log(data)
 
-      let serviceAttendanceExists = !!data.attendances
+      let serviceAttendanceExists = !!data
       if (serviceAttendanceExists) {
+        console.log('checking attendances length')
+        console.log(data.attendances.length)
         serviceAttendanceExists = !(data.attendances.length === 0)
       }
 
       if (serviceAttendanceExists) {
         alertify.error('An attendance for this service already exists')
       } else {
-        await this.props.fetchCreateReportingPeriod({
-          localId: selectedLocal.value,
-          dateTime: selectedDateTime.value,
-          weekNumber: selectedWeekNumber.value,
-          serviceType
-        })
+        await this.props.fetchCreateReportingPeriod(dataToSend)
       }
     }
   }
@@ -155,8 +153,6 @@ class WorshipServiceForm extends Component {
       </select>
     )
   }
-
-  // confirmClose = () => this.setState({isNotified: false})
 
   render() {
     const {locals} = this.props
@@ -280,12 +276,6 @@ class WorshipServiceForm extends Component {
               </Button>
             </Row>
           </Container>
-          {/* <Confirm
-            title="Cannot create new Worship Service"
-            message="The Tarjeta Board is currently active. Please save or clear."
-            show={this.state.isNotified}
-            onHide={this.confirmClose}
-          /> */}
         </Fragment>
       )
     }
