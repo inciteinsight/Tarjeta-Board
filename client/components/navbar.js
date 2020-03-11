@@ -19,7 +19,7 @@ import ReportingNav from './nav/ReportingNav'
 import PasswordRequest from './misc/PasswordRequest'
 import Initialize from './misc/Initialize'
 import ControlNav from './nav/ControlNav'
-const secretaryPass = require('../../secrets')
+const {secretaryPass} = require('../../secrets')
 const secPass = process.env.secretaryPass || secretaryPass
 
 class Navbar extends Component {

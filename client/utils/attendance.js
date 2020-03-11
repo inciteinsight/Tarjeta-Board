@@ -30,16 +30,6 @@ export const DAYS_ARRAY = [
   'Sunday'
 ]
 
-// export const GetTimeZoneAccounted = (givenTime, givenDate) => {
-//   const time = givenTime ? givenTime : '00:00:00'
-//   const date = givenDate ? givenDate : '2020-01-01'
-//   return new Date(
-//     new Date(`${date}T${time}Z`).getTime() +
-//       new Date(Date.now()).getTimezoneOffset() * 60000 +
-//       (moment().isDST() ? 1000 * 60 * 60 : 0)
-//   )
-// }
-
 export const GetWeekNumber = givenDate => {
   const given = new Date(givenDate)
   const start = new Date(given.getFullYear(), 0, 0)

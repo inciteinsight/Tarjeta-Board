@@ -9,7 +9,8 @@ import {
   WorshipServiceForm,
   AdHocReport,
   AdHocReportForm,
-  MemberDashboard
+  MemberDashboard,
+  Loading
 } from './components'
 import {me} from './store'
 
@@ -38,6 +39,7 @@ class Routes extends Component {
             <Route path="/" component={Board} />
           </Switch>
         )}
+        <Route path="/api" component={Loading} />
         <Route component={Login} />
       </Switch>
     )

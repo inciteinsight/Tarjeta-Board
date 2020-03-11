@@ -24,8 +24,6 @@ router.get(
         include: [{model: Attendance}]
       })
 
-      console.log(worshipService)
-
       if (worshipService) {
         const reportingPeriodOfWS = await ReportingPeriod.findOne({
           where: {localId, weekNumber, serviceType}
