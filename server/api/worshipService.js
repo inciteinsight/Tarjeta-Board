@@ -6,6 +6,18 @@ const {
   Local
 } = require('../db/models')
 
+router.get('/propBased', async (req, res, next) => {
+  try {
+    const worshipService = await WorshipService.findOne({
+      where: req.body,
+      include: [{model: Attendance}]
+    })
+    res.send(worshipService)
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.get('/reporting/:reportingId', async (req, res, next) => {
   try {
     const {reportingId} = req.params

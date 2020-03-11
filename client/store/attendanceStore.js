@@ -1,20 +1,20 @@
 import axios from 'axios'
 import {AddHasAttendedField, UpdateMemberInSession} from '../utils/attendance'
 import history from '../history'
+import alertify from 'alertifyjs'
 
-// RENAME
-const IMPORT_FROM_SAMPLE = 'IMPORT_FROM_SAMPLE'
-const importFromSample = members => ({
-  type: IMPORT_FROM_SAMPLE,
+const IMPORT_ACTIVE_MEMBERS = 'IMPORT_ACTIVE_MEMBERS'
+const importActiveMembers = members => ({
+  type: IMPORT_ACTIVE_MEMBERS,
   payload: {members}
 })
-export const importFromSampleThunk = () => async dispatch => {
+export const importActiveMembersThunk = () => async dispatch => {
   try {
     const data = await (await axios.get('/api/member/active')).data.map(m =>
       AddHasAttendedField(m)
     )
     await axios.post('/api/cache/members', data)
-    dispatch(importFromSample(data))
+    dispatch(importActiveMembers(data))
   } catch (err) {
     console.error(err)
   }
@@ -33,7 +33,7 @@ export const importFromSessionThunk = () => async dispatch => {
   try {
     const {data} = await axios.get('/api/cache')
     if (data.members.length === 0) {
-      dispatch(importFromSampleThunk())
+      dispatch(importActiveMembersThunk())
     } else {
       dispatch(
         importFromSession(
@@ -51,7 +51,7 @@ export const importFromSessionThunk = () => async dispatch => {
 export const clearSessionThunk = () => async dispatch => {
   try {
     await axios.get('/api/cache/reset')
-    await dispatch(importFromSampleThunk())
+    await dispatch(importActiveMembersThunk())
   } catch (error) {
     console.error(error)
   }
@@ -78,8 +78,16 @@ const createReportingPeriod = payload => ({
 })
 export const createReportingPeriodThunk = reportingData => async dispatch => {
   try {
-    const {data} = await axios.post('/api/reporting/create', reportingData)
+    const {data, status} = await axios.post(
+      '/api/reporting/create',
+      reportingData
+    )
     dispatch(createReportingPeriod(data))
+    if (status === 200) {
+      alertify.success('New Worship Service Attendance Success!')
+    } else {
+      alertify.error('Error: Unable to create new Worship Service instance')
+    }
     history.push('/')
   } catch (error) {
     console.error(error)
@@ -103,7 +111,7 @@ const initialState = {
 export default (state = initialState, {type, payload}) => {
   let newState = {...state}
   switch (type) {
-    case IMPORT_FROM_SAMPLE:
+    case IMPORT_ACTIVE_MEMBERS:
     case IMPORT_FROM_SESSION:
       newState.members = payload.members
       newState.reportingPeriod = payload.reportingPeriod

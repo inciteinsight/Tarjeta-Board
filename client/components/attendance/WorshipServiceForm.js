@@ -3,7 +3,7 @@ import {Button, Form, Container, Row} from 'react-bootstrap'
 import {createReportingPeriodThunk} from '../../store'
 import {GetWeekNumber, GetServiceFromScheduleDay} from '../../utils/attendance'
 import {connect} from 'react-redux'
-import Confirm from '../misc/Confirm'
+// import Confirm from '../misc/Confirm'
 import Loading from '../misc/Loading'
 import axios from 'axios'
 import moment from 'moment'
@@ -14,7 +14,7 @@ class WorshipServiceForm extends Component {
     super(props)
 
     this.state = {
-      isNotified: false,
+      // isNotified: false,
       selectedWeekNumber: GetWeekNumber(
         new Date(
           new Date(Date.now()).getTime() +
@@ -31,45 +31,56 @@ class WorshipServiceForm extends Component {
 
   componentDidMount = () => {
     if (this.props.members.filter(m => m.hasAttended).length > 0) {
-      this.setState({isNotified: true})
+      // this.setState({isNotified: true})
       setTimeout(() => history.back(), 5000)
     }
   }
 
   handleSubmit = async e => {
     e.preventDefault()
-    const {
-      selectedLocal,
-      selectedWeekNumber,
-      selectedDateTime,
-      selectedServiceType
-    } = e.target
 
-    // console.log(selectedDateTime.value)
-    // const {data} = await axios.get(
-    //   `/api/reporting/attendance/verify/${selectedDateTime.value}`
-    // )
-    // console.log(data)
     if (
       this.props.members.reduce((accum, m) => m.hasAttended || accum, false)
     ) {
-      // this.setState({isNotified: true})
       alertify.error('A Worship Service is currently active')
-      // } else if (data) { /* Check why this is not going through */
-      //   this.setState({isNotified: true})
     } else {
+      const {
+        selectedLocal,
+        selectedWeekNumber,
+        selectedDateTime,
+        selectedServiceType
+      } = e.target
+
       const serviceType =
         selectedServiceType.value === 'Custom'
           ? this.state.selectedCustomType
           : selectedServiceType.value
-      const {status} = await this.props.fetchCreateReportingPeriod({
-        localId: selectedLocal.value,
-        dateTime: selectedDateTime.value,
-        weekNumber: selectedWeekNumber.value,
+
+      const dataToSend = {
+        localId: selectedLocal,
+        weekNumber: selectedWeekNumber,
+        dateTime: selectedDateTime,
         serviceType
-      })
-      if (status === 200) {
-        alertify.success('New Worship Service Attendance Success!')
+      }
+
+      const {data} = await axios.get('/api/ws/propBased', dataToSend)
+
+      console.log(data)
+
+      let serviceAttendanceExists = !!data.attendances
+      if (serviceAttendanceExists) {
+        serviceAttendanceExists = !(data.attendances.length === 0)
+      }
+
+      if (serviceAttendanceExists) {
+        alertify.error('An attendance for this service already exists')
+      } else {
+        await this.props.fetchCreateReportingPeriod({
+          localId: selectedLocal.value,
+          dateTime: selectedDateTime.value,
+          weekNumber: selectedWeekNumber.value,
+          serviceType
+        })
       }
     }
   }

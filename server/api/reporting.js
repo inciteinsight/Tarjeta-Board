@@ -10,7 +10,7 @@ const GetTimeZoneAccounted = date => {
   )
 }
 
-router.get('/attendance/verify/:dateTime', async (req, res, next) => {
+router.get('/ws/propBased', async (req, res, next) => {
   try {
     const {dateTime} = req.params
     const verification = await Attendance.findOne({
