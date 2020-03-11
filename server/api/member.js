@@ -10,26 +10,14 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-// router.get('/active', async (req, res, next) => {
-//   try {
-//     const members = await Member.findAll({
-//       where: {
-//         isActive: true
-//       }
-//     })
-//     res.status(200).send(members)
-//   } catch (error) {
-//     next(error)
-//   }
-// })
-
-router.put('/active/:id', async (req, res, next) => {
+router.get('/active', async (req, res, next) => {
   try {
-    const {id} = req.params
-    let member = await Member.findByPk(id)
-    member.isActive = !member.isActive
-    await member.save()
-    res.status(200).send(member)
+    const members = await Member.findAll({
+      where: {
+        isActive: true
+      }
+    })
+    res.status(200).send(members)
   } catch (error) {
     next(error)
   }

@@ -83,12 +83,12 @@ class Navbar extends Component {
             className="d-flex justify-content-center flex-wrap w-100"
             activeKey="/home"
           >
-            <Nav.Item className="align-self-center text-success d-flex align-items-center flex-column">
-              <h3>Worship Service:</h3>
-              {this.renderServiceDateTime()}
-            </Nav.Item>
             {isLoggedIn ? (
               <Fragment>
+                <Nav.Item className="align-self-center text-success d-flex align-items-center flex-column">
+                  <h3>Worship Service:</h3>
+                  {this.renderServiceDateTime()}
+                </Nav.Item>
                 <BoardNav />
                 {isSecretary ? (
                   <Fragment>
