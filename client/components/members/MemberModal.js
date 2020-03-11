@@ -23,9 +23,16 @@ export default class MemberModal extends Component {
     }
   }
 
-  componentDidMount = () => {
-    if (this.props.mode === 'update') {
-      this.reset()
+  componentDidMount = async () => {
+    await this.reset()
+    this.handleIdByGender()
+  }
+
+  handleIdByGender = () => {
+    const {latestIndexByGender, mode} = this.props
+    if (mode === 'create') {
+      const {gender} = this.state
+      this.setState({id: `${gender}${Number(latestIndexByGender[gender]) + 1}`})
     }
   }
 
@@ -139,6 +146,28 @@ export default class MemberModal extends Component {
     )
   }
 
+  genderDropdown = () => {
+    const {member} = this.props
+    return (
+      <select
+        className="col-8 form-control"
+        required
+        name="gender"
+        onChange={async e => {
+          await this.handleChange(e)
+          this.handleIdByGender()
+        }}
+      >
+        <option key="M" selected={member.gender === 'M'} value="M">
+          Male
+        </option>
+        <option key="F" selected={member.gender === 'F'} value="F">
+          Female
+        </option>
+      </select>
+    )
+  }
+
   genericDropdown = (property, options) => {
     const {member} = this.props
     return (
@@ -217,7 +246,7 @@ export default class MemberModal extends Component {
                 name="id"
                 onChange={this.handleChange}
                 required
-                disabled
+                disabled={!(mode === 'create')}
               />
             </div>
             <div className="row form-group form-check form-check-inline w-100">
@@ -291,7 +320,7 @@ export default class MemberModal extends Component {
               >
                 Gender
               </label>
-              {this.genericDropdown('gender', ['M', 'F'])}
+              {this.genderDropdown()}
             </div>
             <div className="row form-group form-check form-check-inline w-100">
               <label

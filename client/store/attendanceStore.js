@@ -52,7 +52,6 @@ export const clearSessionThunk = () => async dispatch => {
   try {
     await axios.get('/api/cache/reset')
     await dispatch(importFromSampleThunk())
-    // history.go('/service/new')
   } catch (error) {
     console.error(error)
   }

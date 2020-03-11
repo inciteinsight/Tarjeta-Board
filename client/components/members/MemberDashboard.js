@@ -14,14 +14,39 @@ class AdHocReportPane extends Component {
     this.state = {
       members: [],
       isModalActive: false,
-      selectedMember: {},
-      mode: ''
+      selectedMember: {
+        id: '1914',
+        areaGroup: '',
+        lastName: '',
+        firstName: '',
+        cfo: 'B',
+        officer: 'N',
+        gender: 'M',
+        isActive: true,
+        localId: 'MANNYUS'
+      },
+      mode: '',
+      latestIndexByGender: this.defaultGenderObject
     }
+  }
+
+  defaultGenderObject = {
+    M: '',
+    F: ''
   }
 
   componentDidMount = async () => {
     const {data} = await axios.get('/api/member/')
-    this.setState({members: data})
+    await this.setState({
+      members: data,
+      isModalActive: false,
+      selectedMember: {},
+      mode: ''
+    })
+    const latestIndexByGender = this.findLatestIndexByGender(data)
+
+    console.log(latestIndexByGender)
+    this.setState({latestIndexByGender})
   }
 
   localsWithAreaGroups = () => {
@@ -41,25 +66,32 @@ class AdHocReportPane extends Component {
     }, {})
   }
 
-  toggleUpdateMember = async member => {
+  toggleMemberModal = async (member, mode) => {
     await this.setState({
-      selectedMember: member
+      selectedMember: member,
+      mode
     })
     this.setState({
-      isModalActive: true,
-      mode: 'update'
-    })
-  }
-
-  toggleCreateMember = () => {
-    this.setState({
-      isModalActive: true,
-      mode: 'create'
+      isModalActive: true
     })
   }
 
   confirmClose = () =>
-    this.setState({isModalActive: false, mode: '', selectedMember: {}})
+    this.setState({
+      isModalActive: false,
+      mode: '',
+      selectedMember: {
+        id: '1914',
+        areaGroup: '',
+        lastName: '',
+        firstName: '',
+        cfo: 'B',
+        officer: 'N',
+        gender: 'M',
+        isActive: true,
+        localId: 'MANNYUS'
+      }
+    })
 
   renderIsActive = member => (
     <td className={`${member.isActive ? 'table-success' : 'table-danger'}`}>
@@ -67,19 +99,24 @@ class AdHocReportPane extends Component {
     </td>
   )
 
-  renderCreateRow = () => (
-    <tr>
-      <td colSpan={11} className="d-flex justify-content-center">
-        <Button onClick={() => this.toggleCreateMember()}>
-          Create New Member
-        </Button>
-      </td>
-    </tr>
-  )
+  // latest male or female finder
+  findLatestIndexByGender = members =>
+    members.reduce((a, m) => {
+      const gender = m.gender
+      const memberGenId = m.id.slice(1)
+      a[gender] = a[gender] < memberGenId ? memberGenId : a[gender]
+      return a
+    }, this.defaultGenderObject)
 
   render() {
     const {locals} = this.props
-    const {members, mode, isModalActive, selectedMember} = this.state
+    const {
+      members,
+      mode,
+      isModalActive,
+      selectedMember,
+      latestIndexByGender
+    } = this.state
     const heading = [
       'Id',
       'Local',
@@ -104,7 +141,30 @@ class AdHocReportPane extends Component {
             <tr>{heading.map((k, i) => <th key={k}>{heading[i]}</th>)}</tr>
           </thead>
           <tbody>
-            {this.renderCreateRow()}
+            <tr>
+              <td colSpan="12">
+                <Button
+                  onClick={() =>
+                    this.toggleMemberModal(
+                      {
+                        id: '1914',
+                        areaGroup: '',
+                        lastName: '',
+                        firstName: '',
+                        cfo: 'B',
+                        officer: 'N',
+                        gender: 'M',
+                        isActive: true,
+                        localId: 'MANNYUS'
+                      },
+                      'create'
+                    )
+                  }
+                >
+                  Create New Member
+                </Button>
+              </td>
+            </tr>
             {members.map(m => (
               <tr key={m.id}>
                 <td>{m.id}</td>
@@ -121,7 +181,7 @@ class AdHocReportPane extends Component {
                 <td>
                   <Button
                     className="w-100"
-                    onClick={() => this.toggleUpdateMember(m)}
+                    onClick={() => this.toggleMemberModal(m, 'update')}
                   >
                     Edit
                   </Button>
@@ -137,6 +197,7 @@ class AdHocReportPane extends Component {
             mode={mode}
             member={selectedMember}
             locals={this.localsWithAreaGroups()}
+            latestIndexByGender={latestIndexByGender}
           />
         ) : (
           <div />

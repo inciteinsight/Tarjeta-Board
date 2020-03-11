@@ -62,7 +62,7 @@ router.post('/', async (req, res, next) => {
     const {body} = req
     const {id} = body
     let member = await Member.findByPk(id)
-    if (member) {
+    if (!member) {
       member = await Member.create(body)
       res.status(200).send(member)
     } else {
