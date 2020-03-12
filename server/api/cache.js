@@ -32,14 +32,15 @@ router.post('/members', (req, res, next) => {
 })
 
 // For Resetting Attendanace - without ws or rp rest
-// router.delete('/members', (req, res, next) => {
-//   try {
-//     req.session.ws.members = []
-//     res.send(req.session.ws)
-//   } catch (error) {
-//     next(error)
-//   }
-// })
+// Unused as of 03-12-2020
+router.delete('/members', (req, res, next) => {
+  try {
+    req.session.ws.members = []
+    res.send(req.session.ws)
+  } catch (error) {
+    next(error)
+  }
+})
 
 router.get('/reset', (req, res, next) => {
   try {

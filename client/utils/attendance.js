@@ -1,5 +1,4 @@
 import axios from 'axios'
-import moment from 'moment'
 
 export const AddHasAttendedField = member => {
   member.hasAttended = false
@@ -19,6 +18,20 @@ export const UpdateMemberInSession = async memberId => {
     })
   )
 }
+
+// export const UpdateMembersInSession = async memberId => {
+//   const {data} = await axios.get('/api/cache')
+//   await axios.put(
+//     `/api/cache/members`,
+//     data.members.map(m => {
+//       if (m.id === memberId) {
+//         m.hasAttended = !m.hasAttended
+//         // m.code = "future code change"
+//       }
+//       return m
+//     })
+//   )
+// }
 
 export const DAYS_ARRAY = [
   'Monday',

@@ -64,7 +64,6 @@ const updateMemberAttendance = payload => ({
 })
 export const updateMemberAttendanceThunk = memberId => dispatch => {
   try {
-    UpdateMemberInSession(memberId)
     dispatch(updateMemberAttendance(memberId))
   } catch (error) {
     console.error(error)

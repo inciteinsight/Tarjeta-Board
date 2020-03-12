@@ -4,22 +4,12 @@ import AreaGroupPane from './attendance/AreaGroupPane'
 import Loading from './misc/Loading'
 import {Tab, Button} from 'react-bootstrap'
 import TabNav from './nav/TabNav'
-// import {ListAreaGroups} from '../utils/board'
+import axios from 'axios'
 
 export class Board extends Component {
-  // constructor(props) {
-  //   super(props)
-
-  //   this.state = {
-  //     isLoading: true
-  //   }
-  // }
-
-  // componentDidMount = () => {
-  //   this.setState({
-  //     isLoading: false
-  //   })
-  // }
+  componentDidMount = () => {
+    this.setupBeforeUnloadListener()
+  }
 
   tabulizeAreaGroupMembers = () => {
     const {members} = this.props
@@ -29,6 +19,18 @@ export class Board extends Component {
       else a[tabName].push(m)
       return a
     }, {})
+  }
+
+  setupBeforeUnloadListener = () => {
+    window.addEventListener('beforeunload', e => {
+      e.preventDefault()
+      return this.saveSession()
+    })
+  }
+
+  saveSession = async () => {
+    const {members} = this.props
+    await axios.put(`/api/cache/members`, members)
   }
 
   render() {
