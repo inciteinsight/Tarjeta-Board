@@ -77,12 +77,15 @@ export default class MemberModal extends Component {
     }
 
     const {data, status} = res
+    console.log(status)
     if (status === 409) {
-      history.push('/control/members')
       alertify.error(`Error. Id exists as ${data.firstName} ${data.lastName}`)
     } else {
       onHide()
-      alertify.success(`${mode.toUpperCase()} SUCCESS`)
+      // alertify.success(`${mode.toUpperCase()} SUCCESS`)
+      setTimeout(() => {
+        history.go('/control/members')
+      }, 500)
     }
   }
 

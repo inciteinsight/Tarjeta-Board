@@ -44,8 +44,6 @@ class AdHocReportPane extends Component {
       mode: ''
     })
     const latestIndexByGender = this.findLatestIndexByGender(data)
-
-    console.log(latestIndexByGender)
     this.setState({latestIndexByGender})
   }
 

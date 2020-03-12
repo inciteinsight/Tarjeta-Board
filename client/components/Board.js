@@ -11,16 +11,6 @@ export class Board extends Component {
     this.setupBeforeUnloadListener()
   }
 
-  tabulizeAreaGroupMembers = () => {
-    const {members} = this.props
-    return members.reduce((a, m) => {
-      const tabName = `${m.localId.slice(0, 3)} ${m.areaGroup}`
-      if (!a[tabName]) a[tabName] = [m]
-      else a[tabName].push(m)
-      return a
-    }, {})
-  }
-
   setupBeforeUnloadListener = () => {
     window.addEventListener('beforeunload', e => {
       e.preventDefault()
@@ -31,6 +21,16 @@ export class Board extends Component {
   saveSession = async () => {
     const {members} = this.props
     await axios.put(`/api/cache/members`, members)
+  }
+
+  tabulizeAreaGroupMembers = () => {
+    const {members} = this.props
+    return members.reduce((a, m) => {
+      const tabName = `${m.localId.slice(0, 3)} ${m.areaGroup}`
+      if (!a[tabName]) a[tabName] = [m]
+      else a[tabName].push(m)
+      return a
+    }, {})
   }
 
   render() {
