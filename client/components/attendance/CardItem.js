@@ -40,10 +40,9 @@ class CardItem extends Component {
   confirmClose = () => this.setState({isConfirming: false})
 
   cardFront = member => {
-    const {isPresent} = this.state
-    const {id, areaGroup, firstName, lastName, officer} = member
+    const {id, areaGroup, firstName, lastName} = member
     return (
-      <Card className="bg-light text-dark">
+      <Card className="flip-card-front">
         <Card.Body bsPrefix="tarjeta-body">
           <div className="d-flex flex-row justify-content-between">
             <Card.Subtitle className="mb-2 text-muted">
@@ -61,10 +60,9 @@ class CardItem extends Component {
   }
 
   cardBack = member => {
-    const {isPresent} = this.state
-    const {id, areaGroup, firstName, lastName, officer} = member
+    const {id, areaGroup, officer} = member
     return (
-      <Card className="bg-light text-dark">
+      <Card className="flip-card-back">
         <Card.Body bsPrefix="tarjeta-body">
           <div className="d-flex flex-row justify-content-between">
             <Card.Subtitle className="mb-2 text-muted">
@@ -75,7 +73,6 @@ class CardItem extends Component {
             </Card.Subtitle>
           </div>
           <div className="d-flex flex-column justify-content-around align-items-center">
-            {/* <h3 className="text-success">PRESENT</h3> */}
             <svg height="30" width="30">
               <circle
                 cx="15"
@@ -94,6 +91,7 @@ class CardItem extends Component {
 
   render = () => {
     let {member} = this.props
+    const {isPresent} = this.state
     return member === 'empty' ? (
       <Container bsPrefix="tarjeta-placeholder">
         <EmptyCard />
@@ -101,7 +99,16 @@ class CardItem extends Component {
     ) : (
       <Fragment>
         <Container bsPrefix="tarjeta-placeholder" onClick={this.turnover}>
-          {this.cardFront(member)}
+          <div className="flip-card">
+            <div
+              className={`flip-card-inner ${
+                isPresent ? 'flip-card-present' : ''
+              }`}
+            >
+              {this.cardFront(member)}
+              {this.cardBack(member)}
+            </div>
+          </div>
         </Container>
         <Confirm
           title="Revoking Attendance"
