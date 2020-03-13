@@ -1,10 +1,11 @@
 import React, {Component, Fragment} from 'react'
 import {connect} from 'react-redux'
 import {updateMemberAttendanceThunk} from '../../store'
-import {Card, Container} from 'react-bootstrap'
+import {Container} from 'react-bootstrap'
+import CardFront from './CardFront'
+import CardBack from './CardBack'
 import EmptyCard from './EmptyCard'
 import Confirm from '../misc/Confirm'
-import {Colors} from '../../utils/board'
 
 class CardItem extends Component {
   constructor() {
@@ -39,56 +40,6 @@ class CardItem extends Component {
 
   confirmClose = () => this.setState({isConfirming: false})
 
-  cardFront = member => {
-    const {id, areaGroup, firstName, lastName} = member
-    return (
-      <Card className="flip-card-front">
-        <Card.Body bsPrefix="tarjeta-body">
-          <div className="d-flex flex-row justify-content-between">
-            <Card.Subtitle className="mb-2 text-muted">
-              {String(id).padStart(4, '0')}
-            </Card.Subtitle>
-            <Card.Subtitle className="mb-2 text-muted">
-              Area {areaGroup}
-            </Card.Subtitle>
-          </div>
-          <Card.Title>{firstName}</Card.Title>
-          <Card.Title>{lastName}</Card.Title>
-        </Card.Body>
-      </Card>
-    )
-  }
-
-  cardBack = member => {
-    const {id, areaGroup, officer} = member
-    return (
-      <Card className="flip-card-back">
-        <Card.Body bsPrefix="tarjeta-body">
-          <div className="d-flex flex-row justify-content-between">
-            <Card.Subtitle className="mb-2 text-muted">
-              {String(id).padStart(4, '0')}
-            </Card.Subtitle>
-            <Card.Subtitle className="mb-2 text-muted">
-              Area {areaGroup}
-            </Card.Subtitle>
-          </div>
-          <div className="d-flex flex-column justify-content-around align-items-center">
-            <svg height="30" width="30">
-              <circle
-                cx="15"
-                cy="15"
-                r="12"
-                stroke="black"
-                strokeWidth="2"
-                fill={officer === 'Y' ? Colors.officer : Colors.default}
-              />
-            </svg>
-          </div>
-        </Card.Body>
-      </Card>
-    )
-  }
-
   render = () => {
     let {member} = this.props
     const {isPresent} = this.state
@@ -105,8 +56,8 @@ class CardItem extends Component {
                 isPresent ? 'flip-card-present' : ''
               }`}
             >
-              {this.cardFront(member)}
-              {this.cardBack(member)}
+              <CardFront member={member} />
+              <CardBack member={member} />
             </div>
           </div>
         </Container>

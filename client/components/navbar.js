@@ -14,9 +14,9 @@ import {
   OverlayTrigger,
   Popover
 } from 'react-bootstrap'
+import PasswordRequest from './misc/PasswordRequest'
 import BoardNav from './nav/BoardNav'
 import ReportingNav from './nav/ReportingNav'
-import PasswordRequest from './misc/PasswordRequest'
 import Initialize from './misc/Initialize'
 import ControlNav from './nav/ControlNav'
 const {secretaryPass} = require('../../secrets')
@@ -134,11 +134,7 @@ class Navbar extends Component {
                 </Nav.Item>
               </Fragment>
             ) : (
-              <Fragment>
-                <Nav.Item>
-                  <Nav.Link href="/login">Login</Nav.Link>
-                </Nav.Item>
-              </Fragment>
+              <h3 className="">Tarjeta Board Application</h3>
             )}
           </Nav>
         </NavBarComp>

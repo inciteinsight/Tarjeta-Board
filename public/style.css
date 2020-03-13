@@ -169,6 +169,6 @@ div.flip-card-front {
   color: black;
 }
 div.flip-card-back {
-  background-color: palegreen;
+  background-color: #c0ffee;
   transform: rotateX(180deg);
 }
