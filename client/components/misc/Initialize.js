@@ -5,7 +5,6 @@ import {
   getAccessFromSessionThunk,
   getAllLocalsThunk
 } from '../../store'
-import {Line} from 'britecharts-react'
 
 class Initialize extends Component {
   componentDidMount = async () => {
@@ -14,9 +13,7 @@ class Initialize extends Component {
     await this.props.fetchLocalsFromDatabase()
   }
 
-  render() {
-    return <Line data={null} shouldShowLoadingState={true} />
-  }
+  render = () => <div className="loader" />
 }
 
 const mapDispatch = dispatch => ({
