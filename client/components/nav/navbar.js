@@ -23,11 +23,6 @@ const {secretaryPass} = require('../../../secrets')
 const secPass = process.env.secretaryPass || secretaryPass
 
 class Navbar extends Component {
-  componentDidMount = () => {
-    // this.props.fetchAccessFromSession()
-    // this.props.fetchMembersFromSession()
-  }
-
   toggleSecMode = () => {
     this.props.handleUpdateSecretaryMode()
   }
@@ -98,61 +93,55 @@ class Navbar extends Component {
             className="d-flex justify-content-center flex-wrap w-100"
             activeKey="/home"
           >
-            {isLoggedIn ? (
+            <Nav.Item className="align-self-center text-success d-flex align-items-center flex-column">
+              <h3>Worship Service:</h3>
+              {this.renderServiceDateTime()}
+            </Nav.Item>
+            <BoardNav />
+            {isSecretary ? (
               <Fragment>
-                <Nav.Item className="align-self-center text-success d-flex align-items-center flex-column">
-                  <h3>Worship Service:</h3>
-                  {this.renderServiceDateTime()}
+                <ReportingNav />
+                <ControlNav />
+                <Nav.Item>
+                  <Nav.Link href="#" onClick={handleClick}>
+                    Logout
+                  </Nav.Link>
                 </Nav.Item>
-                <BoardNav />
-                {isSecretary ? (
-                  <Fragment>
-                    <ReportingNav />
-                    <ControlNav />
-                    <Nav.Item>
-                      <Nav.Link href="#" onClick={handleClick}>
-                        Logout
-                      </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link onClick={this.toggleSecMode}>
-                        Enter WS Mode
-                      </Nav.Link>
-                    </Nav.Item>
-                  </Fragment>
-                ) : (
-                  <OverlayTrigger
-                    trigger="click"
-                    key="bottom"
-                    placement="bottom"
-                    overlay={
-                      <Popover>
-                        <Popover.Content>
-                          <PasswordRequest
-                            handlePasswordChange={this.handlePasswordChange}
-                          />
-                        </Popover.Content>
-                      </Popover>
-                    }
-                  >
-                    <Nav.Item>
-                      <Nav.Link>Enter Secretary Mode</Nav.Link>
-                    </Nav.Item>
-                  </OverlayTrigger>
-                )}
-                <Nav.Item className="d-flex align-items-center">
-                  <Alert
-                    style={{marginBottom: 0}}
-                    variant={isSecretary ? 'danger' : 'info'}
-                    className="align-middle"
-                  >
-                    {isSecretary ? 'SECRETARY MODE' : 'Worship Service Mode'}
-                  </Alert>
+                <Nav.Item>
+                  <Nav.Link onClick={this.toggleSecMode}>
+                    Enter WS Mode
+                  </Nav.Link>
                 </Nav.Item>
               </Fragment>
             ) : (
-              <h3 className="">Tarjeta Board Application</h3>
+              <OverlayTrigger
+                trigger="click"
+                key="bottom"
+                placement="bottom"
+                overlay={
+                  <Popover>
+                    <Popover.Content>
+                      <PasswordRequest
+                        handlePasswordChange={this.handlePasswordChange}
+                      />
+                    </Popover.Content>
+                  </Popover>
+                }
+              >
+                <Nav.Item>
+                  <Nav.Link>Enter Secretary Mode</Nav.Link>
+                </Nav.Item>
+              </OverlayTrigger>
             )}
+            <Nav.Item className="d-flex align-items-center">
+              <Alert
+                style={{marginBottom: 0}}
+                variant={isSecretary ? 'danger' : 'info'}
+                className="align-middle"
+              >
+                {isSecretary ? 'SECRETARY MODE' : 'Worship Service Mode'}
+              </Alert>
+            </Nav.Item>
           </Nav>
         </NavBarComp>
         <hr />
