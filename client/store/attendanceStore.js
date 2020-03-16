@@ -10,9 +10,10 @@ const importActiveMembers = members => ({
 })
 export const importActiveMembersThunk = () => async dispatch => {
   try {
-    const data = await (await axios.get('/api/member/active')).data.map(m =>
-      AddHasAttendedField(m)
-    )
+    // Refactor for other locals to use
+    const data = await (await axios.get(
+      '/api/member/local/MANNYUS/ext&active'
+    )).data.map(m => AddHasAttendedField(m))
     await axios.post('/api/cache/members', data)
     dispatch(importActiveMembers(data))
   } catch (err) {

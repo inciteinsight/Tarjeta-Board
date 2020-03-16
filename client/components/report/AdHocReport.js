@@ -19,9 +19,7 @@ class AdHocReport extends Component {
   componentDidMount = async () => {
     const {reportingId} = this.props.match.params
     if (reportingId !== 'current') {
-      const {data} = await axios.get(
-        `/api/ws/reporting/${reportingId}/includeExt`
-      )
+      const {data} = await axios.get(`/api/ws/reporting/${reportingId}/ext`)
       this.setState({
         attendance: data.reduce((a, s) => {
           a = a.concat(s.attendances)

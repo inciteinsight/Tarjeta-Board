@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Member} = require('../db/models')
+const {Member, Local} = require('../db/models')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -15,6 +15,88 @@ router.get('/active', async (req, res, next) => {
     const members = await Member.findAll({
       where: {
         isActive: true
+      }
+    })
+    res.status(200).send(members)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/local/:localId', async (req, res, next) => {
+  try {
+    const {localId} = req.params
+    const members = await Member.findAll({
+      where: {localId}
+    })
+    res.status(200).send(members)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/local/:localId/ext', async (req, res, next) => {
+  try {
+    const {localId} = req.params
+    const parentLocal = await Local.findOne({
+      where: {
+        id: localId
+      },
+      include: [
+        {model: Member},
+        {
+          model: Local,
+          as: 'Extensions',
+          include: [Member]
+        }
+      ]
+    })
+    const {Extensions} = parentLocal
+    let {members} = parentLocal
+    Extensions.forEach(e => {
+      members = members.concat(e.members)
+    })
+    res.status(200).send(members)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/local/:localId/ext&active', async (req, res, next) => {
+  try {
+    const {localId} = req.params
+    const parentLocal = await Local.findOne({
+      where: {
+        id: localId
+      },
+      include: [
+        {model: Member},
+        {
+          model: Local,
+          as: 'Extensions',
+          include: [Member]
+        }
+      ]
+    })
+    const {Extensions} = parentLocal
+    let {members} = parentLocal
+    Extensions.forEach(e => {
+      members = members.concat(e.members)
+    })
+    members = members.filter(m => m.isActive)
+    res.status(200).send(members)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/local/:localId/active', async (req, res, next) => {
+  try {
+    const {localId} = req.params
+    const members = await Member.findAll({
+      where: {
+        isActive: true,
+        localId
       }
     })
     res.status(200).send(members)

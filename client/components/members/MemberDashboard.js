@@ -34,16 +34,20 @@ class AdHocReportPane extends Component {
     F: ''
   }
 
-  componentDidMount = async () => {
-    const {data} = await axios.get('/api/member/')
-    await this.setState({
-      members: data,
-      isModalActive: false,
-      selectedMember: {},
-      mode: ''
-    })
-    const latestIndexByGender = this.findLatestIndexByGender(data)
-    this.setState({latestIndexByGender})
+  componentDidUpdate = async (prevProps, prevState) => {
+    const {localId} = await this.props
+    if (prevState.members.length === 0) {
+      const {data} = await axios.get(`/api/member/local/${localId}/ext`)
+      console.log(data)
+      await this.setState({
+        members: data,
+        isModalActive: false,
+        selectedMember: {},
+        mode: ''
+      })
+      const latestIndexByGender = this.findLatestIndexByGender(data)
+      this.setState({latestIndexByGender})
+    }
   }
 
   localsWithAreaGroups = () => {
@@ -106,7 +110,7 @@ class AdHocReportPane extends Component {
     }, this.defaultGenderObject)
 
   render() {
-    const {locals, appInitialized} = this.props
+    const {locals, appInitialized, localId} = this.props
     const {
       members,
       mode,
@@ -129,7 +133,7 @@ class AdHocReportPane extends Component {
       'Edit Mode'
     ]
 
-    return !appInitialized ? (
+    return !appInitialized || !localId ? (
       <div />
     ) : (
       <Fragment>
@@ -205,6 +209,7 @@ class AdHocReportPane extends Component {
 }
 
 const mapState = state => ({
+  localId: state.attendance.local,
   appInitialized: state.loading.appInitialized,
   locals: state.local.locals
 })

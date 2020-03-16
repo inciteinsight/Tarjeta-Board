@@ -38,7 +38,7 @@ export class Board extends Component {
     const tabs = this.tabulizeAreaGroupMembers()
     const tabNames = Object.keys(tabs)
 
-    if (!appInitialized) {
+    if (!appInitialized || !reportingPeriod) {
       return <div />
     }
 

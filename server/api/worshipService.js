@@ -52,7 +52,7 @@ router.get('/reporting/:reportingId', async (req, res, next) => {
   }
 })
 
-router.get('/reporting/:reportingId/includeExt', async (req, res, next) => {
+router.get('/reporting/:reportingId/ext', async (req, res, next) => {
   try {
     const {reportingId} = req.params
 
