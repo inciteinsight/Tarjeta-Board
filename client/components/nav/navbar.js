@@ -24,8 +24,8 @@ const secPass = process.env.secretaryPass || secretaryPass
 
 class Navbar extends Component {
   componentDidMount = () => {
-    this.props.fetchAccessFromSession()
-    this.props.fetchMembersFromSession()
+    // this.props.fetchAccessFromSession()
+    // this.props.fetchMembersFromSession()
   }
 
   toggleSecMode = () => {
@@ -72,6 +72,23 @@ class Navbar extends Component {
       isSecretary,
       locals
     } = this.props
+
+    if (!isLoggedIn) {
+      return (
+        <div>
+          <NavBarComp bg="dark" variant="dark">
+            <Nav
+              className="d-flex justify-content-center flex-wrap w-100"
+              activeKey="/home"
+            >
+              <h3 className="">Tarjeta Board Application</h3>
+            </Nav>
+          </NavBarComp>
+          <hr />
+        </div>
+      )
+    }
+
     return !worshipService || locals.length === 0 ? (
       <Initialize />
     ) : (

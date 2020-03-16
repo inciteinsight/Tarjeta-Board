@@ -56,7 +56,10 @@ const createApp = () => {
   app.use(passport.session())
 
   app.use('*', (req, res, next) => {
-    if (!req.session.ws || !req.session.ws.reportingPeriod) {
+    if (
+      (!req.session.ws || !req.session.ws.reportingPeriod) &&
+      req.session.passport
+    ) {
       req.session.ws = {
         members: [],
         reportingPeriod: {
