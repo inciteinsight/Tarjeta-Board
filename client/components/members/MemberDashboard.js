@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react'
 import {connect} from 'react-redux'
-import Loading from '../misc/Loading'
 import {CFO} from '../../utils/board'
 import {Button} from 'react-bootstrap'
 import axios from 'axios'
@@ -107,7 +106,7 @@ class AdHocReportPane extends Component {
     }, this.defaultGenderObject)
 
   render() {
-    const {locals} = this.props
+    const {locals, appInitialized} = this.props
     const {
       members,
       mode,
@@ -130,8 +129,8 @@ class AdHocReportPane extends Component {
       'Edit Mode'
     ]
 
-    return members.length === 0 || locals.length === 0 ? (
-      <Loading />
+    return !appInitialized ? (
+      <div />
     ) : (
       <Fragment>
         <table className="blueTable">
@@ -206,6 +205,7 @@ class AdHocReportPane extends Component {
 }
 
 const mapState = state => ({
+  appInitialized: state.loading.appInitialized,
   locals: state.local.locals
 })
 

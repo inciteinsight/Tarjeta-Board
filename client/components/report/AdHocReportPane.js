@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react'
 import {connect} from 'react-redux'
-import Loading from '../misc/Loading'
 import {CFO} from '../../utils/board'
 
 class AdHocReportPane extends Component {
@@ -78,8 +77,8 @@ class AdHocReportPane extends Component {
       ]
     }
 
-    return members.length === 0 || locals.length === 0 ? (
-      <Loading />
+    return !this.props.appInitialized ? (
+      <div />
     ) : (
       <table className="blueTable">
         <thead>
@@ -108,6 +107,7 @@ class AdHocReportPane extends Component {
 }
 
 const mapState = state => ({
+  appInitialized: state.loading.appInitialized,
   locals: state.local.locals
 })
 

@@ -3,7 +3,6 @@ import {Button, Form, Container, Row} from 'react-bootstrap'
 import {createReportingPeriodThunk} from '../../store'
 import {GetWeekNumber, GetServiceFromScheduleDay} from '../../utils/attendance'
 import {connect} from 'react-redux'
-import Loading from '../misc/Loading'
 import axios from 'axios'
 import moment from 'moment'
 import alertify from 'alertifyjs'
@@ -149,15 +148,15 @@ class WorshipServiceForm extends Component {
   }
 
   render() {
-    const {locals} = this.props
+    const {appInitialized} = this.props
     const {
       selectedWeekNumber,
       selectedServiceType,
       selectedDateTime,
       selectedCustomType
     } = this.state
-    if (locals.length === 0) {
-      return <Loading />
+    if (!appInitialized) {
+      return <div />
     } else {
       return (
         <Fragment>
@@ -277,6 +276,7 @@ class WorshipServiceForm extends Component {
 }
 
 const mapState = state => ({
+  appInitialized: state.loading.appInitialized,
   members: state.attendance.members,
   locals: state.local.locals
 })

@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {Modal, Button, Container, Form} from 'react-bootstrap'
 import {CFO} from '../../utils/board'
-import Loading from '../misc/Loading'
 import axios from 'axios'
 import alertify from 'alertifyjs'
 
@@ -219,7 +218,7 @@ export default class MemberModal extends Component {
   render() {
     const {isLoading, id, lastName, firstName} = this.state
     const {onHide, mode} = this.props
-    if (isLoading) return <Loading />
+    if (isLoading) return <div />
     return (
       <Modal
         {...this.props}

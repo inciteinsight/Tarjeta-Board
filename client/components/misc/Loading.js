@@ -1,10 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
-function Loading(props) {
-  return <div className="loader" />
+function Loading() {
+  return (
+    <div className="d-flex justify-content-center align-items-center">
+      <div className="loader" />
+    </div>
+  )
 }
-
-Loading.propTypes = {}
 
 export default Loading

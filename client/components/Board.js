@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import AreaGroupPane from './attendance/AreaGroupPane'
-import Loading from './misc/Loading'
 import {Tab, Button} from 'react-bootstrap'
 import TabNav from './nav/TabNav'
 import axios from 'axios'
@@ -35,12 +34,12 @@ export class Board extends Component {
 
   render() {
     const {gender} = this.props.match.params
-    const {members, reportingPeriod} = this.props
+    const {reportingPeriod, appInitialized} = this.props
     const tabs = this.tabulizeAreaGroupMembers()
     const tabNames = Object.keys(tabs)
 
-    if (members.length === 0 || !reportingPeriod) {
-      return <Loading />
+    if (!appInitialized) {
+      return <div />
     }
 
     if (reportingPeriod.id === 0) {
@@ -79,6 +78,7 @@ export class Board extends Component {
 }
 
 const mapState = state => ({
+  appInitialized: state.loading.appInitialized,
   email: state.user.email,
   members: state.attendance.members,
   reportingPeriod: state.attendance.reportingPeriod

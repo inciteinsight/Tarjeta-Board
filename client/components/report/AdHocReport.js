@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {Tab} from 'react-bootstrap'
-import Loading from '../misc/Loading'
 import AdHocReportPane from './AdHocReportPane'
 import {connect} from 'react-redux'
 import TabNav from '../nav/TabNav'
@@ -13,7 +12,7 @@ class AdHocReport extends Component {
     this.state = {
       attendance: [],
       services: [],
-      districtRegion: 'NYUS' /* Must add district functionality */
+      districtRegion: 'NYUS' /* For district functionality */
     }
   }
 
@@ -46,12 +45,12 @@ class AdHocReport extends Component {
   render() {
     let {attendance, services, districtRegion} = this.state
     const {reportingId} = this.props.match.params
-    const {members} = this.props
+    const {members, appInitialized} = this.props
     let tabs = this.tabulizeAreaGroupMembers()
     const tabNames = Object.keys(tabs)
     tabNames.unshift('ALL')
-    return members.length === 0 ? (
-      <Loading />
+    return !appInitialized ? (
+      <div />
     ) : (
       <Tab.Container defaultActiveKey={tabNames[0]}>
         <TabNav tabs={tabNames} />
@@ -78,6 +77,7 @@ class AdHocReport extends Component {
 }
 
 const mapState = state => ({
+  appInitialized: state.loading.appInitialized,
   members: state.attendance.members
 })
 

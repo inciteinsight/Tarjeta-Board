@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {Col, Row} from 'react-bootstrap'
 import CardItem from './CardItem'
-import Loading from '../misc/Loading'
 
 export default class AreaGroupPane extends Component {
   constructor(props) {
@@ -49,7 +48,7 @@ export default class AreaGroupPane extends Component {
   render() {
     const {isLoading} = this.state
     return isLoading ? (
-      <Loading />
+      <div />
     ) : (
       <div className="d-flex flex-row flex-wrap text-center">
         <div className="tarjeta-segment w-100">{this.createPane()}</div>
