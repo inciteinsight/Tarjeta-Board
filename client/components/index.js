@@ -1,4 +1,4 @@
-export {default as Navbar} from './navbar'
+export {default as Navbar} from './nav/navbar'
 export {default as Board} from './Board'
 export {default as AdHocReport} from './report/AdHocReport'
 export {default as AdHocReportForm} from './report/AdHocReportForm'

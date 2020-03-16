@@ -6,7 +6,7 @@ import {
   updateSecretaryModeThunk,
   getAccessFromSessionThunk,
   importFromSessionThunk
-} from '../store'
+} from '../../store'
 import {
   Navbar as NavBarComp,
   Nav,
@@ -14,12 +14,12 @@ import {
   OverlayTrigger,
   Popover
 } from 'react-bootstrap'
-import PasswordRequest from './misc/PasswordRequest'
-import BoardNav from './nav/BoardNav'
-import ReportingNav from './nav/ReportingNav'
-import Initialize from './misc/Initialize'
-import ControlNav from './nav/ControlNav'
-const {secretaryPass} = require('../../secrets')
+import PasswordRequest from '../misc/PasswordRequest'
+import BoardNav from './BoardNav'
+import ReportingNav from './ReportingNav'
+import Initialize from '../misc/Initialize'
+import ControlNav from './ControlNav'
+const {secretaryPass} = require('../../../secrets')
 const secPass = process.env.secretaryPass || secretaryPass
 
 class Navbar extends Component {

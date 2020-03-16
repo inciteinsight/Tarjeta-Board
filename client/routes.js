@@ -9,51 +9,63 @@ import {
   WorshipServiceForm,
   AdHocReport,
   AdHocReportForm,
-  MemberDashboard,
-  Loading
+  MemberDashboard
 } from './components'
 import {me} from './store'
 
-/**
- * COMPONENT
- */
 class Routes extends Component {
-  componentDidMount() {
-    this.props.loadInitialData()
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isLoading: true
+    }
+  }
+
+  componentDidMount = async () => {
+    await this.props.loadInitialData()
+    setTimeout(
+      () =>
+        this.setState({
+          isLoading: false
+        }),
+      100
+    )
   }
 
   render() {
     const {isLoggedIn} = this.props
+
+    if (this.state.isLoading) {
+      return <div />
+    }
 
     return (
       <Switch>
         {/* <Route path="/api/:path" component={Loading} /> */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        {isLoggedIn && (
+        {isLoggedIn ? (
           <Switch>
             <Route path="/home/:gender" component={Board} />
             <Route path="/reports/adhoc/form" component={AdHocReportForm} />
             <Route path="/reports/adhoc/:reportingId" component={AdHocReport} />
             <Route path="/service/:mode" component={WorshipServiceForm} />
             <Route path="/control/members" component={MemberDashboard} />
-            <Route path="/" component={Board} />
+            <Route component={Board} />
           </Switch>
+        ) : (
+          <Route component={Login} />
         )}
-        {/* <Route component={Login} /> */}
       </Switch>
     )
   }
 }
 
-/**
- * CONTAINER
- */
 const mapState = state => {
   return {
-    // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
-    // Otherwise, state.user will be an empty object, and state.user.id will be falsey
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    appInitialized: state.loading.appInitialized
   }
 }
 
@@ -65,13 +77,8 @@ const mapDispatch = dispatch => {
   }
 }
 
-// The `withRouter` wrapper makes sure that updates are not blocked
-// when the url changes
 export default withRouter(connect(mapState, mapDispatch)(Routes))
 
-/**
- * PROP TYPES
- */
 Routes.propTypes = {
   loadInitialData: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired

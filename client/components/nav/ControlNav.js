@@ -8,9 +8,9 @@ export default class ControlNav extends Component {
         <NavDropdown.Item eventKey="6.2" href="/control/members">
           Members
         </NavDropdown.Item>
-        <NavDropdown.Item eventKey="6.3" disabled href="/reports/adhoc/form">
+        {/* <NavDropdown.Item eventKey="6.3" disabled href="/reports/adhoc/form">
           Local
-        </NavDropdown.Item>
+        </NavDropdown.Item> */}
       </NavDropdown>
     )
   }

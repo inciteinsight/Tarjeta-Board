@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {AddHasAttendedField, UpdateMemberInSession} from '../utils/attendance'
+import {AddHasAttendedField} from '../utils/attendance'
 import history from '../history'
 import alertify from 'alertifyjs'
 
