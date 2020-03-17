@@ -179,6 +179,9 @@ class WorshipServiceForm extends Component {
                 className="col-4 font-weight-bold text-right"
                 htmlFor="timeSelection"
               >
+                <span>
+                  <strong>OPTIONAL</strong>
+                </span>{' '}
                 Autofill from Schedule
               </label>
               {this.serviceTimeDropdown()}

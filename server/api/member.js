@@ -143,4 +143,15 @@ router.post('/', async (req, res, next) => {
   }
 })
 
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const {id} = req.params
+    let member = await Member.findByPk(id)
+    await member.destroy()
+    res.status(200)
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = router

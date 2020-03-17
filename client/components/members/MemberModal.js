@@ -1,15 +1,18 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {Modal, Button, Container, Form} from 'react-bootstrap'
+import ConfirmWithPassword from '../misc/ConfirmWithPassword'
 import {CFO} from '../../utils/board'
+import {connect} from 'react-redux'
 import axios from 'axios'
 import alertify from 'alertifyjs'
 
-export default class MemberModal extends Component {
+class MemberModal extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
       isLoading: true,
+      isDeleting: false,
       id: '1914',
       areaGroup: '',
       lastName: '',
@@ -84,6 +87,26 @@ export default class MemberModal extends Component {
         history.go('/control/members')
       }, 500)
     }
+  }
+
+  handleDelete = () => {
+    const {
+      id,
+      areaGroup,
+      lastName,
+      firstName,
+      cfo,
+      officer,
+      gender,
+      isActive,
+      localId
+    } = this.state
+    const {onHide} = this.props
+    axios.delete(`/api/member/${id}`)
+    onHide()
+    setTimeout(() => {
+      history.go('/control/members')
+    }, 100)
   }
 
   localDropdown = () => {
@@ -215,10 +238,29 @@ export default class MemberModal extends Component {
     this.setState({isLoading: false})
   }
 
+  confirmClose = () => this.setState({isDeleting: false})
+
   render() {
-    const {isLoading, id, lastName, firstName} = this.state
-    const {onHide, mode} = this.props
+    const {isLoading, id, lastName, firstName, isDeleting} = this.state
+    const {onHide, mode, worshipService} = this.props
+
     if (isLoading) return <div />
+
+    if (isDeleting) {
+      return (
+        <ConfirmWithPassword
+          title="Deleting Member"
+          message={`Are you sure you want to delete ${firstName} ${lastName}? All attendance records will be wiped out. This cannot be reversed.
+          Alternatively, you can untrack a member changing the Local Registration dropdown - Past attendances will be preserved.`}
+          secPass={true}
+          show={isDeleting}
+          onHide={this.confirmClose}
+          buttonMessage="Confirm Delete"
+          trigger={this.handleDelete}
+        />
+      )
+    }
+
     return (
       <Modal
         {...this.props}
@@ -337,12 +379,31 @@ export default class MemberModal extends Component {
           <Button variant="success" type="submit" onClick={this.handleSave}>
             Save
           </Button>
-          <Button variant="warning" onClick={this.reset}>
-            Reset
-          </Button>
+          {mode === 'update' ? (
+            <Fragment>
+              <Button variant="warning" onClick={this.reset}>
+                Reset Form
+              </Button>
+              <Button
+                variant="danger"
+                disabled={worshipService.id > 0}
+                onClick={() => this.setState({isDeleting: true})}
+              >
+                Permanent Delete
+              </Button>
+            </Fragment>
+          ) : (
+            <div />
+          )}
           <Button onClick={onHide}>Close</Button>
         </Modal.Footer>
       </Modal>
     )
   }
 }
+
+const mapState = state => ({
+  worshipService: state.attendance.worshipService
+})
+
+export default connect(mapState)(MemberModal)

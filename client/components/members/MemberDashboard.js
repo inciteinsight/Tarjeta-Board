@@ -38,7 +38,6 @@ class AdHocReportPane extends Component {
     const {localId} = await this.props
     if (prevState.members.length === 0) {
       const {data} = await axios.get(`/api/member/local/${localId}/ext`)
-      console.log(data)
       await this.setState({
         members: data,
         isModalActive: false,
