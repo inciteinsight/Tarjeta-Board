@@ -56,10 +56,7 @@ const createApp = () => {
   app.use(passport.session())
 
   app.use('*', (req, res, next) => {
-    if (
-      (!req.session.ws || !req.session.ws.reportingPeriod) &&
-      req.session.passport
-    ) {
+    if (!req.session.ws || !req.session.ws.reportingPeriod) {
       req.session.ws = {
         members: [],
         reportingPeriod: {
@@ -83,7 +80,6 @@ const createApp = () => {
 
   app.set('Secret', jwtcode)
 
-  // auth and api routes
   app.use('/auth', require('./auth'))
   app.use('/api', require('./api'))
 
