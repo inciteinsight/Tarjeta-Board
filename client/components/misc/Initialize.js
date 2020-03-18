@@ -3,16 +3,17 @@ import {connect} from 'react-redux'
 import {
   importFromSessionThunk,
   getAccessFromSessionThunk,
-  getAllLocalsThunk,
+  getAccessibleLocalsThunk,
   loadCompleteThunk
 } from '../../store'
 import Loading from './Loading'
 
 class Initialize extends Component {
   componentDidMount = async () => {
+    const {id} = this.props
     await this.props.fetchMembersFromSession()
     await this.props.fetchAccessFromSession()
-    await this.props.fetchLocalsFromDatabase()
+    await this.props.fetchLocalsFromDatabase(id)
     setTimeout(() => {
       this.props.signalLoadComplete()
     }, 100)
@@ -21,11 +22,15 @@ class Initialize extends Component {
   render = () => <Loading />
 }
 
+const mapState = state => ({
+  id: state.user.id
+})
+
 const mapDispatch = dispatch => ({
   fetchMembersFromSession: () => dispatch(importFromSessionThunk()),
   fetchAccessFromSession: () => dispatch(getAccessFromSessionThunk()),
-  fetchLocalsFromDatabase: () => dispatch(getAllLocalsThunk()),
+  fetchLocalsFromDatabase: userId => dispatch(getAccessibleLocalsThunk(userId)),
   signalLoadComplete: () => dispatch(loadCompleteThunk())
 })
 
-export default connect(null, mapDispatch)(Initialize)
+export default connect(mapState, mapDispatch)(Initialize)

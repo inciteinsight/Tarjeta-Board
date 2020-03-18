@@ -148,15 +148,13 @@ class WorshipServiceForm extends Component {
   }
 
   render() {
-    const {appInitialized, user} = this.props
+    const {appInitialized} = this.props
     const {
       selectedWeekNumber,
       selectedServiceType,
       selectedDateTime,
       selectedCustomType
     } = this.state
-
-    console.log(user)
 
     if (!appInitialized) {
       return <div />
