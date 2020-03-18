@@ -131,9 +131,9 @@ router.post('/attendance/save', async (req, res, next) => {
   try {
     const attendees = req.body
     await attendees.forEach(async a => {
-      const {worshipserviceId, memberId, hasAttended} = a
+      const {hasAttended} = a
       const attendance = await Attendance.findOrBuild({
-        where: {worshipserviceId, memberId}
+        where: a
       })
       attendance[0].hasAttended = hasAttended
       await attendance[0].save()

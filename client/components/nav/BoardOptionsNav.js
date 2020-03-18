@@ -25,6 +25,13 @@ class BoardOptionsNav extends Component {
     const attendance = members.map(m => ({
       worshipserviceId: worshipService.id,
       memberId: m.id,
+      localId: m.localId,
+      areaGroup: m.areaGroup,
+      lastName: m.lastName,
+      firstName: m.firstName,
+      cfo: m.cfo,
+      officer: m.officer,
+      gender: m.gender,
       hasAttended: m.hasAttended
     }))
     const {status} = await axios.post('/api/ws/attendance/save', attendance)
@@ -34,6 +41,30 @@ class BoardOptionsNav extends Component {
       alertify.success('Members saved!')
     }
   }
+
+  // areaGroup: {
+  //   type: Sequelize.STRING(7),
+  //   allowNull: false
+  // },
+  // lastName: {
+  //   type: Sequelize.STRING(50),
+  //   allowNull: false
+  // },
+  // firstName: {
+  //   type: Sequelize.STRING(50),
+  //   allowNull: false
+  // },
+  // cfo: {
+  //   type: Sequelize.STRING(2),
+  //   allowNull: false
+  // },
+  // officer: {
+  //   type: Sequelize.STRING(20),
+  //   defaultValue: ''
+  // },
+  // gender: {
+  //   type: Sequelize.ENUM('M', 'F', 'O')
+  // },
 
   render() {
     const {worshipService} = this.props

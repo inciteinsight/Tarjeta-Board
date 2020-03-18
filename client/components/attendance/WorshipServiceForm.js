@@ -181,7 +181,7 @@ class WorshipServiceForm extends Component {
                 htmlFor="timeSelection"
               >
                 <span>
-                  <strong>OPTIONAL</strong>
+                  <strong className="text-success">OPTIONAL</strong>
                 </span>{' '}
                 Autofill from Schedule
               </label>
