@@ -148,13 +148,16 @@ class WorshipServiceForm extends Component {
   }
 
   render() {
-    const {appInitialized} = this.props
+    const {appInitialized, user} = this.props
     const {
       selectedWeekNumber,
       selectedServiceType,
       selectedDateTime,
       selectedCustomType
     } = this.state
+
+    console.log(user)
+
     if (!appInitialized) {
       return <div />
     } else {
@@ -279,6 +282,7 @@ class WorshipServiceForm extends Component {
 }
 
 const mapState = state => ({
+  user: state.user,
   appInitialized: state.loading.appInitialized,
   members: state.attendance.members,
   locals: state.local.locals
