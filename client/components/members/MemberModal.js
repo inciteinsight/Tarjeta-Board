@@ -90,17 +90,7 @@ class MemberModal extends Component {
   }
 
   handleDelete = () => {
-    const {
-      id,
-      areaGroup,
-      lastName,
-      firstName,
-      cfo,
-      officer,
-      gender,
-      isActive,
-      localId
-    } = this.state
+    const {id} = this.state
     const {onHide} = this.props
     axios.delete(`/api/member/${id}`)
     onHide()
