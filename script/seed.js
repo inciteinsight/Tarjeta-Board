@@ -1,12 +1,13 @@
 'use strict'
 
 const db = require('../server/db')
-const {User, Local, Member} = require('../server/db/models')
+const {User, Local, Member, LocalAccess} = require('../server/db/models')
 const {
   localCongregations,
   extensionCongregations,
   ml,
-  secretaries
+  secretaries,
+  secAccess
 } = require('./initLoad')
 
 async function seed() {
@@ -25,6 +26,12 @@ async function seed() {
   const users = await Promise.all(secretaries.map(s => User.create(s)))
 
   console.log(`seeded ${users.length} users`)
+
+  const privileges = await Promise.all(
+    secAccess.map(a => LocalAccess.create(a))
+  )
+
+  console.log(`seeded ${privileges.length} privileges`)
 
   console.log(`seeded successfully`)
 }

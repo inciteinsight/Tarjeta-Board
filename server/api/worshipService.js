@@ -15,8 +15,6 @@ router.get(
   '/:localId/:weekNumber/:serviceType/:dateTime/',
   async (req, res, next) => {
     try {
-      console.log('entering propbased')
-      console.info(req.params)
       const {localId, weekNumber, serviceType, dateTime} = req.params
 
       let worshipService = await WorshipService.findOne({

@@ -235,7 +235,7 @@ class WorshipServiceForm extends Component {
                 id="selectedServiceType"
                 name="selectedServiceType"
                 required
-                onChange={this.handleServiceChange}
+                onChange={this.handleChange}
               >
                 <option selected value="Midweek">
                   Midweek

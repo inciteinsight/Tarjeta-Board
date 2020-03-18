@@ -5,6 +5,10 @@ const ReportingPeriod = require('./ReportingPeriod')
 const Schedule = require('./Schedule')
 const Attendance = require('./Attendance')
 const WorshipService = require('./WorshipService')
+const LocalAccess = require('./LocalAccess')
+
+User.belongsToMany(Local, {through: LocalAccess})
+Local.belongsToMany(User, {through: LocalAccess})
 
 Member.belongsTo(Local)
 Local.hasMany(Member)
@@ -33,5 +37,6 @@ module.exports = {
   ReportingPeriod,
   Attendance,
   Schedule,
-  WorshipService
+  WorshipService,
+  LocalAccess
 }
