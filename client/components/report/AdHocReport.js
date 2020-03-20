@@ -16,6 +16,8 @@ class AdHocReport extends Component {
     }
   }
 
+  // This will be refactored to be simply attendances
+
   componentDidMount = async () => {
     const {reportingId} = this.props.match.params
     if (reportingId !== 'current') {
