@@ -6,6 +6,8 @@ import {connect} from 'react-redux'
 import axios from 'axios'
 import alertify from 'alertifyjs'
 
+// Trim Down
+
 class EditAttendanceModal extends Component {
   constructor(props) {
     super(props)
@@ -27,7 +29,8 @@ class EditAttendanceModal extends Component {
 
   // Before this, create edit attendance route
 
-  // Only edit mode - no create
+  //  Two CRUD Modes - Attendance Creation and Edit
+  //  Simple Mode and Expanded
 
   componentDidMount = async () => {
     await this.reset()

@@ -76,7 +76,7 @@ class Navbar extends Component {
               className="d-flex justify-content-center flex-wrap w-100"
               activeKey="/home"
             >
-              <h3 className="">Tarjeta Board Application</h3>
+              <h3 className="text-info">Tarjeta Board Application</h3>
             </Nav>
           </NavBarComp>
           <hr />
