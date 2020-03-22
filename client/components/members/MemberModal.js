@@ -5,7 +5,7 @@ import {CFO} from '../../utils/board'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import alertify from 'alertifyjs'
-import {GenericDropdown} from './dropdowns'
+import {GenericDropdown} from '../misc/dropdowns'
 
 class MemberModal extends Component {
   constructor(props) {
@@ -37,6 +37,11 @@ class MemberModal extends Component {
       const {gender} = this.state
       this.setState({id: `${gender}${Number(latestIndexByGender[gender]) + 1}`})
     }
+  }
+
+  handleGenderChange = async e => {
+    await this.handleChange(e)
+    this.handleIdByGender()
   }
 
   handleChange = e => {
@@ -100,106 +105,6 @@ class MemberModal extends Component {
     }, 100)
   }
 
-  localDropdown = () => {
-    const {locals, member} = this.props
-    const localKeys = Object.keys(locals)
-    return (
-      <select
-        className="col-8 form-control"
-        required
-        name="localId"
-        onChange={this.handleChange}
-      >
-        {localKeys.map(k => {
-          const selectedLocal = locals[k]
-          return (
-            <option key={k} selected={k === member.localId} value={k}>
-              {selectedLocal.name}
-            </option>
-          )
-        })}
-      </select>
-    )
-  }
-
-  areaGroupsDropdown = () => {
-    const {localId} = this.state
-    const {member} = this.props
-    return (
-      <select
-        className="col-8 form-control"
-        required
-        name="areaGroup"
-        onChange={this.handleChange}
-      >
-        {this.props.locals[localId].areaGroups.map(ag => (
-          <option key={ag} selected={ag === member.areaGroup} value={ag}>
-            {ag}
-          </option>
-        ))}
-      </select>
-    )
-  }
-
-  cfoDropdown = () => {
-    const {member} = this.props
-    const cfoKeys = Object.keys(CFO)
-    return (
-      <select
-        className="col-8 form-control"
-        required
-        name="cfo"
-        onChange={this.handleChange}
-      >
-        {cfoKeys.map(cfo => (
-          <option key={cfo} selected={cfo === member.cfo} value={cfo}>
-            {CFO[cfo]}
-          </option>
-        ))}
-      </select>
-    )
-  }
-
-  genderDropdown = () => {
-    const {member} = this.props
-    return (
-      <select
-        className="col-8 form-control"
-        required
-        name="gender"
-        onChange={async e => {
-          await this.handleChange(e)
-          this.handleIdByGender()
-        }}
-      >
-        <option key="M" selected={member.gender === 'M'} value="M">
-          Male
-        </option>
-        <option key="F" selected={member.gender === 'F'} value="F">
-          Female
-        </option>
-      </select>
-    )
-  }
-
-  // genericDropdown = (property, options) => {
-  //   const {member} = this.props
-  //   return (
-  //     <select
-  //       className="col-8 form-control"
-  //       required
-  //       name={property}
-  //       onChange={this.handleChange}
-  //     >
-  //       {options.map(o => (
-  //         <option key={o} selected={o === member[property]} value={o}>
-  //           {String(o)}
-  //         </option>
-  //       ))}
-  //     </select>
-  //   )
-  // }
-
   reset = async () => {
     await this.setState({isLoading: true})
     const {
@@ -232,8 +137,8 @@ class MemberModal extends Component {
   confirmClose = () => this.setState({isDeleting: false})
 
   render() {
-    const {isLoading, id, lastName, firstName, isDeleting} = this.state
-    const {onHide, mode, worshipService, member} = this.props
+    const {isLoading, id, localId, lastName, firstName, isDeleting} = this.state
+    const {onHide, mode, worshipService, member, locals} = this.props
 
     if (isLoading) return <div />
 
@@ -289,7 +194,13 @@ class MemberModal extends Component {
               >
                 Local
               </label>
-              {this.localDropdown()}
+              <GenericDropdown
+                defaultProperty={member.localId}
+                handleChange={this.handleChange}
+                property="localId"
+                options={Object.keys(locals)}
+                labels={Object.keys(locals).map(l => locals[l].name)}
+              />
             </div>
             <div className="row form-group form-check form-check-inline w-100">
               <label
@@ -298,7 +209,12 @@ class MemberModal extends Component {
               >
                 Area Group
               </label>
-              {this.areaGroupsDropdown()}
+              <GenericDropdown
+                defaultProperty={member.areaGroup}
+                handleChange={this.handleChange}
+                property="areaGroup"
+                options={locals[localId].areaGroups}
+              />
             </div>
             <div className="row form-group form-check form-check-inline w-100">
               <label className="col-4 font-weight-bold text-right" htmlFor="id">
@@ -335,7 +251,13 @@ class MemberModal extends Component {
               >
                 CFO
               </label>
-              {this.cfoDropdown()}
+              <GenericDropdown
+                defaultProperty={member.cfo}
+                handleChange={this.handleChange}
+                property="cfo"
+                options={Object.keys(CFO)}
+                labels={Object.keys(CFO).map(k => CFO[k])}
+              />
             </div>
             <div className="row form-group form-check form-check-inline w-100">
               <label
@@ -344,9 +266,8 @@ class MemberModal extends Component {
               >
                 Officer
               </label>
-              {/* {this.genericDropdown('officer', ['Y', 'N'])} */}
               <GenericDropdown
-                member={member}
+                defaultProperty={member.officer}
                 handleChange={this.handleChange}
                 property="officer"
                 options={['Y', 'N']}
@@ -359,7 +280,13 @@ class MemberModal extends Component {
               >
                 Gender
               </label>
-              {this.genderDropdown()}
+              <GenericDropdown
+                defaultProperty={member.gender}
+                handleChange={this.handleGenderChange}
+                property="gender"
+                options={['M', 'F']}
+                labels={['Male', 'Female']}
+              />
             </div>
             <div className="row form-group form-check form-check-inline w-100">
               <label
@@ -368,7 +295,12 @@ class MemberModal extends Component {
               >
                 Registered in Local
               </label>
-              {this.genericDropdown('isActive', [true, false])}
+              <GenericDropdown
+                defaultProperty={member.isActive}
+                handleChange={this.handleChange}
+                property="isActive"
+                options={[true, false]}
+              />
             </div>
           </Container>
         </Modal.Body>

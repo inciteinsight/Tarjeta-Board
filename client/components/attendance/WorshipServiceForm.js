@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import axios from 'axios'
 import moment from 'moment'
 import alertify from 'alertifyjs'
+import {GenericDropdown} from '../misc/dropdowns'
 
 class WorshipServiceForm extends Component {
   constructor(props) {
@@ -104,21 +105,6 @@ class WorshipServiceForm extends Component {
     }
   }
 
-  localDropdown = () => (
-    <select
-      className="col-8 form-control"
-      required
-      name="selectedLocal"
-      onChange={this.handleChange}
-    >
-      {this.props.locals.map(l => (
-        <option key={l.id} selected={l.id === 'MANNYUS'} value={l.id}>
-          {l.name}
-        </option>
-      ))}
-    </select>
-  )
-
   serviceTimeDropdown = () => {
     const currentLocal = this.props.locals.find(
       l => l.id === this.state.selectedLocal
@@ -148,7 +134,7 @@ class WorshipServiceForm extends Component {
   }
 
   render() {
-    const {appInitialized} = this.props
+    const {appInitialized, locals} = this.props
     const {
       selectedWeekNumber,
       selectedServiceType,
@@ -173,7 +159,13 @@ class WorshipServiceForm extends Component {
               >
                 Congregation
               </label>
-              {this.localDropdown()}
+              <GenericDropdown
+                defaultProperty="MANNYUS"
+                handleChange={this.handleChange}
+                property="selectedLocal"
+                options={locals.map(l => l.id)}
+                labels={locals.map(l => l.name)}
+              />
             </div>
             <div className="row form-group form-check form-check-inline w-100">
               <label
