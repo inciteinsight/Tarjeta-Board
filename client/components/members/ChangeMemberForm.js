@@ -7,13 +7,7 @@ import alertify from 'alertifyjs'
 
 // All the props
 const ChangeMemberForm = props => {
-  const {
-    localId,
-    locals,
-    member,
-
-    handleChange
-  } = props
+  const {localId, locals, member, handleChange} = props
 
   const localDropdown = () => {
     // const {locals, member} = props
@@ -118,10 +112,9 @@ const ChangeMemberForm = props => {
     )
   }
 
-  const {isLoading, id, lastName, firstName, isDeleting} = this.state
-  const {onHide, mode, worshipService} = this.props
+  const {id, lastName, firstName, mode, handleSubmit} = props
 
-  if (isLoading) return <div />
+  // if (isLoading) return <div />
 
   // if (isDeleting) {
   //   return (
@@ -151,7 +144,7 @@ const ChangeMemberForm = props => {
     <Container
       as={Form}
       className="d-flex flex-column align-items-center"
-      onSubmit={this.handleSubmit}
+      onSubmit={handleSubmit}
     >
       <div className="row form-group form-check form-check-inline w-100">
         <label className="col-4 font-weight-bold text-right" htmlFor="id">
