@@ -109,27 +109,31 @@ class WorshipServiceForm extends Component {
     const currentLocal = this.props.locals.find(
       l => l.id === this.state.selectedLocal
     )
+
+    const renderService = service => {
+      const {serviceType, day, time} = service
+      return `${serviceType} - ${day} -
+        ${new Date(
+          new Date(`2020-01-01T${time}Z`).getTime() +
+            new Date(Date.now()).getTimezoneOffset() * 60000 +
+            (moment().isDST() ? 1000 * 60 * 60 : 0)
+        ).toLocaleTimeString()}`
+    }
+
+    const options = [-1].concat(currentLocal.schedules.map(s => s.id))
+
+    const labels = ['Select Worship Service Schedule'].concat(
+      currentLocal.schedules.map(s => renderService(s))
+    )
+
     return (
-      <select
-        className="col-8 form-control"
-        required
-        name="timeSelection"
-        onChange={this.handleDateTimeSelection}
-      >
-        <option selected value={-1}>
-          Select Worship Service Schedule
-        </option>
-        {currentLocal.schedules.map(s => (
-          <option key={s.id} value={s.id}>
-            {`${s.serviceType} - ${s.day} -
-              ${new Date(
-                new Date(`2020-01-01T${s.time}Z`).getTime() +
-                  new Date(Date.now()).getTimezoneOffset() * 60000 +
-                  (moment().isDST() ? 1000 * 60 * 60 : 0)
-              ).toLocaleTimeString()}`}
-          </option>
-        ))}
-      </select>
+      <GenericDropdown
+        defaultProperty={-1}
+        handleChange={this.handleDateTimeSelection}
+        property="timeSelection"
+        options={options}
+        labels={labels}
+      />
     )
   }
 
