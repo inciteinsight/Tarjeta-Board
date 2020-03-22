@@ -5,6 +5,7 @@ import {CFO} from '../../utils/board'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import alertify from 'alertifyjs'
+import {GenericDropdown} from './dropdowns'
 
 class MemberModal extends Component {
   constructor(props) {
@@ -181,23 +182,23 @@ class MemberModal extends Component {
     )
   }
 
-  genericDropdown = (property, options) => {
-    const {member} = this.props
-    return (
-      <select
-        className="col-8 form-control"
-        required
-        name={property}
-        onChange={this.handleChange}
-      >
-        {options.map(o => (
-          <option key={o} selected={o === member[property]} value={o}>
-            {String(o)}
-          </option>
-        ))}
-      </select>
-    )
-  }
+  // genericDropdown = (property, options) => {
+  //   const {member} = this.props
+  //   return (
+  //     <select
+  //       className="col-8 form-control"
+  //       required
+  //       name={property}
+  //       onChange={this.handleChange}
+  //     >
+  //       {options.map(o => (
+  //         <option key={o} selected={o === member[property]} value={o}>
+  //           {String(o)}
+  //         </option>
+  //       ))}
+  //     </select>
+  //   )
+  // }
 
   reset = async () => {
     await this.setState({isLoading: true})
@@ -232,7 +233,7 @@ class MemberModal extends Component {
 
   render() {
     const {isLoading, id, lastName, firstName, isDeleting} = this.state
-    const {onHide, mode, worshipService} = this.props
+    const {onHide, mode, worshipService, member} = this.props
 
     if (isLoading) return <div />
 
@@ -343,7 +344,13 @@ class MemberModal extends Component {
               >
                 Officer
               </label>
-              {this.genericDropdown('officer', ['Y', 'N'])}
+              {/* {this.genericDropdown('officer', ['Y', 'N'])} */}
+              <GenericDropdown
+                member={member}
+                handleChange={this.handleChange}
+                property="officer"
+                options={['Y', 'N']}
+              />
             </div>
             <div className="row form-group form-check form-check-inline w-100">
               <label
