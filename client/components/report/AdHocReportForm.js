@@ -4,6 +4,7 @@ import {createReportingPeriodThunk} from '../../store'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import history from '../../history'
+import {GenericDropdown} from '../misc/dropdowns'
 
 class AdHocReportForm extends Component {
   constructor(props) {
@@ -12,18 +13,13 @@ class AdHocReportForm extends Component {
     this.state = {
       selectedLocal: 'MANNYUS',
       reportingPeriods: [],
-      selectedReportingPeriod: 0
+      selectedReportingPeriod: 0,
+      selectedWeekNumber: 0
     }
   }
 
   componentDidMount = () => {
     this.getReportingPeriodsArrayFromLocalId()
-  }
-
-  componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.selectedLocal !== this.state.selectedLocal) {
-      this.getReportingPeriodsArrayFromLocalId()
-    }
   }
 
   getReportingPeriodsArrayFromLocalId = async () => {
@@ -37,7 +33,19 @@ class AdHocReportForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    history.push(`/reports/adhoc/${this.state.selectedReportingPeriod}`)
+    const {mode} = this.props.match.params
+    const {
+      selectedLocal,
+      selectedReportingPeriod,
+      selectedWeekNumber
+    } = this.state
+    if (mode === 'period') {
+      history.push(`/reports/adhoc/period/${selectedReportingPeriod}`)
+    } else if (mode === 'week') {
+      history.push(
+        `/reports/adhoc/local/${selectedLocal}/week/${selectedWeekNumber}`
+      )
+    }
   }
 
   handleChange = e => {
@@ -60,6 +68,26 @@ class AdHocReportForm extends Component {
       ))}
     </select>
   )
+
+  weekNumberDropdown = () => {
+    const {reportingPeriods} = this.state
+    const options = reportingPeriods
+      .reduce((accum, rp) => {
+        if (accum.indexOf(rp.weekNumber) === -1) {
+          accum.push(rp.weekNumber)
+        }
+        return accum
+      }, [])
+      .sort()
+    return (
+      <GenericDropdown
+        defaultProperty={options[0]}
+        handleChange={this.handleChange}
+        property="selectedWeekNumber"
+        options={options}
+      />
+    )
+  }
 
   reportingPeriodDropdown = () => {
     const {reportingPeriods} = this.state
@@ -86,6 +114,35 @@ class AdHocReportForm extends Component {
     )
   }
 
+  secondDropdown = () => {
+    const {mode} = this.props.match.params
+    if (mode === 'period') {
+      return (
+        <Fragment>
+          <label
+            className="col-4 font-weight-bold text-right"
+            htmlFor="selectedReportingPeriod"
+          >
+            Select Reporting Period
+          </label>
+          {this.reportingPeriodDropdown()}
+        </Fragment>
+      )
+    } else if (mode === 'week') {
+      return (
+        <Fragment>
+          <label
+            className="col-4 font-weight-bold text-right"
+            htmlFor="selectedReportingPeriod"
+          >
+            Select Week Number
+          </label>
+          {this.weekNumberDropdown()}
+        </Fragment>
+      )
+    }
+  }
+
   render() {
     return (
       <Fragment>
@@ -104,13 +161,7 @@ class AdHocReportForm extends Component {
             {this.localDropdown()}
           </div>
           <div className="row form-group form-check form-check-inline w-100">
-            <label
-              className="col-4 font-weight-bold text-right"
-              htmlFor="selectedReportingPeriod"
-            >
-              Select Reporting Period
-            </label>
-            {this.reportingPeriodDropdown()}
+            {this.secondDropdown()}
           </div>
           <Row>
             <Button

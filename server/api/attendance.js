@@ -42,8 +42,9 @@ router.post('/save/:user', async (req, res, next) => {
       })
       if (hasAttended) {
         attendance[0].hasAttended = hasAttended
-        attendance[0].notes = `Confirmed by ${user} 
-                                 on ${new Date(Date.now()).toLocaleString()}`
+        attendance[0].notes = `Confirmed by ${user} on ${new Date(
+          Date.now()
+        ).toLocaleString()}`
       }
       await attendance[0].save()
     })

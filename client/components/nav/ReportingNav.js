@@ -18,8 +18,11 @@ class ReportingNav extends Component {
         >
           Current Service Report
         </NavDropdown.Item>
-        <NavDropdown.Item eventKey="4.2" href="/reports/adhoc/form">
+        <NavDropdown.Item eventKey="4.2" href="/reports/adhoc/form/period">
           Service Report per Reporting Period
+        </NavDropdown.Item>
+        <NavDropdown.Item eventKey="4.2" href="/reports/adhoc/form/week">
+          Service Report per Week
         </NavDropdown.Item>
         {/* <NavDropdown.Item
           eventKey="4.3"
