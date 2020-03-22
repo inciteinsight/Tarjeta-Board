@@ -18,6 +18,8 @@ class AdHocReport extends Component {
 
   // This will be refactored to be simply attendances
 
+  // Consolidate attendances based on memberId
+
   componentDidMount = async () => {
     const {reportingId} = this.props.match.params
     if (reportingId !== 'current') {
@@ -30,6 +32,7 @@ class AdHocReport extends Component {
         services: data
       })
     }
+    console.log(this.state.attendance)
   }
 
   tabulizeAreaGroupMembers = () => {

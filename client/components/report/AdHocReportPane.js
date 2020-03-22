@@ -3,6 +3,14 @@ import {connect} from 'react-redux'
 import {CFO} from '../../utils/board'
 
 class AdHocReportPane extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      showDetails: false
+    }
+  }
+
   isCurrentService = () => this.props.reportingId === 'current'
 
   renderCurrentServiceAttendance = member => (
@@ -50,10 +58,10 @@ class AdHocReportPane extends Component {
     )
     let heading = [
       'Id',
-      'Local',
-      'Area-Group',
       'Last Name',
       'First Name',
+      'Local',
+      'Area-Group',
       'CFO',
       'Officer',
       'Gender'
@@ -90,10 +98,10 @@ class AdHocReportPane extends Component {
           {members.map(m => (
             <tr key={m.id}>
               <td>{m.id}</td>
-              <td>{locals.find(l => l.id === m.localId).name}</td>
-              <td>{m.areaGroup}</td>
               <td>{m.lastName}</td>
               <td>{m.firstName}</td>
+              <td>{locals.find(l => l.id === m.localId).name}</td>
+              <td>{m.areaGroup}</td>
               <td>{CFO[m.cfo]}</td>
               <td>{m.officer}</td>
               <td>{m.gender}</td>
