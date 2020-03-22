@@ -113,35 +113,4 @@ router.get('/reporting/:reportingId/ext', async (req, res, next) => {
   }
 })
 
-router.get('/attendance/:worshipserviceId', async (req, res, next) => {
-  try {
-    const {worshipserviceId} = req.params
-    const attendanceInWS = await Attendance.findAll({
-      where: {
-        worshipserviceId
-      }
-    })
-    res.status(200).send(attendanceInWS)
-  } catch (error) {
-    next(error)
-  }
-})
-
-router.post('/attendance/save', async (req, res, next) => {
-  try {
-    const attendees = req.body
-    await attendees.forEach(async a => {
-      const {hasAttended} = a
-      const attendance = await Attendance.findOrBuild({
-        where: a
-      })
-      attendance[0].hasAttended = hasAttended
-      await attendance[0].save()
-    })
-    res.status(200).send()
-  } catch (error) {
-    next(error)
-  }
-})
-
 module.exports = router

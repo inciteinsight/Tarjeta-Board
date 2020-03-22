@@ -11,6 +11,7 @@ router.use((req, res, next) => {
   }
 })
 
+router.use('/attendance', require('./attendance'))
 router.use('/users', require('./users'))
 router.use('/ws', require('./worshipService'))
 router.use('/cache', require('./cache'))

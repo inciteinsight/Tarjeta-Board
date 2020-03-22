@@ -21,7 +21,7 @@ class BoardOptionsNav extends Component {
   confirmSuccess = () => this.setState({isSuccessful: false})
 
   handleSave = async () => {
-    const {members, worshipService} = this.props
+    const {members, worshipService, user} = this.props
     const attendance = members.map(m => ({
       worshipserviceId: worshipService.id,
       memberId: m.id,
@@ -34,37 +34,16 @@ class BoardOptionsNav extends Component {
       gender: m.gender,
       hasAttended: m.hasAttended
     }))
-    const {status} = await axios.post('/api/ws/attendance/save', attendance)
+    const {status} = await axios.post(
+      `/api/attendance/save/${user}`,
+      attendance
+    )
     if (status === 200) {
       await this.props.handleClearSession()
       this.setState({isSuccessful: true})
       alertify.success('Members saved!')
     }
   }
-
-  // areaGroup: {
-  //   type: Sequelize.STRING(7),
-  //   allowNull: false
-  // },
-  // lastName: {
-  //   type: Sequelize.STRING(50),
-  //   allowNull: false
-  // },
-  // firstName: {
-  //   type: Sequelize.STRING(50),
-  //   allowNull: false
-  // },
-  // cfo: {
-  //   type: Sequelize.STRING(2),
-  //   allowNull: false
-  // },
-  // officer: {
-  //   type: Sequelize.STRING(20),
-  //   defaultValue: ''
-  // },
-  // gender: {
-  //   type: Sequelize.ENUM('M', 'F', 'O')
-  // },
 
   render() {
     const {worshipService} = this.props
@@ -113,6 +92,7 @@ class BoardOptionsNav extends Component {
 }
 
 const mapState = state => ({
+  user: state.user.email,
   members: state.attendance.members,
   worshipService: state.attendance.worshipService
 })
