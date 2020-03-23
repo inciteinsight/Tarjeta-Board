@@ -126,7 +126,8 @@ class AdHocReportPane extends Component {
                         .join(', ')}
                     </td>
                     <td>{member.areaGroup.join(', ')}</td>
-                    <td>{CFO[member.cfo].join(', ')}</td>
+                    <td>{member.cfo.map(cfo => CFO[cfo]).join(', ')}</td>
+                    {/* <td>{CFO[member.cfo].join(', ')}</td> */}
                     <td>{member.officer.join(', ')}</td>
                     <td>{member.gender.join(', ')}</td>
                   </Fragment>

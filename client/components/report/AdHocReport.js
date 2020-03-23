@@ -10,7 +10,7 @@ class AdHocReport extends Component {
     super(props)
 
     this.state = {
-      attendance: [],
+      attendance: {},
       services: [],
       districtRegion: 'NYUS' /* For district functionality */
     }
@@ -68,6 +68,7 @@ class AdHocReport extends Component {
             firstName: [firstName],
             localId: [localId],
             areaGroup: [areaGroup],
+            lag: [`${localId}%${areaGroup}`],
             cfo: [cfo],
             officer: [officer],
             gender: [gender],
@@ -86,7 +87,13 @@ class AdHocReport extends Component {
           attendanceKeys.shift() // remove memberId
           attendanceKeys.pop() // remove services
           attendanceKeys.forEach(ak => {
-            if (accum[memberId][ak].indexOf(a[ak]) === -1) {
+            if (ak === 'lag') {
+              if (
+                accum[memberId].lag.indexOf(`${localId}%${areaGroup}`) === -1
+              ) {
+                accum[memberId].lag.push(`${localId}%${areaGroup}`)
+              }
+            } else if (accum[memberId][ak].indexOf(a[ak]) === -1) {
               accum[memberId][ak].push(a[ak])
             }
           })
@@ -108,9 +115,28 @@ class AdHocReport extends Component {
   tabulizeAreaGroupMembers = () => {
     const {members} = this.props
     return members.reduce((a, m) => {
-      const tabName = `${m.localId.slice(0, 3)} ${m.areaGroup}`
-      if (!a[tabName]) a[tabName] = [m]
-      else a[tabName].push(m)
+      m.lag.forEach(lag => {
+        const [localId, areaGroup] = lag.split('%')
+        const tabName = `${localId.slice(0, 3)} ${areaGroup}`
+        if (!a[tabName]) a[tabName] = [m]
+        else a[tabName].push(m)
+        return a
+      })
+    }, {})
+  }
+
+  tabulizeAreaGroupAttendance = () => {
+    const {attendance} = this.state
+    const attendanceKeys = Object.keys(attendance)
+    return attendanceKeys.reduce((a, k) => {
+      const currentMemberAttendance = attendance[k]
+      currentMemberAttendance.lag.forEach(lag => {
+        const [localId, areaGroup] = lag.split('%')
+        const tabName = `${localId.slice(0, 3)} ${areaGroup}`
+        if (!a[tabName]) a[tabName] = [currentMemberAttendance]
+        else a[tabName].push(currentMemberAttendance)
+      })
+      console.log(a)
       return a
     }, {})
   }
@@ -119,7 +145,12 @@ class AdHocReport extends Component {
     let {attendance, services, districtRegion} = this.state
     const {reportingId} = this.props.match.params
     const {members, appInitialized} = this.props
-    let tabs = this.tabulizeAreaGroupMembers()
+
+    if (!appInitialized || attendance.length === 0) {
+      return <div />
+    }
+
+    let tabs = this.tabulizeAreaGroupAttendance()
     const tabNames = Object.keys(tabs)
     tabNames.unshift('ALL')
     return !appInitialized ? (
@@ -136,9 +167,9 @@ class AdHocReport extends Component {
                   areaGroup={areaGroup}
                   localId={`${localId}${districtRegion}`}
                   reportingId={reportingId}
-                  attendance={attendance}
+                  attendance={t === 'ALL' ? attendance : tabs[t]}
                   services={services}
-                  members={t === 'ALL' ? members : tabs[t]}
+                  // members={t === 'ALL' ? members : tabs[t]}
                 />
               </Tab.Pane>
             )
