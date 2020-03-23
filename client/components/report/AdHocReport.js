@@ -160,7 +160,7 @@ class AdHocReport extends Component {
   render() {
     let {attendance, services, districtRegion} = this.state
     const {reportingId} = this.props.match.params
-    const {members, appInitialized} = this.props
+    const {appInitialized} = this.props
 
     if (!appInitialized || attendance.length === 0) {
       return <div />

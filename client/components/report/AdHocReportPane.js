@@ -7,7 +7,7 @@ class AdHocReportPane extends Component {
     super(props)
 
     this.state = {
-      showDetails: true
+      showDetails: false
     }
   }
 
@@ -80,14 +80,44 @@ class AdHocReportPane extends Component {
           <th>First Name</th>
           {showDetails ? (
             <Fragment>
-              <th>Local</th>
-              <th>Area-Group</th>
-              <th>CFO</th>
-              <th>Officer</th>
-              <th>Gender</th>
+              <th
+                className="detail-head"
+                onClick={() => this.setState({showDetails: false})}
+              >
+                Local
+              </th>
+              <th
+                className="detail-head"
+                onClick={() => this.setState({showDetails: false})}
+              >
+                Area-Group
+              </th>
+              <th
+                className="detail-head"
+                onClick={() => this.setState({showDetails: false})}
+              >
+                CFO
+              </th>
+              <th
+                className="detail-head"
+                onClick={() => this.setState({showDetails: false})}
+              >
+                Officer
+              </th>
+              <th
+                className="detail-head"
+                onClick={() => this.setState({showDetails: false})}
+              >
+                Gender
+              </th>
             </Fragment>
           ) : (
-            <th>Details</th>
+            <th
+              className="detail-head"
+              onClick={() => this.setState({showDetails: true})}
+            >
+              Details
+            </th>
           )}
           {this.isCurrentService() ? (
             <th>Attended</th>
@@ -101,7 +131,7 @@ class AdHocReportPane extends Component {
 
   render() {
     const {showDetails} = this.state
-    const {attendance, members, locals, services} = this.props
+    const {attendance, locals} = this.props
     const attendanceKeys = Object.keys(attendance)
 
     return !this.props.appInitialized ? (
@@ -117,23 +147,31 @@ class AdHocReportPane extends Component {
                 <td>{member.memberId}</td>
                 <td>{member.lastName.join(', ')}</td>
                 <td>{member.firstName.join(', ')}</td>
-                {showDetails ? (
-                  <Fragment>
-                    <td>
-                      {locals
-                        .filter(l => member.localId.includes(l.id))
-                        .map(l => l.name)
-                        .join(', ')}
-                    </td>
-                    <td>{member.areaGroup.join(', ')}</td>
-                    <td>{member.cfo.map(cfo => CFO[cfo]).join(', ')}</td>
-                    {/* <td>{CFO[member.cfo].join(', ')}</td> */}
-                    <td>{member.officer.join(', ')}</td>
-                    <td>{member.gender.join(', ')}</td>
-                  </Fragment>
-                ) : (
-                  <td className="table-secondary" />
-                )}
+                <td style={{display: showDetails ? '' : 'none'}}>
+                  {locals
+                    .filter(l => member.localId.includes(l.id))
+                    .map(l => l.name)
+                    .join(', ')}
+                </td>
+                <td style={{display: showDetails ? '' : 'none'}}>
+                  {member.areaGroup.join(', ')}
+                </td>
+                <td style={{display: showDetails ? '' : 'none'}}>
+                  {member.cfo.map(cfo => CFO[cfo]).join(', ')}
+                </td>
+                <td style={{display: showDetails ? '' : 'none'}}>
+                  {member.officer.join(', ')}
+                </td>
+                <td style={{display: showDetails ? '' : 'none'}}>
+                  {member.gender.join(', ')}
+                </td>
+                <td
+                  className="table-secondary"
+                  style={{
+                    display: showDetails ? 'none' : ''
+                  }}
+                />
+
                 {this.isCurrentService()
                   ? this.renderCurrentServiceAttendance(member)
                   : this.renderPastAttendances(member)}
