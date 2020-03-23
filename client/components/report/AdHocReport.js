@@ -17,21 +17,26 @@ class AdHocReport extends Component {
   }
 
   componentDidMount = async () => {
-    const {reportingId} = this.props.match.params
-    if (reportingId !== 'current') {
-      const {data} = await axios.get(`/api/ws/reporting/${reportingId}/ext`)
-      await this.setState({
-        attendance: this.consolidateAttendanceToMembers(data),
-        services: data
-      })
+    const {selectionId, mode} = this.props.match.params
+    if (mode === 'week') {
+      console.log('Accessing Week')
+    } else if (mode === 'period') {
+      if (selectionId !== 'current') {
+        const {data} = await axios.get(`/api/ws/reporting/${selectionId}/ext`)
+        await this.setState({
+          attendance: this.consolidateAttendanceToMembers(data),
+          services: data
+        })
+      }
     }
   }
 
   componentDidUpdate = async (prevProps, prevState) => {
-    const {reportingId} = this.props.match.params
+    const {mode, selectionId} = this.props.match.params
     const {members} = this.props
     if (
-      reportingId === 'current' &&
+      mode === 'period' &&
+      selectionId === 'current' &&
       Object.keys(prevState.attendance).length === 0 &&
       members.length > 0
     ) {
@@ -160,7 +165,7 @@ class AdHocReport extends Component {
 
   render() {
     let {attendance, services, districtRegion} = this.state
-    const {reportingId} = this.props.match.params
+    const {selectionId} = this.props.match.params
     const {appInitialized} = this.props
 
     if (!appInitialized || attendance.length === 0) {
@@ -183,7 +188,7 @@ class AdHocReport extends Component {
                 <AdHocReportPane
                   areaGroup={areaGroup}
                   localId={`${localId}${districtRegion}`}
-                  reportingId={reportingId}
+                  selectionId={selectionId}
                   attendance={t === 'ALL' ? attendance : tabs[t]}
                   services={services}
                 />

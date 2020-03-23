@@ -72,19 +72,26 @@ class AdHocReportForm extends Component {
   weekNumberDropdown = () => {
     const {reportingPeriods} = this.state
     const options = reportingPeriods
-      .reduce((accum, rp) => {
-        if (accum.indexOf(rp.weekNumber) === -1) {
-          accum.push(rp.weekNumber)
-        }
-        return accum
-      }, [])
+      .reduce(
+        (accum, rp) => {
+          if (accum.indexOf(rp.weekNumber) === -1) {
+            accum.push(rp.weekNumber)
+          }
+          return accum
+        },
+        [0]
+      )
       .sort()
+    const defLabel =
+      options.length === 1 ? ['No Records Available'] : ['Select Week Number']
+    let labels = defLabel.concat(options.slice(1))
     return (
       <GenericDropdown
-        defaultProperty={options[0]}
+        defaultProperty={0}
         handleChange={this.handleChange}
         property="selectedWeekNumber"
         options={options}
+        labels={labels}
       />
     )
   }
@@ -166,7 +173,10 @@ class AdHocReportForm extends Component {
           <Row>
             <Button
               type="submit"
-              disabled={this.state.selectedReportingPeriod === 0}
+              disabled={
+                this.state.selectedReportingPeriod == 0 &&
+                this.state.selectedWeekNumber == 0
+              }
             >
               Create Ad Hoc Report
             </Button>

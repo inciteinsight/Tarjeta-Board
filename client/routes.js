@@ -53,7 +53,7 @@ class Routes extends Component {
               component={AdHocReportForm}
             />
             <Route
-              path="/reports/adhoc/period/:reportingId"
+              path="/reports/adhoc/:mode/:selectionId"
               component={AdHocReport}
             />
             {/* <Route path="/reports/adhoc/local/:localId/week/:weekNumber" component={AdHocReport} /> */}

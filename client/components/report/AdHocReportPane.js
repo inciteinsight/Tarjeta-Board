@@ -13,7 +13,7 @@ class AdHocReportPane extends Component {
     }
   }
 
-  isCurrentService = () => this.props.reportingId === 'current'
+  isCurrentService = () => this.props.selectionId === 'current'
 
   renderCurrentServiceAttendance = member => {
     const service = member.services[0]
