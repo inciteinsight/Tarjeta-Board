@@ -27,8 +27,6 @@ class AdHocReportPane extends Component {
     )
   }
 
-  // Add Modal Component to edit Attendances
-
   renderPastAttendances = member => {
     const {services, handleSelectAttendance} = this.props
     return (

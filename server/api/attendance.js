@@ -1,10 +1,5 @@
 const router = require('express').Router()
-const {
-  Attendance
-  //   ReportingPeriod,
-  //   WorshipService,
-  //   Local
-} = require('../db/models')
+const {Attendance} = require('../db/models')
 
 router.get('/:id', async (req, res, next) => {
   try {

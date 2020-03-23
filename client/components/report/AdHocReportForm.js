@@ -31,7 +31,7 @@ class AdHocReportForm extends Component {
     })
   }
 
-  handleSubmit = async e => {
+  handleSubmit = e => {
     e.preventDefault()
     const {mode} = this.props.match.params
     const {
