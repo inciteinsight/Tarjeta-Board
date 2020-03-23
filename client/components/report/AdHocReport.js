@@ -129,10 +129,11 @@ class AdHocReport extends Component {
   loadCurrentData = async () => {
     const {members, worshipService} = this.props.attendance
     const formattedMembers = await members.map((m, i) => {
-      m.memberId = m.id
-      m.id = `TEMP${i}`
-      m.worshipserviceId = worshipService.id
-      return m
+      let newMember = JSON.parse(JSON.stringify(m))
+      newMember.memberId = m.id
+      newMember.id = `TEMP${i}`
+      newMember.worshipserviceId = worshipService.id
+      return newMember
     })
     worshipService.attendances = formattedMembers
     console.info(worshipService)
