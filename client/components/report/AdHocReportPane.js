@@ -1,5 +1,7 @@
 import React, {Component, Fragment} from 'react'
 import {connect} from 'react-redux'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faCaretDown} from '@fortawesome/free-solid-svg-icons'
 import {CFO} from '../../utils/board'
 
 class AdHocReportPane extends Component {
@@ -84,7 +86,7 @@ class AdHocReportPane extends Component {
                 className="detail-head"
                 onClick={() => this.setState({showDetails: false})}
               >
-                Local
+                <FontAwesomeIcon icon={faCaretDown} /> Local
               </th>
               <th
                 className="detail-head"
@@ -116,7 +118,7 @@ class AdHocReportPane extends Component {
               className="detail-head"
               onClick={() => this.setState({showDetails: true})}
             >
-              Details
+              <FontAwesomeIcon icon={faCaretDown} /> Details
             </th>
           )}
           {this.isCurrentService() ? (
