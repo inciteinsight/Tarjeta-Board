@@ -1,13 +1,9 @@
-import React, {Component, Fragment} from 'react'
+import React, {Component} from 'react'
 import {Modal, Button, Container, Form} from 'react-bootstrap'
-import ConfirmWithPassword from '../misc/ConfirmWithPassword'
-import {CFO} from '../../utils/board'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import alertify from 'alertifyjs'
 import {GenericDropdown} from '../misc/dropdowns'
-
-// Trim Down
 
 class EditAttendanceModal extends Component {
   constructor(props) {
@@ -26,7 +22,12 @@ class EditAttendanceModal extends Component {
   }
 
   componentDidMount = () => {
+    this.reset()
+  }
+
+  reset = async () => {
     const {selectedAttendance} = this.props
+    await this.setState({isLoading: true})
     const {
       id,
       memberId,
@@ -36,7 +37,7 @@ class EditAttendanceModal extends Component {
       code,
       notes
     } = selectedAttendance
-    this.setState({
+    await this.setState({
       id,
       memberId,
       firstName,
@@ -45,6 +46,7 @@ class EditAttendanceModal extends Component {
       code,
       notes
     })
+    this.setState({isLoading: false})
   }
 
   handleChange = e => {
@@ -77,7 +79,20 @@ class EditAttendanceModal extends Component {
 
   render() {
     const {onHide, worshipService} = this.props
-    const {memberId, firstName, lastName, hasAttended, code, notes} = this.state
+    const {
+      isLoading,
+      memberId,
+      firstName,
+      lastName,
+      hasAttended,
+      code,
+      notes
+    } = this.state
+
+    if (isLoading) {
+      return <div />
+    }
+
     return (
       <Modal
         {...this.props}
@@ -202,23 +217,6 @@ class EditAttendanceModal extends Component {
                 required
               />
             </div>
-            {/* <div className="row form-group form-check form-check-inline w-100">
-              <label
-                className="col-4 font-weight-bold text-right"
-                htmlFor="code"
-              >
-                Code
-              </label>
-              <input
-                value={code}
-                type="text"
-                className="form-control col-8"
-                id="code"
-                name="code"
-                onChange={this.handleChange}
-                required
-              />
-            </div> */}
           </Container>
         </Modal.Body>
         <Modal.Footer>
