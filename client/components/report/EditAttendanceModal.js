@@ -53,24 +53,31 @@ class EditAttendanceModal extends Component {
     })
   }
 
-  handleSave = e => {
+  handleSave = async e => {
     e.preventDefault()
-    console.log('Saving')
-    console.info(this.state)
-  }
-
-  render() {
-    // const {isLoading, id, localId, lastName, firstName, isDeleting} = this.state
-    const {onHide, worshipService, locals} = this.props
-    const {
+    const {id, hasAttended, code, notes} = this.state
+    const {onHide} = this.props
+    const dataToSend = {
       id,
-      memberId,
-      firstName,
-      lastName,
       hasAttended,
       code,
       notes
-    } = this.state
+    }
+    const res = await axios.put('/api/attendance', dataToSend)
+    const {status} = res
+    if (status === 200) {
+      onHide()
+      setTimeout(() => {
+        history.go(document.URL.slice(document.URL.indexOf('reports') - 1))
+      }, 100)
+    } else {
+      alertify.error(`Error. Could not save attendance`)
+    }
+  }
+
+  render() {
+    const {onHide, worshipService} = this.props
+    const {memberId, firstName, lastName, hasAttended, code, notes} = this.state
     return (
       <Modal
         {...this.props}
@@ -100,7 +107,6 @@ class EditAttendanceModal extends Component {
                 className="form-control col-8"
                 id="memberId"
                 name="memberId"
-                // onChange={this.handleChange}
                 required
                 disabled
               />
@@ -126,7 +132,6 @@ class EditAttendanceModal extends Component {
                 className="form-control col-8"
                 id="worshipService"
                 name="worshipService"
-                // onChange={this.handleChange}
                 required
                 disabled
               />
@@ -190,7 +195,6 @@ class EditAttendanceModal extends Component {
               </label>
               <textarea
                 value={notes}
-                // type="text"
                 className="form-control col-8"
                 id="notes"
                 name="notes"
@@ -198,7 +202,7 @@ class EditAttendanceModal extends Component {
                 required
               />
             </div>
-            <div className="row form-group form-check form-check-inline w-100">
+            {/* <div className="row form-group form-check form-check-inline w-100">
               <label
                 className="col-4 font-weight-bold text-right"
                 htmlFor="code"
@@ -214,7 +218,7 @@ class EditAttendanceModal extends Component {
                 onChange={this.handleChange}
                 required
               />
-            </div>
+            </div> */}
           </Container>
         </Modal.Body>
         <Modal.Footer>

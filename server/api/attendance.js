@@ -18,7 +18,21 @@ router.get('/:id', async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   try {
-    const {id} = req.params
+    const {id, hasAttended, code, notes} = req.body
+    const attendance = await Attendance.findByPk(id)
+    attendance.hasAttended = hasAttended
+    attendance.code = code
+    attendance.notes = notes
+    await attendance.save()
+    res.status(200).send(attendance)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.put('/details', async (req, res, next) => {
+  try {
+    const {id} = req.body
     const attendance = await Attendance.findByPk(id)
     const updatedAttendance = attendance.update(req.body)
     res.status(200).send(updatedAttendance)
