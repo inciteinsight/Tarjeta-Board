@@ -25,23 +25,26 @@ class AdHocReport extends Component {
     if (reportingId !== 'current') {
       const {data} = await axios.get(`/api/ws/reporting/${reportingId}/ext`)
       await this.setState({
-        attendance: data.reduce((a, s) => {
-          a = a.concat(s.attendances)
-          return a
-        }, []),
+        attendance: this.consolidateAttendanceToMembers(data),
         services: data
       })
       console.info(this.consolidateAttendanceToMembers(data))
+    } else {
+      const {members, worshipService} = this.props.attendance
+      this.setState({
+        attendance: members,
+        services: [worshipService]
+      })
     }
   }
 
   consolidateAttendanceToMembers = attendance => {
-    let attendanceFromAllServices = attendance.reduce((accum, s) => {
+    const attendanceFromAllServices = attendance.reduce((accum, s) => {
       accum = accum.concat(s.attendances)
       return accum
     }, [])
 
-    let consolidatedAttendance = attendanceFromAllServices.reduce(
+    const consolidatedAttendance = attendanceFromAllServices.reduce(
       (accum, a) => {
         const {
           id,
@@ -60,7 +63,7 @@ class AdHocReport extends Component {
         } = a
         if (!accum[memberId]) {
           accum[memberId] = {
-            memberId: [memberId],
+            memberId: memberId,
             lastName: [lastName],
             firstName: [firstName],
             localId: [localId],
@@ -79,8 +82,9 @@ class AdHocReport extends Component {
             ]
           }
         } else {
-          let attendanceKeys = Object.keys(accum[memberId])
-          attendanceKeys.pop()
+          const attendanceKeys = Object.keys(accum[memberId])
+          attendanceKeys.shift() // remove memberId
+          attendanceKeys.pop() // remove services
           attendanceKeys.forEach(ak => {
             if (accum[memberId][ak].indexOf(a[ak]) === -1) {
               accum[memberId][ak].push(a[ak])
@@ -147,6 +151,7 @@ class AdHocReport extends Component {
 
 const mapState = state => ({
   appInitialized: state.loading.appInitialized,
+  attendance: state.attendance,
   members: state.attendance.members
 })
 

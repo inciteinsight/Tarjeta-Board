@@ -13,11 +13,17 @@ class AdHocReportPane extends Component {
 
   isCurrentService = () => this.props.reportingId === 'current'
 
-  renderCurrentServiceAttendance = member => (
-    <td className={`${member.hasAttended ? 'table-success' : 'table-danger'}`}>
-      {member.hasAttended ? 'YES' : 'NO'}
-    </td>
-  )
+  renderCurrentServiceAttendance = member => {
+    const service = member.services[0]
+
+    return (
+      <td
+        className={`${service.hasAttended ? 'table-success' : 'table-danger'}`}
+      >
+        {service.hasAttended ? 'YES' : 'NO'}
+      </td>
+    )
+  }
 
   // Add Modal Component to edit Attendances
 
@@ -26,8 +32,8 @@ class AdHocReportPane extends Component {
     return (
       <Fragment>
         {services.map(s => {
-          const memberAttendance = s.attendances.find(
-            a => a.memberId === member.id
+          const memberAttendance = member.services.find(
+            a => a.worshipserviceId === s.id
           )
           return (
             <td
@@ -95,7 +101,8 @@ class AdHocReportPane extends Component {
 
   render() {
     const {showDetails} = this.state
-    const {members, locals, services} = this.props
+    const {attendance, members, locals, services} = this.props
+    const attendanceKeys = Object.keys(attendance)
 
     return !this.props.appInitialized ? (
       <div />
@@ -103,27 +110,35 @@ class AdHocReportPane extends Component {
       <table className="blueTable">
         {this.renderHeading()}
         <tbody>
-          {members.map(m => (
-            <tr key={m.id}>
-              <td>{m.id}</td>
-              <td>{m.lastName}</td>
-              <td>{m.firstName}</td>
-              {showDetails ? (
-                <Fragment>
-                  <td>{locals.find(l => l.id === m.localId).name}</td>
-                  <td>{m.areaGroup}</td>
-                  <td>{CFO[m.cfo]}</td>
-                  <td>{m.officer}</td>
-                  <td>{m.gender}</td>
-                </Fragment>
-              ) : (
-                <td className="table-secondary" />
-              )}
-              {this.isCurrentService()
-                ? this.renderCurrentServiceAttendance(m)
-                : this.renderPastAttendances(m)}
-            </tr>
-          ))}
+          {attendanceKeys.map(ak => {
+            const member = attendance[ak]
+            return (
+              <tr key={member.memberId}>
+                <td>{member.memberId}</td>
+                <td>{member.lastName.join(', ')}</td>
+                <td>{member.firstName.join(', ')}</td>
+                {showDetails ? (
+                  <Fragment>
+                    <td>
+                      {locals
+                        .filter(l => member.localId.includes(l.id))
+                        .map(l => l.name)
+                        .join(', ')}
+                    </td>
+                    <td>{member.areaGroup.join(', ')}</td>
+                    <td>{CFO[member.cfo].join(', ')}</td>
+                    <td>{member.officer.join(', ')}</td>
+                    <td>{member.gender.join(', ')}</td>
+                  </Fragment>
+                ) : (
+                  <td className="table-secondary" />
+                )}
+                {this.isCurrentService()
+                  ? this.renderCurrentServiceAttendance(member)
+                  : this.renderPastAttendances(member)}
+              </tr>
+            )
+          })}
         </tbody>
       </table>
     )
