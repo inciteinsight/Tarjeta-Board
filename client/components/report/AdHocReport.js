@@ -19,7 +19,14 @@ class AdHocReport extends Component {
   componentDidMount = async () => {
     const {selectionId, mode} = this.props.match.params
     if (mode === 'week') {
-      console.log('Accessing Week')
+      const [localId, weekNumber] = selectionId.split('@')
+      const {data} = await axios.get(
+        `/api/ws/local/${localId}/ext/week/${weekNumber}`
+      )
+      await this.setState({
+        attendance: this.consolidateAttendanceToMembers(data),
+        services: data
+      })
     } else if (mode === 'period') {
       if (selectionId !== 'current') {
         const {data} = await axios.get(`/api/ws/reporting/${selectionId}/ext`)

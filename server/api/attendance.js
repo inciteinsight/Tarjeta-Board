@@ -1,9 +1,9 @@
 const router = require('express').Router()
 const {
-  Attendance,
-  ReportingPeriod,
-  WorshipService,
-  Local
+  Attendance
+  //   ReportingPeriod,
+  //   WorshipService,
+  //   Local
 } = require('../db/models')
 
 router.put('/', async (req, res, next) => {

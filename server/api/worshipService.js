@@ -113,4 +113,62 @@ router.get('/reporting/:reportingId/ext', async (req, res, next) => {
   }
 })
 
+router.get('/local/:localId/ext/week/:weekNumber', async (req, res, next) => {
+  try {
+    const {localId, weekNumber} = req.params
+
+    const parentLocal = await Local.findOne({
+      where: {
+        id: localId
+      },
+      include: [
+        {
+          model: Local,
+          as: 'Extensions',
+          include: [
+            {
+              model: ReportingPeriod,
+              where: {
+                weekNumber
+              },
+              include: [
+                {
+                  model: WorshipService,
+                  include: [Attendance]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          model: ReportingPeriod,
+          where: {
+            weekNumber
+          },
+          include: [
+            {
+              model: WorshipService,
+              include: [Attendance]
+            }
+          ]
+        }
+      ]
+    })
+
+    let consolidatedReporting = parentLocal.reportings
+    parentLocal.Extensions.forEach(e => {
+      consolidatedReporting = consolidatedReporting.concat(e.reportings)
+    })
+
+    const services = consolidatedReporting.reduce((accum, r) => {
+      accum = accum.concat(r.worshipservices)
+      return accum
+    }, [])
+
+    res.status(200).send(services)
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = router

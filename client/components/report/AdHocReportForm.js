@@ -31,7 +31,7 @@ class AdHocReportForm extends Component {
     })
   }
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault()
     const {mode} = this.props.match.params
     const {
@@ -42,9 +42,8 @@ class AdHocReportForm extends Component {
     if (mode === 'period') {
       history.push(`/reports/adhoc/period/${selectedReportingPeriod}`)
     } else if (mode === 'week') {
-      history.push(
-        `/reports/adhoc/local/${selectedLocal}/week/${selectedWeekNumber}`
-      )
+      console.log(selectedWeekNumber)
+      history.push(`/reports/adhoc/week/${selectedLocal}@${selectedWeekNumber}`)
     }
   }
 
