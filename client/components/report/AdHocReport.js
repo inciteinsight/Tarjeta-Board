@@ -24,15 +24,81 @@ class AdHocReport extends Component {
     const {reportingId} = this.props.match.params
     if (reportingId !== 'current') {
       const {data} = await axios.get(`/api/ws/reporting/${reportingId}/ext`)
-      this.setState({
+      await this.setState({
         attendance: data.reduce((a, s) => {
           a = a.concat(s.attendances)
           return a
         }, []),
         services: data
       })
+      console.info(this.consolidateAttendanceToMembers(data))
     }
-    console.log(this.state.attendance)
+  }
+
+  consolidateAttendanceToMembers = attendance => {
+    let attendanceFromAllServices = attendance.reduce((accum, s) => {
+      accum = accum.concat(s.attendances)
+      return accum
+    }, [])
+
+    let consolidatedAttendance = attendanceFromAllServices.reduce(
+      (accum, a) => {
+        const {
+          id,
+          hasAttended,
+          localId,
+          areaGroup,
+          lastName,
+          firstName,
+          cfo,
+          officer,
+          gender,
+          code,
+          notes,
+          memberId,
+          worshipserviceId
+        } = a
+        if (!accum[memberId]) {
+          accum[memberId] = {
+            memberId: [memberId],
+            lastName: [lastName],
+            firstName: [firstName],
+            localId: [localId],
+            areaGroup: [areaGroup],
+            cfo: [cfo],
+            officer: [officer],
+            gender: [gender],
+            services: [
+              {
+                id,
+                worshipserviceId,
+                hasAttended,
+                code,
+                notes
+              }
+            ]
+          }
+        } else {
+          let attendanceKeys = Object.keys(accum[memberId])
+          attendanceKeys.pop()
+          attendanceKeys.forEach(ak => {
+            if (accum[memberId][ak].indexOf(a[ak]) === -1) {
+              accum[memberId][ak].push(a[ak])
+            }
+          })
+          accum[memberId].services.push({
+            id,
+            worshipserviceId,
+            hasAttended,
+            code,
+            notes
+          })
+        }
+        return accum
+      },
+      {}
+    )
+    return consolidatedAttendance
   }
 
   tabulizeAreaGroupMembers = () => {
