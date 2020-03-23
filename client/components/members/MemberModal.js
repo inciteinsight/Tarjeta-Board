@@ -170,7 +170,6 @@ class MemberModal extends Component {
           <Container
             as={Form}
             className="d-flex flex-column align-items-center"
-            onSubmit={this.handleSubmit}
           >
             <div className="row form-group form-check form-check-inline w-100">
               <label className="col-4 font-weight-bold text-right" htmlFor="id">

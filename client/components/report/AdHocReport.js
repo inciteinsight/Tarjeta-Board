@@ -1,15 +1,19 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {Tab} from 'react-bootstrap'
 import AdHocReportPane from './AdHocReportPane'
 import {connect} from 'react-redux'
 import TabNav from '../nav/TabNav'
 import axios from 'axios'
+import EditAttendanceModal from './EditAttendanceModal'
 
 class AdHocReport extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      showEditAttendance: false,
+      selectedAttendance: {},
+      selectedService: {},
       attendance: {},
       services: [],
       districtRegion: 'NYUS' /* For district functionality */
@@ -170,8 +174,32 @@ class AdHocReport extends Component {
     }, {})
   }
 
+  handleSelectAttendance = async (attendanceId, selectedService) => {
+    const {data} = await axios.get(`/api/attendance/${attendanceId}`)
+    this.setState({
+      selectedAttendance: data,
+      selectedService
+    })
+    this.setState({
+      showEditAttendance: true
+    })
+  }
+
+  confirmClose = () =>
+    this.setState({
+      showEditAttendance: false,
+      selectedAttendance: {}
+    })
+
   render() {
-    let {attendance, services, districtRegion} = this.state
+    let {
+      attendance,
+      services,
+      districtRegion,
+      selectedAttendance,
+      selectedService,
+      showEditAttendance
+    } = this.state
     const {selectionId} = this.props.match.params
     const {appInitialized} = this.props
 
@@ -185,25 +213,38 @@ class AdHocReport extends Component {
     return !appInitialized ? (
       <div />
     ) : (
-      <Tab.Container defaultActiveKey={tabNames[0]}>
-        <TabNav tabs={tabNames} />
-        <Tab.Content>
-          {tabNames.map(t => {
-            const [localId, areaGroup] = t.split(' ')
-            return (
-              <Tab.Pane key={t} eventKey={t} title={t}>
-                <AdHocReportPane
-                  areaGroup={areaGroup}
-                  localId={`${localId}${districtRegion}`}
-                  selectionId={selectionId}
-                  attendance={t === 'ALL' ? attendance : tabs[t]}
-                  services={services}
-                />
-              </Tab.Pane>
-            )
-          })}
-        </Tab.Content>
-      </Tab.Container>
+      <Fragment>
+        <Tab.Container defaultActiveKey={tabNames[0]}>
+          <TabNav tabs={tabNames} />
+          <Tab.Content>
+            {tabNames.map(t => {
+              const [localId, areaGroup] = t.split(' ')
+              return (
+                <Tab.Pane key={t} eventKey={t} title={t}>
+                  <AdHocReportPane
+                    areaGroup={areaGroup}
+                    localId={`${localId}${districtRegion}`}
+                    selectionId={selectionId}
+                    attendance={t === 'ALL' ? attendance : tabs[t]}
+                    services={services}
+                    handleSelectAttendance={this.handleSelectAttendance}
+                  />
+                </Tab.Pane>
+              )
+            })}
+          </Tab.Content>
+        </Tab.Container>
+        {showEditAttendance ? (
+          <EditAttendanceModal
+            show={showEditAttendance}
+            onHide={this.confirmClose}
+            selectedAttendance={selectedAttendance}
+            worshipService={selectedService}
+          />
+        ) : (
+          <div />
+        )}
+      </Fragment>
     )
   }
 }

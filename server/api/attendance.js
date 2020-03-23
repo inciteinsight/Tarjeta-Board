@@ -6,6 +6,16 @@ const {
   //   Local
 } = require('../db/models')
 
+router.get('/:id', async (req, res, next) => {
+  try {
+    const {id} = req.params
+    const attendance = await Attendance.findByPk(id)
+    res.status(200).send(attendance)
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.put('/', async (req, res, next) => {
   try {
     const {id} = req.params
@@ -42,7 +52,7 @@ router.post('/save/:user', async (req, res, next) => {
       })
       if (hasAttended) {
         attendance[0].hasAttended = hasAttended
-        attendance[0].notes = `Confirmed by ${user} on ${new Date(
+        attendance[0].notes = `${user} on ${new Date(
           Date.now()
         ).toLocaleString()}`
       }

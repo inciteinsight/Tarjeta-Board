@@ -5,6 +5,7 @@ import {CFO} from '../../utils/board'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import alertify from 'alertifyjs'
+import {GenericDropdown} from '../misc/dropdowns'
 
 // Trim Down
 
@@ -14,36 +15,36 @@ class EditAttendanceModal extends Component {
 
     this.state = {
       isLoading: true,
-      isDeleting: false,
-      id: '1914',
-      areaGroup: '',
-      lastName: '',
-      firstName: '',
-      cfo: 'B',
-      officer: 'N',
-      gender: 'M',
-      isActive: true,
-      localId: 'MANNYUS'
+      id: 0,
+      memberId: 0,
+      firstName: 'Hello',
+      lastName: 'Po',
+      hasAttended: false,
+      code: null,
+      notes: null
     }
   }
 
-  // Before this, create edit attendance route
-
-  //  Two CRUD Modes - Attendance Creation and Edit
-  //  Simple Mode and Expanded
-
-  componentDidMount = async () => {
-    await this.reset()
-    this.handleIdByGender()
-  }
-
-  // Remove
-  handleIdByGender = () => {
-    const {latestIndexByGender, mode} = this.props
-    if (mode === 'create') {
-      const {gender} = this.state
-      this.setState({id: `${gender}${Number(latestIndexByGender[gender]) + 1}`})
-    }
+  componentDidMount = () => {
+    const {selectedAttendance} = this.props
+    const {
+      id,
+      memberId,
+      firstName,
+      lastName,
+      hasAttended,
+      code,
+      notes
+    } = selectedAttendance
+    this.setState({
+      id,
+      memberId,
+      firstName,
+      lastName,
+      hasAttended,
+      code,
+      notes
+    })
   }
 
   handleChange = e => {
@@ -52,215 +53,24 @@ class EditAttendanceModal extends Component {
     })
   }
 
-  // Change
-  handleSave = async e => {
+  handleSave = e => {
     e.preventDefault()
-    const {
-      id,
-      areaGroup,
-      lastName,
-      firstName,
-      cfo,
-      officer,
-      gender,
-      isActive,
-      localId
-    } = this.state
-    const {mode, onHide} = this.props
-
-    const dataToSend = {
-      id,
-      areaGroup,
-      lastName,
-      firstName,
-      cfo,
-      officer,
-      gender,
-      isActive,
-      localId
-    }
-
-    let res
-    if (mode === 'update') {
-      res = await axios.put('/api/member', dataToSend)
-    } else if (mode === 'create') {
-      res = await axios.post('/api/member', dataToSend)
-    }
-
-    const {data, status} = res
-    if (status === 409) {
-      alertify.error(`Error. Id exists as ${data.firstName} ${data.lastName}`)
-    } else {
-      onHide()
-      setTimeout(() => {
-        history.go('/control/members')
-      }, 500)
-    }
+    console.log('Saving')
+    console.info(this.state)
   }
-
-  // Change
-  handleDelete = () => {
-    const {id} = this.state
-    const {onHide} = this.props
-    axios.delete(`/api/member/${id}`)
-    onHide()
-    setTimeout(() => {
-      history.go('/control/members')
-    }, 100)
-  }
-
-  localDropdown = () => {
-    const {locals, member} = this.props
-    const localKeys = Object.keys(locals)
-    return (
-      <select
-        className="col-8 form-control"
-        required
-        name="localId"
-        onChange={this.handleChange}
-      >
-        {localKeys.map(k => {
-          const selectedLocal = locals[k]
-          return (
-            <option key={k} selected={k === member.localId} value={k}>
-              {selectedLocal.name}
-            </option>
-          )
-        })}
-      </select>
-    )
-  }
-
-  areaGroupsDropdown = () => {
-    const {localId} = this.state
-    const {member} = this.props
-    return (
-      <select
-        className="col-8 form-control"
-        required
-        name="areaGroup"
-        onChange={this.handleChange}
-      >
-        {this.props.locals[localId].areaGroups.map(ag => (
-          <option key={ag} selected={ag === member.areaGroup} value={ag}>
-            {ag}
-          </option>
-        ))}
-      </select>
-    )
-  }
-
-  cfoDropdown = () => {
-    const {member} = this.props
-    const cfoKeys = Object.keys(CFO)
-    return (
-      <select
-        className="col-8 form-control"
-        required
-        name="cfo"
-        onChange={this.handleChange}
-      >
-        {cfoKeys.map(cfo => (
-          <option key={cfo} selected={cfo === member.cfo} value={cfo}>
-            {CFO[cfo]}
-          </option>
-        ))}
-      </select>
-    )
-  }
-
-  genderDropdown = () => {
-    const {member} = this.props
-    return (
-      <select
-        className="col-8 form-control"
-        required
-        name="gender"
-        onChange={async e => {
-          await this.handleChange(e)
-          this.handleIdByGender()
-        }}
-      >
-        <option key="M" selected={member.gender === 'M'} value="M">
-          Male
-        </option>
-        <option key="F" selected={member.gender === 'F'} value="F">
-          Female
-        </option>
-      </select>
-    )
-  }
-
-  genericDropdown = (property, options) => {
-    const {member} = this.props
-    return (
-      <select
-        className="col-8 form-control"
-        required
-        name={property}
-        onChange={this.handleChange}
-      >
-        {options.map(o => (
-          <option key={o} selected={o === member[property]} value={o}>
-            {String(o)}
-          </option>
-        ))}
-      </select>
-    )
-  }
-
-  reset = async () => {
-    await this.setState({isLoading: true})
-    const {
-      id,
-      areaGroup,
-      lastName,
-      firstName,
-      cfo,
-      officer,
-      gender,
-      isActive,
-      localId
-    } = this.props.member
-    if (this.props.mode === 'update') {
-      await this.setState({
-        id,
-        areaGroup,
-        lastName,
-        firstName,
-        cfo,
-        officer,
-        gender,
-        isActive,
-        localId
-      })
-    }
-    this.setState({isLoading: false})
-  }
-
-  confirmClose = () => this.setState({isDeleting: false})
 
   render() {
-    const {isLoading, id, lastName, firstName, isDeleting} = this.state
-    const {onHide, mode, worshipService} = this.props
-
-    if (isLoading) return <div />
-
-    if (isDeleting) {
-      return (
-        <ConfirmWithPassword
-          title="Deleting Member"
-          message={`Are you sure you want to delete ${firstName} ${lastName}? All attendance records will be wiped out. This cannot be reversed.
-          Alternatively, you can untrack a member changing the Local Registration dropdown - Past attendances will be preserved.`}
-          secPass={true}
-          show={isDeleting}
-          onHide={this.confirmClose}
-          buttonMessage="Confirm Delete"
-          trigger={this.handleDelete}
-        />
-      )
-    }
-
+    // const {isLoading, id, localId, lastName, firstName, isDeleting} = this.state
+    const {onHide, worshipService, locals} = this.props
+    const {
+      id,
+      memberId,
+      firstName,
+      lastName,
+      hasAttended,
+      code,
+      notes
+    } = this.state
     return (
       <Modal
         {...this.props}
@@ -268,49 +78,64 @@ class EditAttendanceModal extends Component {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">{`${mode.toUpperCase()} MEMBER`}</Modal.Title>
+          <Modal.Title id="contained-modal-title-vcenter">
+            EDIT ATTENDANCE
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Container
             as={Form}
             className="d-flex flex-column align-items-center"
-            onSubmit={this.handleSubmit}
           >
             <div className="row form-group form-check form-check-inline w-100">
-              <label className="col-4 font-weight-bold text-right" htmlFor="id">
+              <label
+                className="col-4 font-weight-bold text-right"
+                htmlFor="memberId"
+              >
                 Member ID
               </label>
               <input
-                value={id}
+                value={memberId}
                 type="text"
                 className="form-control col-8"
-                id="id"
-                name="id"
-                onChange={this.handleChange}
+                id="memberId"
+                name="memberId"
+                // onChange={this.handleChange}
                 required
-                disabled={!(mode === 'create')}
+                disabled
               />
             </div>
             <div className="row form-group form-check form-check-inline w-100">
               <label
                 className="col-4 font-weight-bold text-right"
-                htmlFor="areaGroup"
+                htmlFor="worshipService"
               >
-                Local
+                Worship Service
               </label>
-              {this.localDropdown()}
+              <input
+                value={new Date(
+                  new Date(worshipService.dateTime).getTime() +
+                    new Date(Date.now()).getTimezoneOffset() * 60000
+                ).toLocaleTimeString('en-US', {
+                  weekday: 'short',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+                type="text"
+                className="form-control col-8"
+                id="worshipService"
+                name="worshipService"
+                // onChange={this.handleChange}
+                required
+                disabled
+              />
             </div>
             <div className="row form-group form-check form-check-inline w-100">
               <label
                 className="col-4 font-weight-bold text-right"
-                htmlFor="areaGroup"
+                htmlFor="firstName"
               >
-                Area Group
-              </label>
-              {this.areaGroupsDropdown()}
-            </div>
-            <div className="row form-group form-check form-check-inline w-100">
-              <label className="col-4 font-weight-bold text-right" htmlFor="id">
                 First Name
               </label>
               <input
@@ -321,10 +146,14 @@ class EditAttendanceModal extends Component {
                 name="firstName"
                 onChange={this.handleChange}
                 required
+                disabled
               />
             </div>
             <div className="row form-group form-check form-check-inline w-100">
-              <label className="col-4 font-weight-bold text-right" htmlFor="id">
+              <label
+                className="col-4 font-weight-bold text-right"
+                htmlFor="lastName"
+              >
                 Last Name
               </label>
               <input
@@ -335,43 +164,56 @@ class EditAttendanceModal extends Component {
                 name="lastName"
                 onChange={this.handleChange}
                 required
+                disabled
+              />
+            </div>
+            <div className="row form-group form-check form-check-inline w-100">
+              <label
+                className="col-4 font-weight-bold text-right text-success"
+                htmlFor="hasAttended"
+              >
+                Has Attended
+              </label>
+              <GenericDropdown
+                defaultProperty={hasAttended}
+                handleChange={this.handleChange}
+                property="hasAttended"
+                options={[true, false]}
               />
             </div>
             <div className="row form-group form-check form-check-inline w-100">
               <label
                 className="col-4 font-weight-bold text-right"
-                htmlFor="cfo"
+                htmlFor="notes"
               >
-                CFO
+                Notes
               </label>
-              {this.cfoDropdown()}
+              <textarea
+                value={notes}
+                // type="text"
+                className="form-control col-8"
+                id="notes"
+                name="notes"
+                onChange={this.handleChange}
+                required
+              />
             </div>
             <div className="row form-group form-check form-check-inline w-100">
               <label
                 className="col-4 font-weight-bold text-right"
-                htmlFor="officer"
+                htmlFor="code"
               >
-                Officer
+                Code
               </label>
-              {this.genericDropdown('officer', ['Y', 'N'])}
-            </div>
-            <div className="row form-group form-check form-check-inline w-100">
-              <label
-                className="col-4 font-weight-bold text-right"
-                htmlFor="gender"
-              >
-                Gender
-              </label>
-              {this.genderDropdown()}
-            </div>
-            <div className="row form-group form-check form-check-inline w-100">
-              <label
-                className="col-4 font-weight-bold text-right"
-                htmlFor="isActive"
-              >
-                Registered in Local
-              </label>
-              {this.genericDropdown('isActive', [true, false])}
+              <input
+                value={code}
+                type="text"
+                className="form-control col-8"
+                id="code"
+                name="code"
+                onChange={this.handleChange}
+                required
+              />
             </div>
           </Container>
         </Modal.Body>
@@ -379,22 +221,9 @@ class EditAttendanceModal extends Component {
           <Button variant="success" type="submit" onClick={this.handleSave}>
             Save
           </Button>
-          {mode === 'update' ? (
-            <Fragment>
-              <Button variant="warning" onClick={this.reset}>
-                Reset Form
-              </Button>
-              <Button
-                variant="danger"
-                disabled={worshipService.id > 0}
-                onClick={() => this.setState({isDeleting: true})}
-              >
-                Permanent Delete
-              </Button>
-            </Fragment>
-          ) : (
-            <div />
-          )}
+          <Button variant="warning" onClick={this.reset}>
+            Reset Form
+          </Button>
           <Button onClick={onHide}>Close</Button>
         </Modal.Footer>
       </Modal>
@@ -403,7 +232,7 @@ class EditAttendanceModal extends Component {
 }
 
 const mapState = state => ({
-  worshipService: state.attendance.worshipService
+  locals: state.local.locals
 })
 
 export default connect(mapState)(EditAttendanceModal)

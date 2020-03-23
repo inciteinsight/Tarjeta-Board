@@ -20,9 +20,9 @@ class AdHocReportPane extends Component {
 
     return (
       <td
-        className={`${service.hasAttended ? 'table-success' : 'table-danger'}`}
+        className={`${!service.hasAttended ? 'table-danger' : 'table-success'}`}
       >
-        {service.hasAttended ? 'YES' : 'NO'}
+        {service.hasAttended ? service.notes || 'YES' : 'NO'}
       </td>
     )
   }
@@ -30,7 +30,7 @@ class AdHocReportPane extends Component {
   // Add Modal Component to edit Attendances
 
   renderPastAttendances = member => {
-    const {services} = this.props
+    const {services, handleSelectAttendance} = this.props
     return (
       <Fragment>
         {services.map(s => {
@@ -39,6 +39,7 @@ class AdHocReportPane extends Component {
           )
           return (
             <td
+              onClick={() => handleSelectAttendance(memberAttendance.id, s)}
               key={s.dateTime}
               className={`${
                 !memberAttendance
@@ -50,7 +51,9 @@ class AdHocReportPane extends Component {
             >
               {!memberAttendance
                 ? 'N/A'
-                : memberAttendance.hasAttended ? 'YES' : 'NO'}
+                : memberAttendance.hasAttended
+                  ? memberAttendance.notes || 'YES'
+                  : 'NO'}
             </td>
           )
         })}
