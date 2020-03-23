@@ -29,12 +29,6 @@ class AdHocReport extends Component {
         services: data
       })
       console.info(this.consolidateAttendanceToMembers(data))
-    } else {
-      const {members, worshipService} = this.props.attendance
-      this.setState({
-        attendance: members,
-        services: [worshipService]
-      })
     }
   }
 
@@ -141,6 +135,21 @@ class AdHocReport extends Component {
     }, {})
   }
 
+  loadCurrentData = async () => {
+    const {members, worshipService} = this.props.attendance
+    const formattedMembers = await members.map((m, i) => {
+      m.memberId = m.id
+      m.id = `TEMP${i}`
+      m.worshipserviceId = worshipService.id
+      return m
+    })
+    console.info(formattedMembers)
+    this.setState({
+      attendance: this.consolidateAttendanceToMembers(formattedMembers),
+      services: [worshipService]
+    })
+  }
+
   render() {
     let {attendance, services, districtRegion} = this.state
     const {reportingId} = this.props.match.params
@@ -148,6 +157,10 @@ class AdHocReport extends Component {
 
     if (!appInitialized || attendance.length === 0) {
       return <div />
+    }
+
+    if (reportingId === 'current') {
+      this.loadCurrentData()
     }
 
     let tabs = this.tabulizeAreaGroupAttendance()
@@ -169,7 +182,6 @@ class AdHocReport extends Component {
                   reportingId={reportingId}
                   attendance={t === 'ALL' ? attendance : tabs[t]}
                   services={services}
-                  // members={t === 'ALL' ? members : tabs[t]}
                 />
               </Tab.Pane>
             )
