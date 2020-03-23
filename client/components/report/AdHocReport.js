@@ -16,10 +16,6 @@ class AdHocReport extends Component {
     }
   }
 
-  // This will be refactored to be simply attendances
-
-  // Consolidate attendances based on memberId
-
   componentDidMount = async () => {
     const {reportingId} = this.props.match.params
     if (reportingId !== 'current') {
@@ -28,7 +24,18 @@ class AdHocReport extends Component {
         attendance: this.consolidateAttendanceToMembers(data),
         services: data
       })
-      console.info(this.consolidateAttendanceToMembers(data))
+    }
+  }
+
+  componentDidUpdate = async (prevProps, prevState) => {
+    const {reportingId} = this.props.match.params
+    const {members} = this.props
+    if (
+      reportingId === 'current' &&
+      Object.keys(prevState.attendance).length === 0 &&
+      members.length > 0
+    ) {
+      this.loadCurrentData()
     }
   }
 
@@ -39,7 +46,7 @@ class AdHocReport extends Component {
     }, [])
 
     const consolidatedAttendance = attendanceFromAllServices.reduce(
-      (accum, a) => {
+      (accum, a, i) => {
         const {
           id,
           hasAttended,
@@ -119,6 +126,22 @@ class AdHocReport extends Component {
     }, {})
   }
 
+  loadCurrentData = async () => {
+    const {members, worshipService} = this.props.attendance
+    const formattedMembers = await members.map((m, i) => {
+      m.memberId = m.id
+      m.id = `TEMP${i}`
+      m.worshipserviceId = worshipService.id
+      return m
+    })
+    worshipService.attendances = formattedMembers
+    console.info(worshipService)
+    this.setState({
+      attendance: this.consolidateAttendanceToMembers([worshipService]),
+      services: [worshipService]
+    })
+  }
+
   tabulizeAreaGroupAttendance = () => {
     const {attendance} = this.state
     const attendanceKeys = Object.keys(attendance)
@@ -130,24 +153,8 @@ class AdHocReport extends Component {
         if (!a[tabName]) a[tabName] = [currentMemberAttendance]
         else a[tabName].push(currentMemberAttendance)
       })
-      console.log(a)
       return a
     }, {})
-  }
-
-  loadCurrentData = async () => {
-    const {members, worshipService} = this.props.attendance
-    const formattedMembers = await members.map((m, i) => {
-      m.memberId = m.id
-      m.id = `TEMP${i}`
-      m.worshipserviceId = worshipService.id
-      return m
-    })
-    console.info(formattedMembers)
-    this.setState({
-      attendance: this.consolidateAttendanceToMembers(formattedMembers),
-      services: [worshipService]
-    })
   }
 
   render() {
@@ -157,10 +164,6 @@ class AdHocReport extends Component {
 
     if (!appInitialized || attendance.length === 0) {
       return <div />
-    }
-
-    if (reportingId === 'current') {
-      this.loadCurrentData()
     }
 
     let tabs = this.tabulizeAreaGroupAttendance()
