@@ -7,7 +7,7 @@ class AdHocReportPane extends Component {
     super(props)
 
     this.state = {
-      showDetails: false
+      showDetails: true
     }
   }
 
@@ -50,61 +50,75 @@ class AdHocReportPane extends Component {
     )
   }
 
-  render() {
-    const {members, locals, services} = this.props
+  renderHeading = () => {
+    const {showDetails} = this.state
+    const {services} = this.props
     const dateTimeArray = services.map(s => s.dateTime)
-    let memberKeys = Object.keys(members[0]).filter(
-      k => k !== 'createdAt' && k !== 'updatedAt' && k !== 'isActive'
+    const servicesHeading = dateTimeArray.map(dateTime =>
+      new Date(
+        new Date(dateTime).getTime() +
+          new Date(Date.now()).getTimezoneOffset() * 60000
+      ).toLocaleTimeString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
     )
-    let heading = [
-      'Id',
-      'Last Name',
-      'First Name',
-      'Local',
-      'Area-Group',
-      'CFO',
-      'Officer',
-      'Gender'
-    ]
-    if (this.isCurrentService()) {
-      heading.push('Attended')
-    } else {
-      const servicesHeading = dateTimeArray.map(dateTime =>
-        new Date(
-          new Date(dateTime).getTime() +
-            new Date(Date.now()).getTimezoneOffset() * 60000
-        ).toLocaleTimeString('en-US', {
-          weekday: 'short',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        })
-      )
-      heading = heading.concat(servicesHeading)
-      memberKeys = [
-        ...memberKeys.splice(0, memberKeys.length - 1),
-        ...dateTimeArray
-      ]
-    }
+
+    return (
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Last Name</th>
+          <th>First Name</th>
+          {showDetails ? (
+            <Fragment>
+              <th>Local</th>
+              <th>Area-Group</th>
+              <th>CFO</th>
+              <th>Officer</th>
+              <th>Gender</th>
+            </Fragment>
+          ) : (
+            <th>Details</th>
+          )}
+          {this.isCurrentService() ? (
+            <th>Attended</th>
+          ) : (
+            servicesHeading.map(s => <th key={s}>{s}</th>)
+          )}
+        </tr>
+      </thead>
+    )
+  }
+
+  render() {
+    const {showDetails} = this.state
+    const {members, locals, services} = this.props
 
     return !this.props.appInitialized ? (
       <div />
     ) : (
       <table className="blueTable">
-        <thead>
-          <tr>{memberKeys.map((k, i) => <th key={k}>{heading[i]}</th>)}</tr>
-        </thead>
+        {this.renderHeading()}
         <tbody>
           {members.map(m => (
             <tr key={m.id}>
               <td>{m.id}</td>
               <td>{m.lastName}</td>
               <td>{m.firstName}</td>
-              <td>{locals.find(l => l.id === m.localId).name}</td>
-              <td>{m.areaGroup}</td>
-              <td>{CFO[m.cfo]}</td>
-              <td>{m.officer}</td>
-              <td>{m.gender}</td>
+              {showDetails ? (
+                <Fragment>
+                  <td>{locals.find(l => l.id === m.localId).name}</td>
+                  <td>{m.areaGroup}</td>
+                  <td>{CFO[m.cfo]}</td>
+                  <td>{m.officer}</td>
+                  <td>{m.gender}</td>
+                </Fragment>
+              ) : (
+                <td className="table-secondary" />
+              )}
               {this.isCurrentService()
                 ? this.renderCurrentServiceAttendance(m)
                 : this.renderPastAttendances(m)}
