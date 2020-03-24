@@ -11,6 +11,36 @@ router.get('/', async (req, res, next) => {
   res.send(worshipServices)
 })
 
+router.get('/:id', async (req, res, next) => {
+  try {
+    const {id} = req.params
+    const reporting = await WorshipService.findOne({
+      where: {
+        id
+      },
+      include: [
+        {
+          model: Attendance
+        }
+      ]
+    })
+    res.send(reporting)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/:id/destroy', async (req, res, next) => {
+  try {
+    const {id} = req.params
+    const reporting = await WorshipService.findByPk(id)
+    await reporting.destroy()
+    res.status(200).send()
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.get(
   '/:localId/:weekNumber/:serviceType/:dateTime/',
   async (req, res, next) => {

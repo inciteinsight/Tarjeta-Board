@@ -145,7 +145,6 @@ class AdHocReportPane extends Component {
         <tbody>
           {attendanceKeys.map(ak => {
             const member = attendance[ak]
-            console.info(member)
             return (
               <tr key={member.memberId}>
                 <td>{member.memberId}</td>
