@@ -129,12 +129,12 @@ router.get('/local/:localId/ext/week/:weekNumber', async (req, res, next) => {
             {
               model: ReportingPeriod,
               where: {
-                weekNumber
+                weekNumber: Number(weekNumber)
               },
               include: [
                 {
-                  model: WorshipService,
-                  include: [Attendance]
+                  model: WorshipService
+                  // include: [Attendance]
                 }
               ]
             }
@@ -143,12 +143,12 @@ router.get('/local/:localId/ext/week/:weekNumber', async (req, res, next) => {
         {
           model: ReportingPeriod,
           where: {
-            weekNumber
+            weekNumber: Number(weekNumber)
           },
           include: [
             {
-              model: WorshipService,
-              include: [Attendance]
+              model: WorshipService
+              // include: [Attendance]
             }
           ]
         }

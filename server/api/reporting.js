@@ -50,6 +50,20 @@ router.get('/local/:localId', async (req, res, next) => {
   }
 })
 
+// router.get('/local/:localId/ext', async (req, res, next) => {
+//   try {
+//     const {localId} = req.params
+//     const reportingPeriods = await ReportingPeriod.findAll({
+//       where: {
+//         localId
+//       }
+//     })
+//     res.status(200).send(reportingPeriods)
+//   } catch (error) {
+//     next(error)
+//   }
+// })
+
 router.post('/create', async (req, res, next) => {
   try {
     let reportingPeriod = req.body

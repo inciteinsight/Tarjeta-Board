@@ -11,6 +11,7 @@ class AdHocReport extends Component {
     super(props)
 
     this.state = {
+      isLoading: true,
       showEditAttendance: false,
       selectedAttendance: {},
       selectedService: {},
@@ -22,16 +23,7 @@ class AdHocReport extends Component {
 
   componentDidMount = async () => {
     const {selectionId, mode} = this.props.match.params
-    if (mode === 'week') {
-      const [localId, weekNumber] = selectionId.split('@')
-      const {data} = await axios.get(
-        `/api/ws/local/${localId}/ext/week/${weekNumber}`
-      )
-      await this.setState({
-        attendance: this.consolidateAttendanceToMembers(data),
-        services: data
-      })
-    } else if (mode === 'period') {
+    if (mode === 'period') {
       if (selectionId !== 'current') {
         const {data} = await axios.get(`/api/ws/reporting/${selectionId}/ext`)
         await this.setState({
@@ -52,6 +44,39 @@ class AdHocReport extends Component {
       members.length > 0
     ) {
       this.loadCurrentData()
+    } else if (
+      prevState.isLoading &&
+      Object.keys(prevState.attendance).length === 0 &&
+      mode === 'week'
+    ) {
+      const [localId, weekNumber] = selectionId.split('@')
+
+      let {data} = await axios.get(
+        `/api/ws/local/${localId}/ext/week/${weekNumber}`
+      )
+
+      let services = data
+
+      await this.setState({
+        services
+      })
+
+      let newServices = [...services]
+
+      let attendances = await axios.all(
+        newServices.map(s => axios.get(`/api/attendance/ws/${s.id}`))
+      )
+
+      newServices = newServices.map((s, i) => {
+        s.attendances = attendances[i].data
+        return s
+      })
+
+      this.setState({
+        attendance: this.consolidateAttendanceToMembers(newServices),
+        services: newServices,
+        isLoading: false
+      })
     }
   }
 
