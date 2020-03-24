@@ -11,7 +11,7 @@ class AdHocReport extends Component {
     super(props)
 
     this.state = {
-      isLoading: true,
+      isLoading: false,
       showEditAttendance: false,
       selectedAttendance: {},
       selectedService: {},
@@ -23,6 +23,11 @@ class AdHocReport extends Component {
 
   componentDidMount = async () => {
     const {selectionId, mode} = this.props.match.params
+    if (mode === 'week') {
+      this.setState({
+        isLoading: true
+      })
+    }
     if (mode === 'period') {
       if (selectionId !== 'current') {
         const {data} = await axios.get(`/api/ws/reporting/${selectionId}/ext`)
@@ -40,13 +45,13 @@ class AdHocReport extends Component {
     if (
       mode === 'period' &&
       selectionId === 'current' &&
-      Object.keys(prevState.attendance).length === 0 &&
+      Object.keys(this.state.attendance).length === 0 &&
       members.length > 0
     ) {
       this.loadCurrentData()
     } else if (
-      prevState.isLoading &&
-      Object.keys(prevState.attendance).length === 0 &&
+      this.state.isLoading &&
+      Object.keys(this.state.attendance).length < 2 &&
       mode === 'week'
     ) {
       const [localId, weekNumber] = selectionId.split('@')
@@ -177,7 +182,6 @@ class AdHocReport extends Component {
       return newMember
     })
     worshipService.attendances = formattedMembers
-    console.info(worshipService)
     this.setState({
       attendance: this.consolidateAttendanceToMembers([worshipService]),
       services: [worshipService]
@@ -231,6 +235,8 @@ class AdHocReport extends Component {
     if (!appInitialized || attendance.length === 0) {
       return <div />
     }
+
+    console.log(this.state)
 
     let tabs = this.tabulizeAreaGroupAttendance()
     const tabNames = Object.keys(tabs)
