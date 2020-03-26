@@ -64,6 +64,13 @@ class BoardNav extends Component {
           >
             Save Attendance
           </NavDropdown.Item>
+          <NavDropdown.Item
+            eventKey="4.5"
+            href="/service/new"
+            disabled={worshipService.id > 0}
+          >
+            New WS Attendance
+          </NavDropdown.Item>
           {this.props.isSecretary ? (
             <BoardOptionsNav />
           ) : (

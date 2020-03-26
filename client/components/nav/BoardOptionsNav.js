@@ -13,37 +13,10 @@ class BoardOptionsNav extends Component {
 
     this.state = {
       isConfirming: false
-      // isSuccessful: false
     }
   }
 
   confirmClose = () => this.setState({isConfirming: false})
-  // confirmSuccess = () => this.setState({isSuccessful: false})
-
-  // handleSave = async () => {
-  //   const {members, worshipService, user} = this.props
-  //   const attendance = members.map(m => ({
-  //     worshipserviceId: worshipService.id,
-  //     memberId: m.id,
-  //     localId: m.localId,
-  //     areaGroup: m.areaGroup,
-  //     lastName: m.lastName,
-  //     firstName: m.firstName,
-  //     cfo: m.cfo,
-  //     officer: m.officer,
-  //     gender: m.gender,
-  //     hasAttended: m.hasAttended
-  //   }))
-  //   const {status} = await axios.post(
-  //     `/api/attendance/save/${user}`,
-  //     attendance
-  //   )
-  //   if (status === 200) {
-  //     await this.props.handleClearSession()
-  //     this.setState({isSuccessful: true})
-  //     alertify.success('Members saved!')
-  //   }
-  // }
 
   render() {
     const {worshipService} = this.props
@@ -53,23 +26,9 @@ class BoardOptionsNav extends Component {
         <NavDropdown.Item
           eventKey="4.4"
           disabled={worshipService.id === 0}
-          onClick={this.handleSave}
-        >
-          Save Attendance
-        </NavDropdown.Item>
-        <NavDropdown.Item
-          eventKey="4.4"
-          disabled={worshipService.id === 0}
           onClick={() => this.setState({isConfirming: true})}
         >
           Clear Attendance
-        </NavDropdown.Item>
-        <NavDropdown.Item
-          eventKey="4.5"
-          href="/service/new"
-          disabled={worshipService.id > 0}
-        >
-          New WS Attendance
         </NavDropdown.Item>
         <ConfirmWithPassword
           title="Clearing Worship Service Attendance Cache"
@@ -80,20 +39,12 @@ class BoardOptionsNav extends Component {
           buttonMessage="Clear"
           trigger={this.props.handleClearSession}
         />
-        {/* <Confirm
-          title="Save Success"
-          message="Attendance was saved successfully"
-          show={this.state.isSuccessful}
-          onHide={this.confirmSuccess}
-        /> */}
       </Fragment>
     )
   }
 }
 
 const mapState = state => ({
-  // user: state.user.email,
-  // members: state.attendance.members,
   worshipService: state.attendance.worshipService
 })
 
