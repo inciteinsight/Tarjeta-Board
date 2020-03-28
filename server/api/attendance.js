@@ -56,8 +56,11 @@ router.post('/save/:user', async (req, res, next) => {
     const attendees = req.body
     const {user} = req.params
     await attendees.forEach(async a => {
-      const {hasAttended, worshipserviceId, memberId} = a
-      const memberKeys = Object.keys(a).filter(k => k !== 'hasAttended')
+      const {hasAttended, worshipserviceId, memberId, dateTimeNow} = a
+      console.log(dateTimeNow)
+      const memberKeys = Object.keys(a).filter(
+        k => k !== 'hasAttended' && k !== 'dateTimeNow'
+      )
       const attendance = await Attendance.findOrBuild({
         where: {
           worshipserviceId,
@@ -72,10 +75,7 @@ router.post('/save/:user', async (req, res, next) => {
       if (hasAttended && !attendance[0].hasAttended) {
         attendance[0].hasAttended = hasAttended
 
-        attendance[0].notes = `${user} on ${moment().format(
-          'MMMM Do YYYY, h:mm:ss a'
-        )}`
-        // The date will be 3 or 4 hours behind on testing, but production will display the correct date
+        attendance[0].notes = `${user} on ${dateTimeNow}`
       }
       await attendance[0].save()
     })
