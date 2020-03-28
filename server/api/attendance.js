@@ -74,7 +74,7 @@ router.post('/save/:user', async (req, res, next) => {
 
       if (hasAttended && !attendance[0].hasAttended) {
         attendance[0].hasAttended = hasAttended
-
+        console.log(dateTimeNow)
         attendance[0].notes = `${user} on ${dateTimeNow}`
       }
       await attendance[0].save()

@@ -6,7 +6,7 @@ import BoardOptionsNav from './BoardOptionsNav'
 import Confirm from '../misc/Confirm'
 import axios from 'axios'
 import alertify from 'alertifyjs'
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 class BoardNav extends Component {
   constructor(props) {
@@ -32,7 +32,9 @@ class BoardNav extends Component {
       officer: m.officer,
       gender: m.gender,
       hasAttended: m.hasAttended,
-      dateTimeNow: moment().format('MMMM Do YYYY, h:mm:ss a')
+      dateTimeNow: moment()
+        .tz('America/New_York')
+        .format('MMMM Do YYYY, h:mm:ss a')
     }))
     const {status} = await axios.post(
       `/api/attendance/save/${user}`,
