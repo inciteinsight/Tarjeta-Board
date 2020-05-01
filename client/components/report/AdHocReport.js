@@ -240,11 +240,6 @@ class AdHocReport extends Component {
     const tabNames = Object.keys(tabs)
     tabNames.unshift('ALL')
 
-    // console.log('====== AdHoc Report Ran ========')
-    // console.info(attendance)
-    // console.log()
-    // console.log("================================")
-
     return !appInitialized || Object.keys(attendance).length === 0 ? (
       <div />
     ) : (

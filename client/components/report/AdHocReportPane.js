@@ -16,20 +16,25 @@ class AdHocReportPane extends Component {
   }
 
   componentDidMount = async () => {
-    console.log('Calling cdm')
     const {attendance, locals, services, tab} = this.props
 
     // Tableize every tab, but only Excel printout the 'ALL' tab
     if (tab === 'ALL') {
       console.log('========== Attendance ==========')
       console.info(attendance)
+      console.log('attendances numbers --> ' + Object.keys(attendance).length)
       console.log('============ Locals ============')
       console.info(locals)
       console.log('=========== Services ===========')
       console.info(services)
 
       // run Excel print here
-      const tablizer = await new TableizeData({attendance, locals, services})
+      const tablizer = await new TableizeData({
+        attendance,
+        locals,
+        services,
+        mode: this.isCurrentService()
+      })
       const {table} = tablizer
       this.setState({table})
     }
@@ -160,12 +165,6 @@ class AdHocReportPane extends Component {
     const {showDetails} = this.state
     const {attendance, locals, services, tab} = this.props
     const attendanceKeys = Object.keys(attendance)
-
-    // if(tab === 'ALL') {
-    //   console.log(attendance)
-    //   console.log("Tableize Called")
-    //   // we only want one Excel call, otherwise this will get expensive quickly
-    // }
 
     return !this.props.appInitialized ? (
       <div />
