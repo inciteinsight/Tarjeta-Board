@@ -28,7 +28,7 @@ export default class TableizeData {
     this.table = [...this.table, ...this.headers]
   }
 
-  // services need to be in a certain format - this formats datetime
+  // services need to be in a certain format
   createServicesHeading = () => {
     const serviceDateTimeArray = this.services.map(s => s.dateTime)
 

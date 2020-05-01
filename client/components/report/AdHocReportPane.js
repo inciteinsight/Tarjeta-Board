@@ -11,13 +11,15 @@ class AdHocReportPane extends Component {
 
     this.state = {
       showDetails: false,
-      table: []
+      table: {}
     }
   }
 
   componentDidMount = async () => {
     console.log('Calling cdm')
-    const {attendance, locals, services, tab} = await this.props
+    const {attendance, locals, services, tab} = this.props
+
+    // Tableize every tab, but only Excel printout the 'ALL' tab
     if (tab === 'ALL') {
       console.log('========== Attendance ==========')
       console.info(attendance)
@@ -27,7 +29,9 @@ class AdHocReportPane extends Component {
       console.info(services)
 
       // run Excel print here
-      const tablizer = new TableizeData({attendance, locals, services})
+      const tablizer = await new TableizeData({attendance, locals, services})
+      const {table} = tablizer
+      this.setState({table})
     }
   }
 
@@ -75,6 +79,7 @@ class AdHocReportPane extends Component {
     )
   }
 
+  // rework to utilize tablizer
   renderHeading = () => {
     const {showDetails} = this.state
     const {services} = this.props
