@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCaretDown} from '@fortawesome/free-solid-svg-icons'
 import {CFO} from '../../utils/board'
 import TableizeData from './util/TableizeData'
+import {adhocToExcelDownload} from './util/AdHocToExcel'
 
 class AdHocReportPane extends Component {
   constructor(props) {
@@ -35,7 +36,8 @@ class AdHocReportPane extends Component {
         services,
         mode: this.isCurrentService()
       })
-      const {table} = tablizer
+      const {table} = await tablizer
+      await adhocToExcelDownload(table)
       this.setState({table})
     }
   }

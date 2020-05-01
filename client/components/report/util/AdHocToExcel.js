@@ -1,9 +1,13 @@
-const XLSX = require('xlsx')
+// const XLSX = require('xlsx')
+import XLSX from 'xlsx'
 
-const adHocToExcel = attendance => {}
+export const adhocToExcelDownload = table => {
+  let adhocReportExcel = XLSX.utils.book_new()
+  const adhocReportSheetName = 'Attendance'
 
-module.exports = {
-  adHocToExcel
+  adhocReportExcel.SheetNames.push(adhocReportSheetName)
+  adhocReportExcel.Sheets[adhocReportSheetName] = XLSX.utils.aoa_to_sheet(table)
+  XLSX.writeFile(adhocReportExcel, `${adhocReportSheetName}.xlsx`)
 }
 
 /**
