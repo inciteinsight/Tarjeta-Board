@@ -3,13 +3,31 @@ import {connect} from 'react-redux'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCaretDown} from '@fortawesome/free-solid-svg-icons'
 import {CFO} from '../../utils/board'
+import TableizeData from './util/TableizeData'
 
 class AdHocReportPane extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      showDetails: false
+      showDetails: false,
+      table: []
+    }
+  }
+
+  componentDidMount = async () => {
+    console.log('Calling cdm')
+    const {attendance, locals, services, tab} = await this.props
+    if (tab === 'ALL') {
+      console.log('========== Attendance ==========')
+      console.info(attendance)
+      console.log('============ Locals ============')
+      console.info(locals)
+      console.log('=========== Services ===========')
+      console.info(services)
+
+      // run Excel print here
+      const tablizer = new TableizeData({attendance, locals, services})
     }
   }
 
@@ -130,10 +148,19 @@ class AdHocReportPane extends Component {
     )
   }
 
+  // push printable to redux
+  // Excel Export up top
+
   render() {
     const {showDetails} = this.state
-    const {attendance, locals} = this.props
+    const {attendance, locals, services, tab} = this.props
     const attendanceKeys = Object.keys(attendance)
+
+    // if(tab === 'ALL') {
+    //   console.log(attendance)
+    //   console.log("Tableize Called")
+    //   // we only want one Excel call, otherwise this will get expensive quickly
+    // }
 
     return !this.props.appInitialized ? (
       <div />

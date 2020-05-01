@@ -236,12 +236,16 @@ class AdHocReport extends Component {
       return <div />
     }
 
-    console.log(this.state)
-
     let tabs = this.tabulizeAreaGroupAttendance()
     const tabNames = Object.keys(tabs)
     tabNames.unshift('ALL')
-    return !appInitialized ? (
+
+    // console.log('====== AdHoc Report Ran ========')
+    // console.info(attendance)
+    // console.log()
+    // console.log("================================")
+
+    return !appInitialized || Object.keys(attendance).length === 0 ? (
       <div />
     ) : (
       <Fragment>
@@ -253,6 +257,7 @@ class AdHocReport extends Component {
               return (
                 <Tab.Pane key={t} eventKey={t} title={t}>
                   <AdHocReportPane
+                    tab={t}
                     areaGroup={areaGroup}
                     localId={`${localId}${districtRegion}`}
                     selectionId={selectionId}
