@@ -53,7 +53,6 @@ export default class TableizeData {
     return serviceHeading
   }
 
-  // PUSH DATAPOINTS
   mergeMemberInfoAndAttendances = () => {
     const infoArr = this.createMemberInfoArr()
     const attendancesArr = this.createMemberAttendancesArr()

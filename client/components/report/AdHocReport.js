@@ -229,7 +229,7 @@ class AdHocReport extends Component {
       selectedService,
       showEditAttendance
     } = this.state
-    const {selectionId} = this.props.match.params
+    const {selectionId, downloadOption} = this.props.match.params
     const {appInitialized} = this.props
 
     if (!appInitialized || attendance.length === 0) {
@@ -257,6 +257,7 @@ class AdHocReport extends Component {
                     localId={`${localId}${districtRegion}`}
                     selectionId={selectionId}
                     attendance={t === 'ALL' ? attendance : tabs[t]}
+                    downloadOption={downloadOption}
                     services={services}
                     handleSelectAttendance={this.handleSelectAttendance}
                   />

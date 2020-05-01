@@ -17,26 +17,17 @@ class AdHocReportPane extends Component {
   }
 
   componentDidMount = async () => {
-    const {attendance, locals, services, tab} = this.props
+    const {attendance, locals, services, tab, downloadOption} = this.props
 
-    // Tableize every tab, but only Excel printout the 'ALL' tab
-    if (tab === 'ALL') {
-      console.log('========== Attendance ==========')
-      console.info(attendance)
-      console.log('attendances numbers --> ' + Object.keys(attendance).length)
-      console.log('============ Locals ============')
-      console.info(locals)
-      console.log('=========== Services ===========')
-      console.info(services)
-
+    if (tab === 'ALL' && downloadOption === 'xlsx') {
       // run Excel print here
-      const tablizer = await new TableizeData({
+      const tableizer = await new TableizeData({
         attendance,
         locals,
         services,
         mode: this.isCurrentService()
       })
-      const {table} = await tablizer
+      const {table} = await tableizer
       await adhocToExcelDownload(table)
       this.setState({table})
     }
@@ -165,7 +156,7 @@ class AdHocReportPane extends Component {
 
   render() {
     const {showDetails} = this.state
-    const {attendance, locals, services, tab} = this.props
+    const {attendance, locals} = this.props
     const attendanceKeys = Object.keys(attendance)
 
     return !this.props.appInitialized ? (
