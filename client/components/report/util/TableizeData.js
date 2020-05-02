@@ -11,7 +11,7 @@ export default class TableizeData {
 
     //Tableizer Created
     this.createTable()
-    this.run()
+    // this.run()
   }
 
   // create header
@@ -129,10 +129,10 @@ export default class TableizeData {
 
   // render
 
-  run = () => {
-    console.log('Running =================================')
-    console.log(this.table)
-    console.info(this.attendance)
-    console.log('Run Complete ============================')
-  }
+  // run = () => {
+  //   console.log('Running =================================')
+  //   console.log(this.table)
+  //   console.info(this.attendance)
+  //   console.log('Run Complete ============================')
+  // }
 }

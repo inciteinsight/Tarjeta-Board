@@ -17,20 +17,24 @@ class AdHocReportPane extends Component {
   }
 
   componentDidMount = async () => {
-    const {attendance, locals, services, tab, downloadOption} = this.props
+    const {tab, downloadOption} = this.props
 
     if (tab === 'ALL' && downloadOption === 'xlsx') {
-      // run Excel print here
-      const tableizer = await new TableizeData({
-        attendance,
-        locals,
-        services,
-        mode: this.isCurrentService()
-      })
-      const {table} = await tableizer
-      await adhocToExcelDownload(table)
-      this.setState({table})
+      this.performExcelDownload()
     }
+  }
+
+  performExcelDownload = async () => {
+    const {attendance, locals, services} = this.props
+    const tableizer = await new TableizeData({
+      attendance,
+      locals,
+      services,
+      mode: this.isCurrentService()
+    })
+    const {table} = await tableizer
+    await adhocToExcelDownload(table)
+    this.setState({table})
   }
 
   isCurrentService = () => this.props.selectionId === 'current'
