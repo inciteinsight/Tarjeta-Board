@@ -3,8 +3,8 @@ import {connect} from 'react-redux'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCaretDown} from '@fortawesome/free-solid-svg-icons'
 import {CFO} from '../../utils/board'
-import TableizeData from './util/TableizeData'
-import {adhocToExcelDownload} from './util/AdHocToExcel'
+// import TableizeData from './util/TableizeData'
+// import {adhocToExcelDownload} from './util/AdHocToExcel'
 
 class AdHocReportPane extends Component {
   constructor(props) {
@@ -20,22 +20,23 @@ class AdHocReportPane extends Component {
     const {tab, downloadOption} = this.props
 
     if (tab === 'ALL' && downloadOption === 'xlsx') {
-      this.performExcelDownload()
+      // this.performExcelDownload()
+      console.log('Excel download functionality')
     }
   }
 
-  performExcelDownload = async () => {
-    const {attendance, locals, services} = this.props
-    const tableizer = await new TableizeData({
-      attendance,
-      locals,
-      services,
-      mode: this.isCurrentService()
-    })
-    const {table} = await tableizer
-    await adhocToExcelDownload(table)
-    this.setState({table})
-  }
+  // performExcelDownload = async () => {
+  //   const {attendance, locals, services} = this.props
+  //   const tableizer = await new TableizeData({
+  //     attendance,
+  //     locals,
+  //     services,
+  //     mode: this.isCurrentService()
+  //   })
+  //   const {table} = await tableizer
+  //   await adhocToExcelDownload(table)
+  //   this.setState({table})
+  // }
 
   isCurrentService = () => this.props.selectionId === 'current'
 
